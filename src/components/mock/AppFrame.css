@@ -1,0 +1,331 @@
+/* =====================================================================
+ * AppFrame.css — the handful of rules the hero's product scene needs that
+ * Tailwind utilities can't express: a plain beat arriving (`af-in`), the
+ * hero beat's heavier arrival + upward exit (`af-card`), the talk-time
+ * meter, and two one-frame transition kills. Everything else in AppFrame is
+ * utilities.
+ *
+ * Values are the donor's, measured: Attio's hero card is a TIME-driven
+ * scene machine (inspo/attio/DESIGN.md §4.2 + §5.2 M4b/M4/M4c) —
+ *   · a scene swap is "content blur/fade out 300ms → next mounts"  (M4b)
+ *   · a beat arrives "op 0→1 (+y ~3px), 250–300ms, cb(.33,1,.68,1)" (M4)
+ *   · house entrance grammar adds "blur 1.5–2.5px→0"               (§5.0)
+ *   · once shown, elements PERSIST — the entrance never replays     (M4c)
+ * ===================================================================== */
+
+/* One scene beat arriving. Hidden until the scene shows it; the settled
+   end state carries `.is-shown` in the markup, so a reduced-motion
+   visitor gets the finished frame with zero JavaScript. */
+.af-in {
+  opacity: 0;
+  transform: translateY(6px);
+  filter: blur(1.5px);
+  transition:
+    opacity 300ms var(--ease-entrance),
+    transform 300ms var(--ease-entrance),
+    filter 300ms var(--ease-entrance);
+}
+
+.af-in.is-shown {
+  opacity: 1;
+  transform: none;
+  filter: blur(0);
+}
+
+/* The HERO beat: a LIVE SUGGESTION card superseding the one before it.
+   This is the only element in the frame with an arrival of its own, and it
+   is deliberately the heaviest one — it travels further (10px vs 6px), from
+   a deeper blur (3px vs 1.5px) and over longer (420ms vs 300ms) than a
+   plain beat. It also LEAVES UPWARD, so a replacement reads as a
+   replacement and not as an edit of the card that was already there.
+   Donor grain: a scene swap is "content blur/fade out 300ms → next mounts"
+   (attio DESIGN.md §4.2 M4b), beats sit at 250–300ms (M4). */
+.af-card {
+  opacity: 0;
+  transform: translateY(10px);
+  filter: blur(3px);
+  transition:
+    opacity 420ms var(--ease-entrance),
+    transform 420ms var(--ease-entrance),
+    filter 420ms var(--ease-entrance);
+}
+
+.af-card.is-shown {
+  opacity: 1;
+  transform: none;
+  filter: blur(0);
+}
+
+/* Superseded — out and UP, faster than the arrival that replaces it.
+   Declared after `.is-shown` so it wins at equal specificity during the
+   ~400ms both classes are present. */
+.af-card.is-out {
+  opacity: 0;
+  transform: translateY(-8px);
+  filter: blur(3px);
+  transition-duration: 300ms;
+}
+
+/* Transitions off for exactly one frame, so resetting the card from "out"
+   back to its hidden start (both invisible) is never tweened — otherwise the
+   carried-over transform would make the new card enter from above. Same
+   trick as `.af-still`, scoped to a single node. */
+.af-nt {
+  transition: none !important;
+}
+
+/* The talk-time meter. Driven by scaleX so the coaching bar never lays
+   out — transform/opacity/filter only in any moving path.
+
+   `.is-over` is the product's own documented escalation: PRODUCT-NOTES §4.2
+   records the SAME bar teal/green at t-026 and RED at t-029/t-030, with the
+   coaching pill arriving inline beside it (the product's own words there are
+   "⚠ Slow down!"; ours are "Ask a question" — AppFrame.tsx has the copy note,
+   user 2026-07-27). The class is added by the
+   clock at the instant the fill reaches the 50% target tick — the crossing
+   is what escalates, not a timer — and the pill follows 400ms later so it
+   reads as a consequence. Colour comes from the owned `risk` ramp; the
+   fill never becomes an area of invented colour. */
+.af-bar {
+  transform-origin: left center;
+  transition:
+    transform 260ms linear,
+    background-color 380ms var(--ease-entrance);
+}
+
+.af-bar.is-over {
+  background-color: var(--color-risk-700);
+}
+
+/* ---------- the briefing rows the call writes ------------------------
+ * PRE-CALL BRIEFING used to be 40% of the surface saying "None captured
+ * yet" for the whole 13.2s. Its rows now COMPUTE: a row appears (or is
+ * overwritten) in a `is-pending` state and then resolves, which is the
+ * donor's #2 aliveness mechanic (ATTIO-HERO-SPEC §8: "AI is thinking…"
+ * resolving row-by-row) expressed in this product's plain-text idiom —
+ * no checkmark taxonomy, no confidence score, no invented panel.
+ *
+ * Three states, each a MARK (a 4px dot) plus an ink ramp, never a fill:
+ *   is-pending — the AI is writing this row      (gray)
+ *   is-new     — the AI just captured it          (accent, the product's own)
+ *   is-set     — an open item the call has closed (won)
+ * `af-flash` is the one-shot "this row just changed" wash. It is added by a
+ * beat and never ships in the markup, so the settled frame and the
+ * reduced-motion frame carry no animation at all. It is a plain
+ * background-colour fade — NOT a box-shadow, which the shadow policy allows
+ * only for the four surface tokens. The row carries its own 2px/6px padding
+ * with an exactly cancelling negative margin, so the wash has a band to
+ * paint into while the row's MARGIN box (and therefore the rail's layout)
+ * stays byte-identical to a row with no padding at all. */
+.af-row__dot {
+  background-color: var(--color-gray-400);
+  transition: background-color 320ms var(--ease-entrance);
+}
+
+.af-row__val {
+  transition: color 320ms var(--ease-entrance);
+}
+
+.af-row.is-pending .af-row__dot {
+  background-color: var(--color-gray-300);
+}
+
+.af-row.is-pending .af-row__val {
+  color: var(--color-gray-500);
+}
+
+.af-row.is-new .af-row__dot {
+  background-color: var(--color-accent-600);
+}
+
+.af-row.is-set .af-row__dot {
+  background-color: var(--color-won-700);
+}
+
+.af-row.is-new .af-row__val,
+.af-row.is-set .af-row__val {
+  color: var(--color-ink);
+}
+
+.af-row.af-flash {
+  animation: af-flash 640ms var(--ease-entrance) 1;
+}
+
+@keyframes af-flash {
+  from {
+    background-color: var(--color-surface-300);
+  }
+  to {
+    background-color: transparent;
+  }
+}
+
+/* Applied for exactly one frame while the scene rewinds itself from the
+   settled markup to its opening frame, so the rewind can't be seen. */
+.af-still,
+.af-still * {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* ---------- interaction: hover, press, and the simulated pointer ------
+ * The frame reads as a product being USED. Two things carry that: every
+ * card and row has a real hover state, and a simulated pointer moves
+ * through the tour lighting those same states — the demo drives the UI a
+ * visitor's own mouse would drive, rather than a parallel set of fakes.
+ *
+ * Hover is ASYMMETRIC — 50ms in, 300ms out — which is the donor's measured
+ * hover grammar (inspo/attio/DESIGN.md §5): snap to attention, release
+ * lazily. `.is-hover` is the simulated pointer's channel and `:hover` is
+ * the visitor's; they resolve to exactly the same paint. */
+/* The property list includes the ARRIVAL properties on purpose. `.af-in` /
+   `.af-card` set `transition` as a shorthand; this rule comes later, so a
+   node wearing both (`af-in af-hoverable`) would have its transition-property
+   list replaced and its blur-fade entrance would become a pop. Listing
+   opacity/transform/filter here means such a node still animates in.
+   The tidier pattern is still to NEST — an `af-in` gate wrapping an
+   `af-hoverable` box — and the panes mostly do that; this is the safety net
+   for when they don't. */
+.af-hoverable {
+  transition-property: background-color, border-color, opacity, transform, filter;
+  transition-duration: 300ms;
+  transition-timing-function: var(--ease-entrance);
+}
+
+.af-hoverable:hover,
+.af-hoverable.is-hover {
+  background-color: var(--color-surface-200);
+  border-color: var(--color-gray-400);
+  transition-duration: 50ms;
+}
+
+/* A card lifts a hair; a row does not (rows are dense, travel reads as jitter). */
+.af-hoverable.af-lift:hover,
+.af-hoverable.af-lift.is-hover {
+  transform: translateY(-2px);
+}
+
+.af-hoverable.is-press {
+  background-color: var(--color-surface-300);
+  transform: none;
+  transition-duration: 40ms;
+}
+
+/* Ink-filled pills (the primary buttons). Washing them to surface-200 like
+   everything else would bleach them, so they darken instead. */
+.af-hoverable.af-invert:hover,
+.af-hoverable.af-invert.is-hover {
+  background-color: var(--color-gray-800);
+  border-color: var(--color-gray-800);
+}
+
+.af-hoverable.af-invert.is-press {
+  background-color: var(--color-gray-900);
+}
+
+/* The pointer itself. Positioned by transform from the frame's top-left,
+   so moving it never lays out. `will-change` keeps it on its own layer for
+   the whole tour — it is the one element that moves continuously. */
+.af-cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform;
+  transition:
+    transform 620ms cubic-bezier(0.45, 0, 0.15, 1),
+    opacity 260ms ease;
+}
+
+.af-cursor.is-shown {
+  opacity: 1;
+}
+
+/* The click: the pointer dips, and a ring pulses out once. */
+.af-cursor .af-cursor__arrow {
+  display: block;
+  /* Lifts the pointer off whatever it is over. A drop-shadow FILTER on a
+     16px glyph, not a box-shadow on a panel — the shadow policy's concern
+     is surfaces, and the colour is the ink token rather than a literal. */
+  filter: drop-shadow(0 1px 2px color-mix(in srgb, var(--color-ink) 28%, transparent));
+  transition: transform 120ms var(--ease-entrance);
+}
+
+.af-cursor.is-press .af-cursor__arrow {
+  transform: scale(0.82);
+}
+
+.af-cursor__ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+  border: 1.5px solid var(--color-accent-600);
+  border-radius: 9999px;
+  opacity: 0;
+  transform: scale(0.3);
+}
+
+.af-cursor.is-press .af-cursor__ring {
+  animation: af-click 460ms var(--ease-entrance);
+}
+
+@keyframes af-click {
+  0% {
+    opacity: 0.55;
+    transform: scale(0.3);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.25);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* No pointer at all: a cursor gliding across the screen is exactly the
+     kind of unrequested motion this mode exists to remove. */
+  .af-cursor {
+    display: none;
+  }
+  .af-hoverable,
+  .af-hoverable.af-lift.is-hover {
+    transform: none;
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Nothing performs; the markup already IS the settled end state — so kill
+     the travel, the blur and the transition, but leave `.is-shown` in charge
+     of opacity. Forcing `opacity: 1` on every `.af-in` here (as this block
+     used to) lit the elements the settled state hides: the two empty states
+     and the MY NOTES placeholder. "No next steps suggested yet." is absolute
+     over the first question row, so that one painted straight over live
+     content for reduced-motion visitors. */
+  .af-in,
+  .af-card {
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+  .af-in.is-shown,
+  .af-card.is-shown {
+    opacity: 1;
+  }
+  .af-bar {
+    transition: none;
+  }
+  /* The briefing rows ship their settled colours in the markup, so nothing
+     here needs to tween — and `af-flash` is never present in that markup. */
+  .af-row__dot,
+  .af-row__val {
+    transition: none;
+  }
+  .af-row {
+    animation: none;
+  }
+}

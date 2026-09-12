@@ -1,0 +1,16 @@
+/* =====================================================================
+ * Tour.css — co-located paint bits for the platform tour.
+ * Session 5 rations this section to QUIET: the modules hold their settled
+ * frames and the only motion is the article's kz-enter plus the rail's
+ * colour transition, so no scene-driven rules live here any more.
+ * ===================================================================== */
+
+/* Faint drafting grid behind the dashboard chart (ink lines, radial fade). */
+.tour-grid {
+  background-image:
+    linear-gradient(to right, var(--color-hairline-2) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-hairline-2) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 30%, transparent 100%);
+}

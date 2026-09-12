@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="The approved Knowzilla mascot pose library, presented on a clean white background."
+    />
+    <title>Lizzie · Knowzilla mascot</title>
+    <style>
+      :root {
+        --ink: #161514;
+        --ink-secondary: #71706f;
+        --surface: #ffffff;
+        --surface-hover: #fafafa;
+        --surface-active: #f6f6f6;
+        --hairline: #ececeb;
+        --control-border: #d7d6d4;
+        --quiet-detail: #8c8b8a;
+        --secondary-detail: #454545;
+        --accent: #6a77e5;
+        --accent-strong: #3f4baf;
+        --error: #c42422;
+        --mascot-display-height: 400px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: var(--surface);
+      }
+
+      body {
+        margin: 0;
+        background: var(--surface);
+        color: var(--ink);
+        font-family: sans-serif;
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      .showcase {
+        min-height: 100vh;
+        padding: 96px 40px 64px;
+      }
+
+      .showcase__header,
+      .showcase__gallery,
+      .showcase__state,
+      .showcase__footer {
+        width: min(1200px, 100%);
+        margin-inline: auto;
+      }
+
+      .showcase__header {
+        padding-bottom: 64px;
+      }
+
+      .showcase__eyebrow {
+        margin: 0 0 16px;
+        color: var(--accent-strong);
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 16px;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+      }
+
+      .showcase__title {
+        margin: 0;
+        font-size: 64px;
+        font-weight: 500;
+        line-height: 68px;
+        letter-spacing: -0.64px;
+      }
+
+      .showcase__intro {
+        max-width: 640px;
+        margin: 20px 0 0;
+        color: var(--ink-secondary);
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 24px;
+        letter-spacing: -0.1px;
+      }
+
+      .showcase__state {
+        padding: 80px 0;
+        color: var(--ink-secondary);
+        font-size: 15px;
+        line-height: 24px;
+      }
+
+      .showcase__state--error {
+        color: var(--error);
+      }
+
+      .showcase__gallery {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        border-top: 1px solid var(--hairline);
+        border-left: 1px solid var(--hairline);
+      }
+
+      .pose-card {
+        min-width: 0;
+        padding: 24px;
+        border-right: 1px solid var(--hairline);
+        border-bottom: 1px solid var(--hairline);
+      }
+
+      .pose-card__figure {
+        margin: 0;
+      }
+
+      .pose-card__image-well {
+        display: grid;
+        height: var(--mascot-display-height);
+        place-items: center;
+        background: var(--surface);
+      }
+
+      .pose-card__image {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .pose-card__copy {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        padding-top: 16px;
+      }
+
+      .pose-card__name,
+      .pose-card__number,
+      .showcase__footer {
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 16px;
+        letter-spacing: -0.13px;
+      }
+
+      .pose-card__name {
+        min-width: 0;
+        overflow: hidden;
+        color: var(--secondary-detail);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .pose-card__number {
+        flex: 0 0 auto;
+        color: var(--ink-secondary);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .showcase__footer {
+        padding-top: 48px;
+        color: var(--ink-secondary);
+      }
+
+      @media (max-width: 768px) {
+        .showcase {
+          padding: 64px 24px 48px;
+        }
+
+        .showcase__header {
+          padding-bottom: 48px;
+        }
+
+        .showcase__gallery {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 520px) {
+        .showcase {
+          padding: 48px 16px 40px;
+        }
+
+        .showcase__title {
+          font-size: 40px;
+          line-height: 44px;
+          letter-spacing: -0.4px;
+        }
+
+        .showcase__gallery {
+          grid-template-columns: minmax(0, 1fr);
+        }
+
+        .pose-card {
+          padding: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="showcase">
+      <header class="showcase__header">
+        <p class="showcase__eyebrow">Knowzilla mascot</p>
+        <h1 class="showcase__title">Meet Lizzie</h1>
+        <p class="showcase__intro">
+          All <span id="pose-count">58</span> approved poses, shown in full for product moments,
+          reactions, and future animation work.
+        </p>
+      </header>
+
+      <p class="showcase__state" id="gallery-status" role="status">
+        Loading the pose library…
+      </p>
+      <section
+        class="showcase__gallery"
+        id="pose-gallery"
+        aria-label="Lizzie pose gallery"
+        hidden
+      ></section>
+
+      <footer class="showcase__footer">
+        Lizzie is the mouthless, crystal-backed mascot of Knowzilla.
+      </footer>
+    </main>
+
+    <script>
+      const gallery = document.querySelector('#pose-gallery')
+      const status = document.querySelector('#gallery-status')
+      const poseCount = document.querySelector('#pose-count')
+
+      const poseName = (name) =>
+        name
+          .split('-')
+          .map((word) => `${word.charAt(0).toUpperCase()}${word.slice(1)}`)
+          .join(' ')
+
+      const assetUrl = (path) => `/${path.replace(/^public\//, '')}`
+      const poseNumber = (pose) => `${String(pose.sheet).padStart(2, '0')}.${pose.pose}`
+
+      function createPoseCard(pose) {
+        const card = document.createElement('article')
+        const figure = document.createElement('figure')
+        const imageWell = document.createElement('span')
+        const image = document.createElement('img')
+        const copy = document.createElement('figcaption')
+        const name = document.createElement('span')
+        const number = document.createElement('span')
+        const readableName = poseName(pose.name)
+
+        card.className = 'pose-card'
+        figure.className = 'pose-card__figure'
+
+        imageWell.className = 'pose-card__image-well'
+        image.className = 'pose-card__image'
+        image.src = assetUrl(pose.transparent_path)
+        image.alt = readableName
+        image.loading = 'lazy'
+        image.decoding = 'async'
+
+        copy.className = 'pose-card__copy'
+        name.className = 'pose-card__name'
+        name.textContent = readableName
+        number.className = 'pose-card__number'
+        number.textContent = poseNumber(pose)
+
+        imageWell.append(image)
+        copy.append(name, number)
+        figure.append(imageWell, copy)
+        card.append(figure)
+        return card
+      }
+
+      async function loadGallery() {
+        try {
+          const response = await fetch('/mascot/poses/manifest.json')
+          if (!response.ok) throw new Error(`Manifest returned ${response.status}`)
+
+          const manifest = await response.json()
+          if (!manifest || !Array.isArray(manifest.poses)) {
+            throw new Error('Manifest has an unexpected shape')
+          }
+
+          poseCount.textContent = String(manifest.poses.length)
+          gallery.replaceChildren(...manifest.poses.map(createPoseCard))
+          gallery.hidden = false
+          status.remove()
+        } catch (error) {
+          status.classList.add('showcase__state--error')
+          status.setAttribute('role', 'alert')
+          status.textContent = 'The pose library could not be loaded. Refresh the page and try again.'
+        }
+      }
+
+      loadGallery()
+    </script>
+  </body>
+</html>

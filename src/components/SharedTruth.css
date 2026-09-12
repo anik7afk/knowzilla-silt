@@ -1,0 +1,599 @@
+/* SharedTruth — "three voices synchronize" poster scene.
+
+   A single gsap timeline (in the .tsx) choreographs one ~8s performance whose
+   MEANING happens in time: the eyebrow/headline/subcopy stack reveals and
+   "same" flips to accent as the punchline; each role SPEAKS in turn (a 1.5px
+   gray-600 rule draws under its name for the duration of the voice while the
+   serif quote transcribes word-by-word); as each voice finishes, its line
+   TRAVELS toward the shared bus (ink filling the path — the voice moving) and
+   the live rule hands over to a settled gray-400 hairline: that voice is on
+   the record; the merged trunk runs to the node; the right block LANDS as a
+   raised panel and sets itself like a letterpress lockup, then states the
+   record it produced as a hairline ledger, closed by the graphite check.
+   Ambient after: stillness.
+
+   Session 9 (contract R1/R2). R1 — no structural line in this section is
+   lavender any more: the whole routing diagram (branches / trunk / arrow /
+   the leading dots that terminate each branch) is gray-500 matte, 1.5px on
+   the three voices and 2px on the merged trunk + arrow so the merge still
+   reads as heavier; the role labels are gray-700 mono; the speaking rule
+   draws gray-600 and settles gray-400 at 1.5px. Exactly TWO lavender marks
+   survive, and both mean "one": the headline word "same" (type-level accent
+   on a highlighted word) and the junction node (an 11px semantic mark ≤24px).
+   R2 — depth carries the argument: utterances stay flat on the ground, the
+   record lifts. See .st__truth.
+
+   NO waveform device here — the waveform idiom belongs to the frozen wave
+   section (cap = 1). The speaking state is carried by a drawn rule + the
+   transcribing quote, both non-amplitude.
+
+   This stylesheet defines only the SETTLED end-state + layout. gsap.set() in
+   the .tsx forces the hidden initial state before playing, so if JS/gsap never
+   runs (or prefers-reduced-motion), the finished poster shows immediately —
+   graceful by default. Skin: Natural (surface, 1px hairlines, zero shadows).
+   Accent = lavender (the voices); the closing check is graphite. */
+
+.st {
+  position: relative;
+  background: var(--color-surface-300);
+  color: var(--color-ink);
+  padding: 152px 0 96px;
+  overflow: hidden;
+}
+
+.st__container {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 40px;
+}
+
+/* ── eyebrow + headline + subcopy ─────────────────────────────────────────
+   This is the page's ONE retained eyebrow → H2 → subcopy stack (Attio intro
+   grammar). The headline is deliberately BELOW poster scale (48px cap): this
+   section's subject is the three-voice diagram, not the sentence. */
+
+.st__eyebrow {
+  margin: 0 0 20px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-gray-700);
+}
+
+.st__headline {
+  margin: 0 auto;
+  max-width: 22ch;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: clamp(32px, 3.6vw, 48px);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+.st__sub {
+  margin: 20px auto 0;
+  max-width: 58ch;
+  text-align: center;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--color-gray-600);
+}
+
+.st__line {
+  display: block;
+}
+
+/* inline (not inline-block) so wrapping stays natural; only opacity/blur/color
+   animate per word — never transform — so inline is fine. */
+.st-word {
+  color: var(--color-ink);
+}
+
+.st-word--accent {
+  color: var(--color-accent-600);
+}
+
+/* ── diagram: roles + converging lines | truth lockup ─────────────────── */
+
+.st__diagram {
+  margin-top: clamp(56px, 6vw, 88px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  column-gap: 48px;
+  align-items: center;
+}
+
+.st__flow {
+  position: relative;
+}
+
+.st__lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.st__roles {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(30px, 4vw, 54px);
+}
+
+/* Both columns are the SAME construction — a text line, a 12px gap, then a
+   1.5px rail — and the row aligns them by their BOTTOMS, so the label's
+   hairline and the branch line leaving the dot are one continuous rail at one
+   y. Before this they were centred against each other, which put two identical
+   gray rules 15px apart across every row and read as a misalignment. */
+.st-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 32px;
+}
+
+.st-row__id {
+  flex: none;
+  width: 190px;
+}
+
+.st-row__label {
+  display: block;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  /* R1: structural metadata label — neutral, never lavender */
+  color: var(--color-gray-700);
+  margin-bottom: 12px;
+}
+
+.st-row__label--matrix {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* speaking indicator — two stacked 1.5px rules, no amplitude anywhere. The
+   live rule draws in a stronger neutral (gray-600) for the duration of the
+   voice, then fades to reveal the settled gray-400 hairline underneath (= this
+   voice is on the record, permanently). Semantics unchanged from session 3,
+   colour only: drawing = speaking now, settled = on the account forever. CSS
+   base is the settled state: gray drawn, live rule gone. */
+
+.st-row__rules {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 190px;
+  height: 1.5px;
+}
+
+.st-row__rule,
+.st-row__rule-live {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 1.5px;
+  transform-origin: left;
+}
+
+.st-row__rule {
+  background: var(--color-gray-400);
+}
+
+.st-row__rule-live {
+  background: var(--color-gray-600);
+  opacity: 0;
+}
+
+.st-row__quote {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+/* the rail the branch leaves from — same height and same 12px stand-off from
+   the words as the label's rules opposite, so the two align by construction */
+.st-row__rail {
+  display: block;
+  position: relative;
+  height: 1.5px;
+  width: 100%;
+}
+
+/* the dot is the TERMINAL of that voice's branch, not a bullet — so it is the
+   same matte gray as the line it starts (R1), and it is centred ON the rail:
+   the measured branch geometry starts at this dot's centre, which is now the
+   rail's own y. */
+.st-row__dot {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  margin-top: -4.5px;
+  border-radius: 50%;
+  background: var(--color-gray-500);
+}
+
+.st-row__text {
+  font-family: var(--font-serif);
+  /* sized so the nowrap quote clears the bus channel at every width the
+     three-column diagram is used (≥1060px) */
+  font-size: clamp(17px, 1.6vw, 23px);
+  line-height: 1.15;
+  color: var(--color-ink);
+  white-space: nowrap;
+  /* the words sit above the rail, clear of it — same 12px as the label */
+  margin-bottom: 12px;
+  /* the dot terminates the branch at the rail's left end, so the words are
+     inset past it rather than sitting beside it */
+  padding-left: 29px;
+}
+
+.st-qword {
+  color: var(--color-ink);
+}
+
+/* ── bus branches + trunk + node + arrow (geometry set imperatively) ───── */
+
+.st-line {
+  fill: none;
+  stroke-dasharray: 1000; /* normalised via pathLength=1000, see DASH in the .tsx */
+  stroke-dashoffset: 0; /* settled = fully drawn */
+  stroke-linecap: round;
+}
+
+/* R1: the routing diagram is the section's deliberate device line — matte
+   gray-500, drawn thick enough to read as a drawing rather than a scratch.
+   The three voices run at 1.5px, the merged trunk + arrow at 2px, so the
+   "many become one" is still carried by weight without any colour. */
+.st-line--base {
+  stroke: var(--color-gray-500);
+  stroke-width: 1.5;
+}
+
+/* the merged run — one line carrying all three voices, so it reads heavier */
+.st-trunk {
+  stroke: var(--color-gray-500);
+  stroke-width: 2;
+}
+
+/* the ONE accent mark in the diagram (11px, inside the ≤24px allowance): the
+   point where three separate voices have become one shared record. Everything
+   that structures the layout around it is neutral. */
+.st-node {
+  fill: var(--color-accent-600);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.st-node-matrix {
+  position: absolute;
+  z-index: 2;
+  width: 10px;
+  height: 10px;
+  display: grid;
+  place-items: center;
+}
+
+.st--matrix-state-only .st-node--circle,
+.st--matrix-full-ref .st-node--circle {
+  display: none;
+}
+
+.st-arrow {
+  fill: none;
+  stroke: var(--color-gray-500);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 0;
+}
+
+/* ── truth lockup (right block) — THE RAISED RECORD ────────────────────────
+   R2: this section argues that three separate voices resolve into ONE shared
+   record, so DEPTH states the argument. The three quotes are utterances — in
+   the air, transient — and stay flat on the tinted ground. The record is the
+   durable thing they collapse into, so it is the ONLY element that lifts:
+   surface-100 on surface-300, hairline-2, radius-card, shadow-card (legal
+   here: the dial requires a tinted ground, and this section is surface-300).
+   The routing arrow then literally points at the one object with weight.
+   The old 1px vertical divider is GONE — the panel's own left edge is the
+   division, and a rule inside a card would be redundant furniture. */
+
+.st__truth {
+  position: relative;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 32px 28px;
+  background: var(--color-surface-100);
+  border: 1px solid var(--color-hairline-2);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+/* NOTE: the mid-diagram "The shared record" eyebrow was REMOVED — the phrase
+   now opens the section as its one retained eyebrow, and the page is de-duping
+   eyebrows. The lockup reads panel → title → rule → ledger. */
+
+.st__truth-title {
+  margin: 0;
+  font-family: var(--font-serif);
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: clamp(20px, 2vw, 27px);
+  line-height: 1.18;
+  letter-spacing: 0.01em;
+  white-space: nowrap; /* hold the two-line lockup exactly as the reference */
+  color: var(--color-ink);
+}
+
+.st__truth-rule {
+  height: 1px;
+  margin: 24px 0 4px;
+  background: var(--color-gray-300);
+  transform-origin: left;
+}
+
+/* the ledger — what the diagram produced, stated plainly. Hairline per row
+   (drawn left→right as the row resolves), mono key, ink value. */
+
+.st__ledger {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.st-led {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 0;
+}
+
+.st-led__hair {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--color-gray-300);
+  transform-origin: left;
+}
+
+.st-led__k {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-gray-700);
+}
+
+.st-led__v {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  text-align: right;
+}
+
+.st__truth-sign {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 26px;
+}
+
+.st__truth-sign-text {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--color-gray-700);
+}
+
+.st__truth-status-matrix {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 6px;
+  height: 6px;
+}
+
+.st-check {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  overflow: visible;
+}
+
+.st-check__c,
+.st-check__k {
+  fill: none;
+  /* The retired warm ramp is gone (2026-07-27). NOT swapped to signal blue:
+     this glyph is a
+     26px stroked mark — over the ≤24px mark cap — and it sits in the same
+     frame as the section's two sanctioned accent-600 marks (the headline word
+     "same" and the 11px junction node). A saturated blue at this size beside
+     saturated lavender is exactly what the accent-as-mark restraint bars, and
+     the old hue read quiet here only because it was the least saturated one
+     in the system.
+     Graphite keeps it a quiet closing stamp on the record. */
+  stroke: var(--color-gray-700);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 0;
+}
+
+/* ── responsive ───────────────────────────────────────────────────────── */
+
+/* below the diagram's usable width, stack and drop the bus routing — it only
+   reads horizontally, and the nowrap quotes would otherwise be clipped by the
+   section. The truth block moves under the roles — still the one raised panel,
+   now full-width, so the depth argument survives the stack. */
+@media (max-width: 1060px) {
+  .st__diagram {
+    grid-template-columns: 1fr;
+    row-gap: 56px;
+  }
+
+  .st__lines {
+    display: none;
+  }
+
+  /* the junction does not exist once the horizontal routing is removed; keep
+     its matrix with that meaningful state instead of leaving it detached */
+  .st-node-matrix {
+    display: none;
+  }
+
+  /* with no rail to align to, the two columns go back to being centred against
+     each other (the pre-rail behaviour) */
+  .st-row {
+    align-items: center;
+  }
+
+  /* no routing lines here, so the branch terminal has nothing to terminate —
+     a lone dot under the words would read as stray punctuation. The words take
+     back the inset the dot was holding. */
+  .st-row__rail {
+    display: none;
+  }
+
+  .st-row__text {
+    padding-left: 0;
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .st {
+    padding: 80px 0 64px;
+  }
+
+  .st__container {
+    padding-inline: 24px;
+  }
+
+  .st-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .st-row__id {
+    width: auto;
+  }
+
+  .st-row__text {
+    white-space: normal;
+  }
+
+  .st__truth {
+    padding: 26px 22px;
+  }
+}
+
+/* prefers-reduced-motion: the .tsx skips gsap entirely, so the settled base
+   state above renders synchronously. Nothing to override here. */
+
+/* ── QUIET variant (landing page, Session 5 motion ration) ─────────────────
+   Same poster, same settled state — the scene is NOT played. The section
+   arrives with Attio's house quiet entrance only: blur(2px)→0 + opacity 0→1,
+   520ms, cubic-bezier(0.33,1,0.68,1), 120ms stagger across three groups
+   (header stack → diagram → lockup). Once on viewport entry, latched by the
+   .is-in class in the .tsx; nothing here ever animates again. Zero visual
+   difference in the settled state. */
+
+.st--quiet .st__eyebrow,
+.st--quiet .st__headline,
+.st--quiet .st__sub,
+.st--quiet .st__roles,
+.st--quiet .st__truth {
+  opacity: 0;
+  filter: blur(2px);
+  transition:
+    opacity 520ms cubic-bezier(0.33, 1, 0.68, 1),
+    filter 520ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+/* the branch/trunk/arrow SVG fades on opacity ALONE — it is `overflow: visible`
+   and the arrow tip sits outside .st__flow's box, so a filter (even the settled
+   blur(0px), which still establishes a clipping filter region) could crop it.
+   Blurring 1px strokes buys nothing anyway. */
+.st--quiet .st__lines {
+  opacity: 0;
+  transition: opacity 520ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+/* group 1 — the header stack reads first */
+.st--quiet .st__headline {
+  transition-delay: 40ms;
+}
+
+.st--quiet .st__sub {
+  transition-delay: 80ms;
+}
+
+/* group 2 — the diagram (roles + the routing lines move together) */
+.st--quiet .st__roles,
+.st--quiet .st__lines {
+  transition-delay: 120ms;
+}
+
+/* group 3 — the lockup */
+.st--quiet .st__truth {
+  transition-delay: 240ms;
+}
+
+.st--quiet.is-in .st__eyebrow,
+.st--quiet.is-in .st__headline,
+.st--quiet.is-in .st__sub,
+.st--quiet.is-in .st__roles,
+.st--quiet.is-in .st__truth {
+  opacity: 1;
+  filter: blur(0px);
+}
+
+.st--quiet.is-in .st__lines {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .st--quiet .st__eyebrow,
+  .st--quiet .st__headline,
+  .st--quiet .st__sub,
+  .st--quiet .st__roles,
+  .st--quiet .st__lines,
+  .st--quiet .st__truth {
+    opacity: 1;
+    filter: none;
+    transition: none;
+    transition-delay: 0s;
+  }
+}

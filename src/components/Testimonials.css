@@ -1,0 +1,450 @@
+/* ===========================================================================
+   Testimonials / "Backed by" — Natural `investors` section, donor-traced.
+
+   Geometry is the donor's, measured (inspo/natural/DESIGN.md §investors
+   anatomy tree): header block 480px wide over an edge-to-edge row of cards
+   542px tall at 2px radius, two width tiers 560 (fund) / 360 (angel), padding
+   80/40/40, a uniform 122px gap between mark / quote / footer, 20px between
+   cards, 120px inset at 1440. The donor's hover-expand (angel → fund width,
+   150ms) was dropped per user 2026-07-26 — cards are static.
+
+   ---------------------------------------------------------------------------
+   PALETTE — SANCTIONED EXCEPTION (user, 2026-07-26). DO NOT "FIX" THIS FILE.
+   ---------------------------------------------------------------------------
+   The five `--tm-fill-*` values below are the ONLY raw colour literals in this
+   build outside the token files, logos.tsx and the frozen KineticConversation.
+   They are deliberate: this row is Natural's palette break, and it only works
+   because each card is a full-bleed slab of its subject's REAL brand colour
+   (donor: Forerunner #001633, Mercury #5266eb, Privy #17171f, Y Combinator
+   #f60, light tier rgb(235,234,229)). Turning them into ramp neutrals would
+   delete the section's entire idea.
+
+   The exception is scoped to the INSIDE of the cards. The section ground, the
+   header, the measures, the radii, the entrance easing and every gray in this
+   file are ordinary tokens. `scripts/session7-gates.mjs` excludes this file
+   from Gate 7 for exactly this reason, in the same way it excludes logos.tsx.
+
+   Ink on a card is never a token either — it is the donor's two-tier rule:
+   `--light` = white ink with the title at 50% alpha, `--dark` = our ink #161514
+   with the title at 50% alpha (donor: rgba(255,255,255,.5) / rgba(17,20,0,.5),
+   DESIGN.md palette table rows 6 and 12).
+
+   PER-BRAND SOURCING is recorded next to each value below. Every one was read
+   off the organisation's OWN live CSS / logo SVG (measured, not eyeballed, and
+   not taken from a brand aggregator — brandfetch 403s and brandcolors has no
+   entry for any of these). Anything not fully verified is marked `~`.
+   =========================================================================== */
+
+.tm {
+  --tm-gutter: 24px;
+  --tm-w-fund: 560px;
+  --tm-w-angel: 360px;
+  --tm-card-h: 542px;
+  --tm-card-pad: 80px 40px 40px;
+  --tm-card-gap: 122px;
+  --tm-quote-w: 440px;
+  --tm-quote-h: 96px;
+  --tm-quote-lines: 4;
+
+  /* ── the sanctioned fills ────────────────────────────────────────────────
+     Antler — their live `:root` declares `--swatch--red: #ed4746` (confirmed by
+     pixel-sampling the logo mark and both Apply buttons: all three read #ed4746
+     exactly). We ship their OWN `--swatch--dark-red: #b82b35` instead, because
+     white body ink on #ed4746 is 3.76:1 and fails AA, while #b82b35 is 6.11:1.
+     Same brand token set, one step down. Checkpoint item. */
+  --tm-fill-antler: #b82b35;
+
+  /* Superangel — their dominant brand ground is the yellow: computed `header`
+     background rgb(252,198,79), 12 CSS references, the largest painted area on
+     their site. White ink on it is 1.58:1 and unusable, so this card takes the
+     donor's OTHER ink tier (dark ink, 13.5:1) — which is also what their own
+     site does. It is the row's one bright card, the slot Y Combinator's #f60
+     holds in the donor. */
+  --tm-fill-superangel: #fcc64f;
+
+  /* Grünfin — `~` the only soft value here. The company is closed; grunfin.com
+     now serves a Google Sites notice whose teal is Google's, not theirs. This
+     is the hero ground their production site actually shipped, pixel-sampled
+     from the Wayback capture of 2024-06-01. White ink 5.30:1 ✓. */
+  --tm-fill-grunfin: #367851;
+
+  /* VentureBeat — the wordmark fill in the inline logo SVG on venturebeat.com
+     (`fill="#121212"`, paired with `fill="#ED2025"` for the red flame). The red
+     is 4.34:1 with white and would also collide with Antler's card, so the card
+     takes the mark's other half. White ink 18.5:1 ✓. NOTE this is a near-black
+     panel, which the page's standing no-black rule bars — it is inside the
+     user's sanctioned exception, and the donor's own row runs #17171f, #030712
+     and #000000 cards for the same reason. */
+  --tm-fill-venturebeat: #121212;
+
+  /* Knowzilla — the founder's card is the donor's LIGHT tier, measured
+     rgb(235,234,229) on their Human Capital card. Deliberately NOT knowzilla.eu's
+     real brand teal (#0d9488, read from their `:root --kz-green`): this mock
+     re-skins the company on a lavender/signal-blue system, so their production teal
+     would be the one colour on the page belonging to no ladder at all. */
+  --tm-fill-knowzilla: #ebeae5;
+
+  --tm-ink-light: #ffffff;
+  --tm-ink-light-50: rgb(255 255 255 / 0.5);
+  --tm-ink-dark: var(--color-ink);
+  --tm-ink-dark-50: rgb(22 21 20 / 0.5);
+
+  position: relative;
+  background: var(--color-surface-100);
+  color: var(--color-ink);
+  padding: 96px 0 64px;
+}
+
+@media (min-width: 769px) {
+  .tm {
+    --tm-gutter: 40px;
+    padding: 152px 0 96px;
+  }
+}
+
+/* ── header block ─────────────────────────────────────────────────────────
+   Donor keeps the heading SMALL (32/40, one weight below the page's other
+   H2s) so the cards carry the section. The 480px measure is what makes it
+   wrap to two lines; `text-wrap: balance` would undo that, so it is absent
+   on purpose. The inset matches the row's, so the sentence and the first
+   card share one left edge. */
+/* The 480px measure lives on the two text elements, NOT on this block: this
+   block carries the row's own responsive inset, and with `box-sizing:
+   border-box` a max-width here would eat the 120px inset out of the measure
+   and drop the heading to four lines. */
+.tm__head {
+  padding-inline: max(var(--tm-gutter), calc((100% - 1280px) / 2 + var(--tm-gutter)));
+  margin-bottom: 40px;
+}
+
+@media (min-width: 769px) {
+  .tm__head {
+    margin-bottom: 56px;
+  }
+}
+
+/* NOT the tracked uppercase eyebrow idiom (cap 3, never adjacent — and
+   SharedTruth directly above holds one). This is the donor's own lead-in:
+   plain sentence case, 15/24, gray-700 — the same de-idiomed treatment
+   IntegrationsStrip was given in Session 3. */
+.tm__lead {
+  margin: 0 0 12px;
+  max-width: 480px;
+  font-size: 15px;
+  line-height: 24px;
+  color: var(--color-gray-700);
+}
+
+.tm__headline {
+  margin: 0;
+  max-width: 480px;
+  font-family: var(--font-display);
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 500;
+  letter-spacing: -0.32px;
+  color: var(--color-ink);
+}
+
+/* ── the row ──────────────────────────────────────────────────────────────
+   Native horizontal scroll, no JS, no scroll-snap (donor has none — snap
+   would fight the two width tiers). It is a direct child of the section, so
+   `100%` is already the full page width and the donor's `100vw` breakout is
+   not needed; `100vw` would include the classic scrollbar gutter and put a
+   horizontal scrollbar on the whole document, which the overflow gate bans. */
+.tm__row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 20px;
+  margin: 0;
+  padding-block: 0;
+  padding-inline: max(var(--tm-gutter), calc((100% - 1280px) / 2 + var(--tm-gutter)));
+  list-style: none;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.tm__row::-webkit-scrollbar {
+  display: none;
+}
+
+/* The house `.kz-focus-ring` is an outer box-shadow; on an element that runs
+   edge to edge, half of it falls outside the viewport. Same accent, same 2px,
+   drawn INSIDE instead — and an outline rather than an inset shadow, so the
+   shadow policy still holds that this build has exactly one shadow idiom.
+   Accent on an interactive state is explicitly allowed by contract R1. */
+.tm__row:focus-visible {
+  outline: 2px solid var(--color-accent-600);
+  outline-offset: -4px;
+}
+
+/* Chromium honours `padding-inline-end` on a flex scroll container, but only
+   when the container is not `display: block`; keeping this element flex is
+   load-bearing for the trailing inset, which the verify script asserts. */
+
+.tm__slot {
+  flex: 0 0 auto;
+  width: var(--tm-w-angel);
+}
+
+.tm__slot--fund {
+  width: var(--tm-w-fund);
+}
+
+/* Donor hover (angel card widening to fund width on hover, 150ms ease-out)
+   was carried over and then REMOVED per user 2026-07-26: "we dont need that".
+   Cards are static; the row's only motion is the once-latched entrance. */
+
+/* ── card ─────────────────────────────────────────────────────────────────
+   Fixed height with a uniform 122px gap: 80 + 32 (mark) + 122 + 96 (quote)
+   + 122 + 50 (footer) + 40 = 542, so the declared height and the declared
+   rhythm agree instead of one overriding the other. 2px radius — the donor's
+   cards are near-square, deliberately not our 12px card radius, because they
+   read as printed slabs rather than as UI panels. */
+.tm-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--tm-card-gap);
+  height: var(--tm-card-h);
+  padding: var(--tm-card-pad);
+  margin: 0;
+  border-radius: 2px;
+  overflow: hidden;
+  /* confine the grain layer's blend to this card's own slab */
+  isolation: isolate;
+}
+
+/* ── grain: same paper tooth as the kinetic card (user 2026-07-26) ────────
+   Identical tile + blend to `.kinetic-card__inner::before` (feTurbulence SVG,
+   200px tile, `overlay` so mid-gray stays neutral and the fill hue shows
+   through untinted). Content is lifted to z-index 1 below, so the ink is
+   never textured — only the slab is. `overlay` self-attenuates on the very
+   dark fills (VentureBeat) and reads strongest on the mids — that spread is
+   the printed-stock look, one knob on --tm-grain. */
+.tm-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: var(--tm-grain, 0.55);
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  background-repeat: repeat;
+}
+
+.tm-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.tm-card--light {
+  color: var(--tm-ink-light);
+}
+
+.tm-card--dark {
+  color: var(--tm-ink-dark);
+}
+
+.tm-card--antler {
+  background: var(--tm-fill-antler);
+}
+.tm-card--superangel {
+  background: var(--tm-fill-superangel);
+}
+.tm-card--grunfin {
+  background: var(--tm-fill-grunfin);
+}
+.tm-card--venturebeat {
+  background: var(--tm-fill-venturebeat);
+}
+.tm-card--knowzilla {
+  background: var(--tm-fill-knowzilla);
+}
+
+.tm-card__mark {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  height: 32px;
+  max-width: 100%;
+}
+
+.tm-mark {
+  display: block;
+  width: 32px;
+  height: 32px;
+}
+
+.tm-brand-mark {
+  display: block;
+  width: 32px;
+  height: 32px;
+  color: currentColor;
+}
+
+.tm-brand-mark--venturebeat {
+  width: 42px;
+  height: 24px;
+}
+
+.tm-brand-mark--antler {
+  width: 32px;
+  height: 32px;
+}
+
+.tm-brand-mark--superangel {
+  width: 28px;
+  height: 28px;
+}
+
+.tm-brand-mark--grunfin {
+  width: 32px;
+  height: 32px;
+}
+
+.tm-wordmark {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.17px;
+  line-height: 1;
+}
+
+/* Fixed 4-line box (donor: 96px at 15/24). Clamped rather than raw
+   `overflow: hidden` so an over-long quote ends on a whole line instead of a
+   half-cut one; the verify script asserts nothing is clipped at all. */
+.tm-card__quote {
+  flex: 0 0 auto;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--tm-quote-lines);
+  line-clamp: var(--tm-quote-lines);
+  overflow: hidden;
+  height: var(--tm-quote-h);
+  max-width: var(--tm-quote-w);
+  margin: 0;
+  font-size: 15px;
+  line-height: 24px;
+  font-weight: 400;
+  letter-spacing: -0.075px;
+}
+
+.tm-card__footer {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  height: 50px;
+}
+
+.tm-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.tm-card__name,
+.tm-card__title {
+  font-size: 15px;
+  line-height: 24px;
+}
+
+.tm-card__title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* the donor's exact-50% rule — the title is the SAME ink at half alpha, never
+   a separate gray, so it holds on any fill */
+.tm-card--light .tm-card__title {
+  color: var(--tm-ink-light-50);
+}
+
+.tm-card--dark .tm-card__title {
+  color: var(--tm-ink-dark-50);
+}
+
+.tm-card__tile {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+/* ── QUIET entrance ───────────────────────────────────────────────────────
+   Attio's house grammar: opacity + blur(2px) → 0, 520ms on --ease-entrance,
+   120ms stagger, header first then the cards left to right. Fires once and
+   latches (useInView disconnects its observer), so it can never replay. */
+.tm__head,
+.tm__slot {
+  opacity: 0;
+}
+
+.tm.is-in .tm__head,
+.tm.is-in .tm__slot {
+  animation: tm-enter 520ms var(--ease-entrance) both;
+}
+
+.tm.is-in .tm__slot {
+  animation-delay: calc(var(--i) * 120ms);
+}
+
+@keyframes tm-enter {
+  from {
+    opacity: 0;
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* ── mobile ───────────────────────────────────────────────────────────────
+   Donor's small-screen tier: every card 280px, padding 32, card height 402.
+   The donor's internal rhythm there is gap 80 + a 4-line quote; ours is gap 56
+   + a 6-line quote, because at 280px wide our real quotes run to six lines and
+   the donor's four-line box would cut Jussi Kallasvuo's sentence in half. The
+   48px comes out of the two gaps and goes into the quote, so the CARD is still
+   exactly 402: 32 + 32 + 56 + 144 + 56 + 50 + 32. Deviation, deliberate — a
+   clipped real quote is a worse failure than a tighter internal rhythm.
+   The row is the same native overflow scroll, which is what makes it
+   swipeable — no carousel script on either side. */
+@media (max-width: 768px) {
+  .tm {
+    --tm-w-fund: 280px;
+    --tm-w-angel: 280px;
+    --tm-card-h: 402px;
+    --tm-card-pad: 32px;
+    --tm-card-gap: 56px;
+    --tm-quote-w: none;
+    --tm-quote-h: 144px;
+    --tm-quote-lines: 6;
+  }
+
+  .tm__headline {
+    font-size: 28px;
+    line-height: 36px;
+    letter-spacing: -0.28px;
+  }
+}
+
+/* ── reduced motion ───────────────────────────────────────────────────────
+   Settled render: no entrance. Cards are already static. */
+@media (prefers-reduced-motion: reduce) {
+  .tm__head,
+  .tm__slot {
+    opacity: 1;
+    animation: none !important;
+    filter: none;
+  }
+}

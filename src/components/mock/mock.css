@@ -1,0 +1,125 @@
+/* =====================================================================
+ * mock.css — motion primitives for the live product-window mocks.
+ * Imported by the mock components (Window / typewriter-driven scenes).
+ * Transform / opacity / filter only. Keep durations in sync with the
+ * typewriter engine defaults (resetFadeMs 420ms, reveal 450ms).
+ * ===================================================================== */
+
+/* ---- Typing caret -------------------------------------------------- *
+ * A thin vertical bar rendered inline after the text span. Hidden until
+ * the engine adds `.is-on` for the currently-typing line. */
+.tw-caret {
+  display: inline-block;
+  width: 0;
+  height: 1.05em;
+  margin-left: 1px;
+  border-right: 1.5px solid currentColor;
+  vertical-align: -0.16em;
+  opacity: 0;
+}
+
+.tw-caret.is-on {
+  animation: tw-blink 1s steps(1, end) infinite;
+}
+
+@keyframes tw-blink {
+  0%,
+  49.9% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ---- "Thinking" bounce dots --------------------------------------- */
+.mock-dot {
+  animation: mock-bounce 1s ease-in-out infinite;
+}
+.mock-dot:nth-child(2) {
+  animation-delay: 0.12s;
+}
+.mock-dot:nth-child(3) {
+  animation-delay: 0.24s;
+}
+
+@keyframes mock-bounce {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: translateY(-3px);
+    opacity: 1;
+  }
+}
+
+/* ---- Reveal (floating cards / chips / indicators) ----------------- *
+ * Base is hidden + nudged down; the engine adds `.is-shown` to play the
+ * entrance, removes it to fade back out on reset. */
+.mock-reveal {
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 450ms var(--ease-entrance, cubic-bezier(0.33, 1, 0.68, 1)),
+    transform 450ms var(--ease-entrance, cubic-bezier(0.33, 1, 0.68, 1));
+  will-change: opacity, transform;
+}
+
+.mock-reveal.is-shown {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---- Soft-fade reset root ----------------------------------------- *
+ * The transcript body carries this so the loop can fade it out, clear the
+ * text mid-fade, and fade the (now-empty) body back in. */
+.mock-fade-root {
+  transition: opacity 420ms var(--ease-entrance, cubic-bezier(0.33, 1, 0.68, 1));
+}
+
+.mock-fade-root.mock-resetting {
+  opacity: 0;
+}
+
+/* ---- Recording ping ----------------------------------------------- */
+.mock-ping {
+  animation: mock-ping-kf 1.8s ease-out infinite;
+}
+
+@keyframes mock-ping-kf {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* ---- Reduced motion: freeze everything to a static resting frame --- */
+@media (prefers-reduced-motion: reduce) {
+  .tw-caret,
+  .tw-caret.is-on {
+    animation: none;
+    opacity: 0;
+  }
+  .mock-dot {
+    animation: none;
+    opacity: 0.5;
+  }
+  .mock-reveal {
+    transition: none;
+  }
+  .mock-fade-root {
+    transition: none;
+  }
+  .mock-ping {
+    animation: none;
+  }
+}

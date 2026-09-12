@@ -1,0 +1,60 @@
+/* ClosingCta — the closing drafting sheet.
+
+   Two things live here, both added 2026-07-25 (Session 9) off direct user
+   feedback on this section:
+
+   1. THE FIELD MUST NOT START. Before this, the dot grid met the section's
+      top edge at ~24% of its own strength and the section carried a 1px
+      hairline on top of that — measured as a 10.1/255 luminance step across
+      the full width, which is the "slight border on the top edge" the user
+      objected to. The field now fades through a single elliptical mask that
+      reaches zero INSIDE every edge, with a long tail, so the texture emerges
+      toward the centre instead of switching on. One gradient, not a composed
+      radial x linear pair: `mask-composite` would have to be supported for
+      the composite to mean anything, and if it silently fell back to `add`
+      the two layers would UNION and put the residue straight back on the top
+      edge. A single ellipse cannot fail that way.
+
+      The gradient's colours are a stencil, not palette: mask gradients read
+      alpha only, and `black`/`transparent` is what the shared DotGrid mask
+      already used. No page colour is being invented here.
+
+   2. THE FIELD IS DRAWN ON A CANVAS so it can react to the pointer (see the
+      .tsx). The mask applies to the canvas element, so the cursor-reactive
+      stretch fades out toward the edges exactly like the resting field does —
+      the two effects compose instead of fighting. */
+
+.cta__field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cta__canvas {
+  /* stencil: alpha only. Vertical radius is 50% of the box, so at the
+     horizontal centre the field reaches zero exactly at the top and bottom
+     edges — and off-centre it is already dead well before them. The stop
+     ladder is an eased ramp (slow near zero, steep through the middle) so
+     there is no visible onset row anywhere. */
+  --cta-field-mask: radial-gradient(
+    ellipse 58% 50% at 50% 50%,
+    rgb(0 0 0 / 1) 0%,
+    rgb(0 0 0 / 0.96) 18%,
+    rgb(0 0 0 / 0.8) 34%,
+    rgb(0 0 0 / 0.55) 50%,
+    rgb(0 0 0 / 0.3) 64%,
+    rgb(0 0 0 / 0.13) 78%,
+    rgb(0 0 0 / 0.04) 89%,
+    rgb(0 0 0 / 0) 98%
+  );
+
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* never steals a click from the CTA pill or the demo link */
+  pointer-events: none;
+  mask-image: var(--cta-field-mask);
+  -webkit-mask-image: var(--cta-field-mask);
+}

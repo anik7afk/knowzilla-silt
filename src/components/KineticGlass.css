@@ -1,0 +1,104 @@
+/* KineticGlass — frosted-glass restyle of the frozen KineticConversation.
+   Scoped under .kinetic-glass only. Does not touch KineticConversation.css
+   or the landing-page instance. Glass tokens mirror HvuGlass.css. */
+
+.kinetic-glass {
+  min-height: 100vh;
+  background: var(--color-surface-100);
+  /* soft lavender atmosphere the frost samples (HvuGlass weave-bed role) */
+  --kg-lavender-a: color-mix(in srgb, var(--color-accent-200) 72%, white);
+  --kg-lavender-b: color-mix(in srgb, var(--color-accent-100) 88%, white);
+  --kg-lavender-c: #e8ebfc;
+}
+
+/* Bed behind the growing card — peeks past the glass edges so frost reads */
+.kinetic-glass .kinetic__pin::before {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  inset: 8% 4%;
+  border-radius: 48px;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      58% 48% at 32% 46%,
+      var(--color-accent-200) 0%,
+      transparent 68%
+    ),
+    radial-gradient(
+      52% 44% at 72% 54%,
+      var(--color-accent-100) 0%,
+      transparent 70%
+    ),
+    linear-gradient(135deg, var(--kg-lavender-b) 0%, var(--kg-lavender-c) 55%, var(--kg-lavender-a) 100%);
+  opacity: 0.92;
+  filter: blur(28px);
+  transform: scale(1.04);
+}
+
+.kinetic-glass .kinetic-card {
+  z-index: 1;
+  /* rounder glass plate once grown — still grows from the seed square */
+  border-radius: calc(10px + 22px * var(--grow, 0));
+  /* replace opaque lavender paper with iOS glass */
+  background: rgba(255, 255, 255, 0.34);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  outline: 1px solid rgba(22, 21, 20, 0.05);
+  outline-offset: -1px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(22, 21, 20, 0.07),
+    0 8px 24px rgba(22, 21, 20, 0.08),
+    0 28px 64px rgba(22, 21, 20, 0.14);
+  -webkit-backdrop-filter: blur(22px) saturate(1.15);
+  backdrop-filter: blur(22px) saturate(1.15);
+}
+
+/* Soft lavender wash still lives inside the plate, under the frost sample —
+   keeps the kinetic accent identity without opaque fill */
+.kinetic-glass .kinetic-card__inner::after {
+  content: '';
+  position: absolute;
+  inset: -8%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      46% 40% at 50% 48%,
+      color-mix(in srgb, var(--color-accent-200) 55%, transparent) 0%,
+      transparent 72%
+    );
+  opacity: 0.7;
+}
+
+/* Grain: quieter on glass — tooth, not paper fill */
+.kinetic-glass .kinetic-card__inner::before {
+  z-index: 1;
+  opacity: calc(var(--kc-grain, 0.55) * 0.35);
+  mix-blend-mode: soft-light;
+}
+
+.kinetic-glass .kinetic__wave {
+  z-index: 1;
+}
+
+.kinetic-glass .kinetic-quote {
+  z-index: 2;
+}
+
+.kinetic-glass .kinetic-intro,
+.kinetic-glass .kinetic-guide {
+  z-index: 3;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .kinetic-glass .kinetic-card {
+    background: rgba(255, 255, 255, 0.88);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kinetic-glass .kinetic__pin::before {
+    filter: blur(18px);
+  }
+}

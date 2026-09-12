@@ -1,0 +1,432 @@
+/* Sentence-on-a-timeline — a live line with its history attaching in real time.
+   Skin: Natural (white surface, hairlines, zero shadows). Type: Inter Display
+   for the sentence, Inter (label face; mono retired 2026-07-25) for labels/meta. Accent lavender is the
+   interactive/telemetry mark (playhead, connectors, arrow). Wave + anchor are
+   canvas/rAF-driven (SentenceHistory.tsx); everything here is layout + the
+   scene-class entrances for the rows, arrow, and chip. */
+
+.sh {
+  position: relative;
+  background: var(--color-surface-100);
+  padding: 112px 0 128px;
+  overflow: hidden;
+}
+
+/* ── head ─────────────────────────────────────────────────────────────── */
+
+.sh__head {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 40px;
+}
+
+.sh__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 34px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+.sh__copy {
+  margin: 14px 0 0;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 24px;
+  letter-spacing: -0.1px;
+  color: var(--color-gray-700);
+}
+
+.sh__meta {
+  margin: 30px 0 0;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  line-height: 20px;
+  letter-spacing: 0.06em;
+  color: var(--color-gray-800);
+}
+
+.sh__meta-live {
+  color: var(--color-signal-700);
+  font-weight: 500;
+}
+
+.sh__meta-sep {
+  margin-inline: 12px;
+  color: var(--color-gray-500);
+}
+
+/* ── stage ────────────────────────────────────────────────────────────── */
+
+.sh__stage {
+  --pad: 40px;
+  --park-x: 62%;
+  --wave-top: 104px;
+  --wave-h: 92px;
+  --sent-top: 200px;
+  --rows-top: 356px;
+  --verdict-top: 402px;
+  --ph-top: 10px;
+  --ph-h: 528px;
+
+  position: relative;
+  max-width: 1200px;
+  min-height: 552px;
+  margin: 44px auto 0;
+}
+
+/* full-width bar waveform on its own compositor layer (per-frame canvas
+   redraw must not re-raster the big glyph layers) */
+.sh__wave {
+  position: absolute;
+  top: var(--wave-top);
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: var(--wave-h);
+  pointer-events: none;
+  z-index: 1;
+  will-change: transform;
+}
+
+/* ── playhead (the shared x anchor) ───────────────────────────────────── */
+
+.sh-playhead {
+  position: absolute;
+  top: var(--ph-top);
+  left: 0;
+  width: 1px;
+  height: var(--ph-h);
+  background: var(--color-accent-600);
+  z-index: 4;
+  pointer-events: none;
+  /* driven each frame via translateX; kept on its own layer */
+  will-change: transform;
+}
+
+.sh-playhead__dot {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  width: 11px;
+  height: 11px;
+  margin-left: -5.5px;
+  border-radius: 9999px;
+  background: var(--color-accent-600);
+}
+
+/* ── sentence (karaoke fill) ──────────────────────────────────────────── */
+
+.sh__sentence {
+  position: absolute;
+  top: var(--sent-top);
+  left: var(--pad);
+  right: var(--pad);
+  z-index: 3;
+}
+
+.sh-line {
+  display: inline-block;
+  margin: 0;
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-size: clamp(38px, 5.4vw, 66px);
+  line-height: 1.02;
+  font-weight: 500;
+  letter-spacing: -0.028em;
+}
+
+/* base = gray (the sentence ahead of the playhead) */
+.sh-line--base {
+  position: relative;
+  color: var(--color-gray-400);
+}
+
+/* ink overlay = the spoken portion, clipped to the shared anchor from the right */
+.sh-line--ink {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--color-ink);
+  clip-path: inset(0 100% 0 0);
+  pointer-events: none;
+}
+
+.sh-line__word {
+  color: inherit;
+}
+
+/* ── history rows ─────────────────────────────────────────────────────── */
+
+.sh__rows {
+  position: absolute;
+  top: var(--rows-top);
+  right: calc(100% - var(--park-x) + 30px);
+  width: min(468px, 42%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sh-row {
+  display: flex;
+  align-items: center;
+}
+
+.sh-row__label {
+  flex: none;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 12.5px;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-gray-700);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(2px);
+  transition:
+    opacity 320ms var(--sh-ease),
+    transform 320ms var(--sh-ease);
+}
+
+.sh-row__line {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  margin-inline: 14px;
+  background: var(--color-accent-400);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 520ms var(--sh-ease) 90ms;
+}
+
+.sh-row__dot {
+  position: absolute;
+  top: 50%;
+  right: -1px;
+  width: 8px;
+  height: 8px;
+  margin-top: -4px;
+  border-radius: 9999px;
+  background: var(--color-accent-600);
+  transform: scale(0);
+  transition: transform 300ms var(--sh-ease) 470ms;
+}
+
+.sh-row__value {
+  flex: none;
+  width: 148px;
+  margin-left: 16px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.2;
+  letter-spacing: -0.1px;
+  color: var(--color-ink);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition:
+    opacity 360ms var(--sh-ease) 460ms,
+    transform 360ms var(--sh-ease) 460ms;
+}
+
+.sh-row.is-on .sh-row__label {
+  opacity: 1;
+  transform: translateY(0);
+}
+.sh-row.is-on .sh-row__line {
+  transform: scaleX(1);
+}
+.sh-row.is-on .sh-row__dot {
+  transform: scale(1);
+}
+.sh-row.is-on .sh-row__value {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ── verdict (arrow crossing the playhead → black chip) ───────────────── */
+
+.sh-verdict {
+  position: absolute;
+  top: var(--verdict-top);
+  left: calc(var(--park-x) - 46px);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.sh-verdict__line {
+  position: relative;
+  flex: none;
+  width: 156px;
+  height: 1px;
+  background: var(--color-accent-600);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 480ms var(--sh-ease);
+}
+
+.sh-verdict__head {
+  position: absolute;
+  top: 50%;
+  right: -1px;
+  width: 0;
+  height: 0;
+  margin-top: -4px;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 7px solid var(--color-accent-600);
+  opacity: 0;
+  transition: opacity 200ms var(--sh-ease) 360ms;
+}
+
+.sh-verdict__chip {
+  flex: none;
+  margin-left: 14px;
+  padding: 11px 20px;
+  border-radius: var(--radius-micro, 4px);
+  background: var(--color-ink);
+  color: var(--color-surface-100);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(8px);
+  filter: blur(6px);
+  transition:
+    opacity 520ms var(--sh-ease),
+    transform 520ms var(--sh-ease),
+    filter 520ms var(--sh-ease);
+}
+
+.sh-verdict.is-arrow .sh-verdict__line {
+  transform: scaleX(1);
+}
+.sh-verdict.is-arrow .sh-verdict__head {
+  opacity: 1;
+}
+.sh-verdict.is-chip .sh-verdict__chip {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* shared easing token */
+.sh__stage {
+  --sh-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── narrow / mobile: reflow to a vertical stack ──────────────────────── */
+
+@media (max-width: 719px) {
+  .sh {
+    padding: 72px 0 84px;
+  }
+  .sh__head {
+    padding-inline: 24px;
+  }
+  .sh__meta {
+    margin-top: 24px;
+  }
+
+  .sh__stage {
+    --wave-top: 24px;
+    --wave-h: 72px;
+    min-height: 0;
+    margin-top: 28px;
+    padding: 0 24px;
+  }
+
+  .sh__wave {
+    position: relative;
+    top: 0;
+    height: 72px;
+  }
+
+  /* playhead + ink overlay are desktop-only devices; on mobile the karaoke
+     is carried by per-word color classes on the base line. Scoped higher than
+     `.sh-line` so the later `display: block` rule can't resurrect the overlay. */
+  .sh-playhead,
+  .sh__sentence .sh-line--ink {
+    display: none;
+  }
+
+  .sh__sentence {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin-top: 24px;
+  }
+
+  .sh-line {
+    display: block;
+    max-width: 100%;
+    white-space: normal;
+    font-size: clamp(28px, 7.8vw, 40px);
+    line-height: 1.1;
+  }
+
+  .sh-line--base .sh-line__word {
+    color: var(--color-gray-400);
+    transition: color 440ms var(--sh-ease);
+  }
+  .sh-line--base .sh-line__word.is-spoken {
+    color: var(--color-ink);
+  }
+
+  .sh__rows {
+    position: relative;
+    top: 0;
+    right: auto;
+    width: 100%;
+    margin-top: 36px;
+    gap: 16px;
+  }
+  .sh-row__value {
+    width: auto;
+    flex: 1;
+  }
+
+  .sh-verdict {
+    position: relative;
+    top: 0;
+    left: 0;
+    margin-top: 28px;
+  }
+  .sh-verdict__line {
+    width: 40px;
+  }
+}
+
+/* desktop: base line stays gray regardless of the mobile karaoke class */
+@media (min-width: 720px) {
+  .sh-line--base .sh-line__word.is-spoken {
+    color: var(--color-gray-400);
+  }
+}
+
+/* ── reduced motion ───────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .sh-row__label,
+  .sh-row__line,
+  .sh-row__dot,
+  .sh-row__value,
+  .sh-verdict__line,
+  .sh-verdict__head,
+  .sh-verdict__chip,
+  .sh-line--base .sh-line__word {
+    transition: none;
+  }
+}

@@ -1,0 +1,379 @@
+/* ===========================================================================
+ * §05 Components — scene gallery styles.
+ *
+ * VISUAL LANGUAGE: the spec-book showcase idiom, same as the shell — warm paper
+ * grounds, one 1px hairline per join, generous air, an Inter-600/1.2px label
+ * face instead of the donor's monospace (mono is retired page-wide), and the
+ * 50ms-in / 300ms-out asymmetric hover. The only depth in this chapter is
+ * `--kz-shadow-frame` on the scene frames: those ARE product windows, which is
+ * exactly the token's sanctioned use, and it is what separates a live scene from
+ * the paper it sits on. Nothing else casts.
+ *
+ * Everything is `pch-comp-` prefixed, so nothing here can reach the shell, a
+ * sibling chapter, or — critically — the scenes themselves, which live in their
+ * own documents and cannot be touched by this stylesheet at all.
+ *
+ * The only classes borrowed from outside are the shell's opt-in helpers
+ * (`.pp-sec`, `.pp-eyebrow`, `.pp-h`, `.pp-p`, `.pp-grp`, `.pp-meta`, `.pp-btn`).
+ * ======================================================================== */
+
+.pch-comp {
+  /* The chapter is one long column of posters; the tiles carry their own air. */
+  padding-bottom: 40px;
+}
+
+/* ---------------------------------------------------------------------------
+ * FILTER BAR — sticky, because the cut pass is a long scroll and the group
+ * filter is how it gets narrowed. The shell's main column scrolls with the
+ * window and has no header of its own, so top:0 is the right anchor.
+ *
+ * REBUILT 2026-07-29 — two overlay faults were reported and both were real:
+ *
+ *   1. IT WAS 133px TALL. Nine chips wrapped to two rows and a third row carried
+ *      a status readout plus a two-line hint sentence, so a sticky bar covered a
+ *      seventh of the viewport and sat on top of whichever card frame was
+ *      arriving. Fixed at the cause, not with margins: ONE row, ~52px. The chips
+ *      scroll horizontally instead of wrapping (the shell does the same with its
+ *      own nav below 900px), the redundant "Filter" eyebrow is gone — a row of
+ *      group names with counts does not need to be told it is a filter — and the
+ *      hint sentence is gone with it, because the tiles say "loads on scroll" and
+ *      "click to explore" themselves, in place.
+
+ * The bar sits below the shell's mobile header and both lightboxes.
+ * ------------------------------------------------------------------------- */
+.pch-comp-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0 -8px 8px;
+  padding: 12px 8px;
+  background: var(--kz-surface-100);
+  border-bottom: 1px solid var(--kz-hairline-2);
+}
+
+/* The chips take the slack and scroll; the status cluster never shrinks. */
+.pch-comp-bar__chips {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  gap: 6px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  /* A soft right edge, so a chip cut off by the scroll reads as continuing
+     rather than as clipped. */
+  mask-image: linear-gradient(to right, #000 calc(100% - 20px), transparent);
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 20px), transparent);
+}
+
+.pch-comp-bar__chips::-webkit-scrollbar {
+  display: none;
+}
+
+.pch-comp-bar__live {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 10px;
+}
+
+.pch-comp-chip {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 7px;
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid var(--kz-hairline-2);
+  /* Squircle, not pill (owner, 2026-07-29): gallery chrome uses the system's own
+     tile radius so it cannot be mistaken for a button out of a scene. */
+  border-radius: var(--kz-radius-tile);
+  background: var(--kz-surface-200);
+  color: var(--kz-ink-secondary);
+  font: 500 12px/16px var(--kz-font-body);
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  cursor: pointer;
+  /* 300ms out … */
+  transition:
+    background 300ms ease-out,
+    border-color 300ms ease-out,
+    color 300ms ease-out;
+}
+
+.pch-comp-chip:hover {
+  border-color: var(--kz-gray-400);
+  color: var(--kz-ink);
+  /* … 50ms in */
+  transition-duration: 50ms;
+}
+
+.pch-comp-chip.is-on {
+  background: var(--kz-ink);
+  border-color: var(--kz-ink);
+  color: var(--kz-surface-100);
+}
+
+.pch-comp-chip__n {
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  opacity: 0.62;
+}
+
+/* ---------------------------------------------------------------------------
+ * GROUPS
+ * ------------------------------------------------------------------------- */
+.pch-comp-grp {
+  padding-top: 72px;
+}
+
+.pch-comp-grp + .pch-comp-grp {
+  margin-top: 24px;
+  border-top: 1px solid var(--kz-hairline-2);
+}
+
+.pch-comp-grp__head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.pch-comp-grp__blurb {
+  max-width: 640px;
+  margin: 10px 0 0;
+  font: var(--kz-type-body-15);
+  letter-spacing: var(--kz-ls-body-15);
+  color: var(--kz-ink-secondary);
+}
+
+.pch-comp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  margin-top: 40px;
+}
+
+/* ---------------------------------------------------------------------------
+ * ONE SCENE CARD
+ * ------------------------------------------------------------------------- */
+.pch-comp-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* `contain: layout paint` was tried on the card and MEASURED WORSE (p95 31.5 →
+ * 40.4ms on the same fast-scroll trace), so it is deliberately absent. It was
+ * also the wrong suspect: the dropped frames were never this stylesheet's
+ * layout, they were React reconciling all ~54 tiles on every frame mount, which
+ * `memo` on SceneCard fixed (hard-flick p95 32.7 → 17.2ms). Measure first. */
+
+.pch-comp-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.pch-comp-card__id {
+  min-width: 0;
+}
+
+/* The scene name IS the eyebrow — the label face, mono-free (Inter 600 /
+ * 1.2px / tabular-nums), exactly as the showcase labels its specimens. */
+.pch-comp-card__nm {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font: 600 13px/18px var(--kz-font-body);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-ink);
+}
+
+.pch-comp-card__n {
+  color: var(--kz-gray-500);
+  letter-spacing: 1.2px;
+}
+
+.pch-comp-card__note {
+  max-width: 640px;
+  margin: 8px 0 0;
+  font: var(--kz-type-body-15);
+  letter-spacing: var(--kz-ls-body-15);
+  color: var(--kz-ink-secondary);
+}
+
+.pch-comp-card__act {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding-top: 2px;
+}
+
+.pch-comp-card__path {
+  max-width: 220px;
+  overflow: hidden;
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.4px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-600);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------
+ * THE FRAME. `aspect-ratio` reserves the tile's exact height whether the iframe
+ * is mounted or not, which is what makes the mount/unmount cycle invisible: no
+ * layout shift, no scroll jump, nothing moving under the reader's cursor.
+ * ------------------------------------------------------------------------- */
+.pch-comp-frame {
+  position: relative;
+  aspect-ratio: var(--pch-comp-ar, 1280 / 800);
+  overflow: hidden;
+  border: 1px solid var(--kz-hairline-2);
+  border-radius: var(--kz-radius-card);
+  background: var(--kz-surface-200);
+  box-shadow: var(--kz-shadow-frame);
+}
+
+.pch-comp-frame.is-interactive {
+  border-color: var(--kz-accent-400);
+}
+
+.pch-comp-frame__doc {
+  display: block;
+  width: 1280px;
+  height: var(--pch-comp-h, 800px);
+  border: 0;
+  background: var(--kz-surface-100);
+  transform: scale(var(--pch-comp-scale, 0.781));
+  transform-origin: top left;
+}
+
+/* The veil is why the page keeps its own scroll: until it is clicked the frame
+ * is a poster. Invisible at rest, so what the reader sees is the scene. */
+.pch-comp-frame__veil {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.pch-comp-frame__veil span {
+  padding: 7px 14px;
+  border: 1px solid var(--kz-gray-400);
+  border-radius: var(--kz-radius-tile);
+  /* The page ground at 92%, not a white literal. */
+  background: color-mix(in srgb, var(--kz-surface-100) 92%, transparent);
+  color: var(--kz-ink);
+  font: 500 12px/16px var(--kz-font-body);
+  letter-spacing: 0.2px;
+  opacity: 0;
+  transition: opacity 300ms ease-out;
+}
+
+.pch-comp-frame__veil:hover span,
+.pch-comp-frame__veil:focus-visible span {
+  opacity: 1;
+  transition-duration: 50ms;
+}
+
+/* The interactive frame's own controls (Replay / Lock) — the card header is
+ * off-screen while a tall scene is being driven, so these ride the frame. */
+.pch-comp-frame__ctl {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  display: flex;
+  gap: 8px;
+}
+
+/* The placeholder: a titled empty frame. It says what it is and what it is
+ * waiting for, and offers the button for a reader who wants it now. */
+.pch-comp-frame__ph {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  padding: 24px;
+}
+
+.pch-comp-ph__nm {
+  max-width: 70%;
+  font: 600 12px/16px var(--kz-font-body);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--kz-gray-700);
+}
+
+.pch-comp-ph__hint {
+  margin-bottom: 6px;
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.4px;
+  color: var(--kz-gray-600);
+}
+
+/* ---------------------------------------------------------------------------
+ * NARROW — the shell's own breakpoint, matched on purpose (900px).
+ *
+ * At 900px the shell turns its sidebar into a full-width STICKY header at
+ * z-index 60, so there is no offset this chapter could sticky against. A sticky
+ * bar of ours would simply hide
+ * underneath it: below the breakpoint the filter bar scrolls with the page
+ * instead. The card head stacks, and the frame keeps its ratio and scales
+ * further down — which is the whole point of the transform.
+ * ------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .pch-comp-bar {
+    position: static;
+    flex-wrap: wrap;
+  }
+
+  /* Static means height is free, so the two clusters get a row each rather than
+     squeezing the chip scroller into a third of the column. */
+  .pch-comp-bar__chips {
+    flex-basis: 100%;
+  }
+
+  .pch-comp-card__head {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+
+  .pch-comp-card__path {
+    max-width: 100%;
+  }
+
+  .pch-comp-list {
+    gap: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pch-comp-chip,
+  .pch-comp-frame__veil span {
+    transition: none;
+  }
+
+  /* A reader who has asked for less motion should not have to hover a frame to
+   * learn it is clickable. */
+  .pch-comp-frame__veil span {
+    opacity: 1;
+  }
+}

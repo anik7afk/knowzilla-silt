@@ -1,0 +1,27 @@
+/* =====================================================================
+ * WriteBack.css — layout helpers for the CRM field-row scene.
+ * Motion primitives (mock-reveal, tw-caret) live in mock/mock.css and are
+ * reused untouched — the section is BEAT, so the loop-only mock-fade-root
+ * is no longer used here; this file only adds the grid
+ * that lines up label / value / tick columns, since that shape doesn't
+ * exist anywhere else in the build.
+ * ===================================================================== */
+
+.wb-row {
+  display: grid;
+  grid-template-columns: minmax(112px, 160px) 1fr auto;
+  align-items: center;
+  column-gap: 16px;
+}
+
+/* Call-summary row runs long, so it drops the 3-column grid for a
+   stacked label-over-value block instead. */
+.wb-row--long {
+  display: block;
+}
+
+.wb-row--long .wb-row__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

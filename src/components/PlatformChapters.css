@@ -1,0 +1,1993 @@
+/* PlatformChapters — the deep product showcase ("study it", not "watch it").
+
+   ── REVISION 2, 2026-07-27 ────────────────────────────────────────────────
+   Round 1 was rejected by the owner in-browser: "the component it produced
+   here are very basic and nothing like attios and also what i want in our
+   context we explain our product in this place simply and properly" /
+   "also attios one had animation and showcase of things happening our is just
+   plain cards". This file is the rebuild. Four things changed:
+
+   A. CELL ANATOMY. Rows are composed of MARKS now — leading checkbox, 16px
+      type-glyph chip beside an underlined entity name, bordered tinted score
+      pill, avatar disk + name, status dot + text — not five columns of gray
+      text. Six columns per table where round 1 had five, at 12.5px.
+   B. COLOUR CARRIES DATA, restrained and owned-ramp only (see §tints).
+   C. BAND COMPOSITION rebuilt to the donor's measured ratios (see §geometry).
+   D. STAGED SCENARIO instead of a uniform fade cascade (see §choreography).
+   Plus an explanation layer (a section lede + dual-tone feature rows under
+   ALL FOUR chapters, where the brief asked for two) — owner-driven, flagged.
+
+   ── SKELETON PROVENANCE (A) ──────────────────────────────────────────────
+   attio.com's platform tour: inspo/attio/DESIGN.md §4.4,
+   design-assets/dumps4/article-0-tree.json, dumps/animations-during-sweep.json,
+   shots/desktop-03-y2430.png, and the owner's 32s screen recording of the
+   live section. Five articles that scroll NATIVELY (no pin, no scrub), a
+   sticky rail that an IntersectionObserver flips at the ~0.38 viewport line,
+   and ONE latched multi-beat scenario per chapter on first viewport entry.
+
+   ── SKIN (N) ─────────────────────────────────────────────────────────────
+   Warm ink, three tonal steps (ground surface-300 → plate surface-200 → card
+   surface-100), 1px hairlines, pill buttons.
+
+   SHADOWS: the section's zero-shadow rule was LIFTED by the owner on
+   2026-07-27 ("no dont care about the zero shadow thing remove it"). Exactly
+   two owned warm-ink tokens are spent, on two different jobs:
+     --shadow-frame  the chapter WINDOW itself (§window chrome below) — the
+                     token whose licence is "recorded product-moment windows"
+     --shadow-float  the one overlay that floats OVER the app inside it
+   Flat cards in between stay hairline-defined, so the ladder still says
+   frame < app < floating thing, exactly as the donor recording does.
+
+   ── §window chrome, added 2026-07-27 ─────────────────────────────────────
+   The owner rejected the mocks as "frameless fragments bleeding into the
+   page": they are to read as ACTUAL APP WINDOWS. The plate now wears the
+   house window bar — `WindowBar`, imported verbatim out of mock/Window.tsx
+   so the hero AppFrame, WriteBack and these four can never drift apart — and
+   carries --shadow-frame. Chrome only: traffic lights + a title, no
+   minimise/close, no REC readout, no timestamp, no hover lift (QUIET).
+   Titles are the chapters' OWN labels (Knowledge / Practice / Live
+   navigation / Deal intelligence), which is copy that already exists in the
+   rail beside them — the chrome adds no fiction of its own.
+   The window bar and the app toolbar below it are NOT a duplicate device:
+   the bar names the surface, the toolbar belongs to the card inside it, and
+   a real application shows both.
+
+   ── WHAT IS STILL DELIBERATELY ABSENT (contract, CLAUDE.md) ──────────────
+   · no eyebrow / no uppercase — KineticConversation sits directly above and
+     holds the eyebrow idiom, which is never-adjacent.
+   · (SUPERSEDED 2026-07-27 — see §window chrome. The idiom cap was lifted by
+     the owner; the plate now carries the house window bar. The card's top
+     row is still an app TOOLBAR, which is a different device.)
+   · no waveform (cap 1, KC, adjacent), no transcript surface (cap 1, spent),
+     no count-up (cap 1, spent). Chapter 03's guidance feed carries no
+     timestamps and no speaker labels precisely so it reads as a panel.
+   · no monospace (retired). Digit columns get tabular figures.
+   · no scroll-scrub, no timers, no loops, no animation after settle.
+
+   ── §geometry: measured donor ratios ─────────────────────────────────────
+   article-0-tree.json, rendered px against its 1043×654 band:
+     table card  left  6.9%   width 72.5%   top 11.2%   height 69.9%
+     overlay     left 52.9%   width 32.6% (340px)   height 71.1%
+                 overhangs the card's right edge by 136px and its bottom by 45
+     right-edge mask on the CARD: linear-gradient(to right,#000 38%,transparent)
+       — the card is NOT clipped by the band; the mask alone does the
+       "cropped out of a bigger app" work. Round 1 clipped a too-wide card at
+       the plate edge instead, which is why it read as a small floating table.
+     row height 36 (18 authored ×2), 4 columns + an inline checkbox,
+     9 visible rows, dividers #EEEFF1 1px, radius 6px.
+   Ours is 860px of band against their 1043 (82%), so the card lands at 623px
+   carrying SIX columns at 12.5px — denser than the donor's four at 14px.
+
+   ── §half-scale ──────────────────────────────────────────────────────────
+   The donor authors its mocks at half size and doubles them with a
+   container-query transform (`text-[7px]` → 14px effective; the tell is
+   `rounded-[2.5px]` → 5px). We do NOT adopt the trick: our type already sits
+   at the donor's EFFECTIVE size (12.5px vs their 14px in a band 82% as wide,
+   i.e. denser), so the transform would buy nothing but a blurry raster and a
+   second coordinate space. Flagged in the session report.
+
+   ── §tints: every use of colour as data ──────────────────────────────────
+   All owned ramps, all as MARKS (≤24px, ≤16px type, 1px strokes):
+     accent-100/700  provenance only — source chips + the knowledge glyph
+     won-100/900     a good score, low risk, a saved state
+     risk-100/900    a weak score, high risk, an open objection
+     gray-*          everything else, including all avatar disks
+   The SIGNAL ramp is deliberately absent from this section, so the
+   accent/signal 17°-adjacency rule (CLAUDE.md #7) cannot be tripped at all.
+   Every one of these is a checkpoint flag: "colour carries data" is formally
+   a hero-scoped exception.
+
+   ── §choreography: one latched scenario per chapter ──────────────────────
+   QUIET class: one-shot on first viewport entry, latched (useInView
+   disconnects), settled forever, no timers, no loops, no scroll-linking.
+   Only opacity / transform / filter animate — never width, height or mask.
+   Donor grammar carried over verbatim (dumps/animations-during-sweep.json):
+     · blur→0 and opacity 0→1 fired together, ease cubic-bezier(.33,1,.68,1)
+     · durations quantised to a 5-step 85ms ladder: 340/425/500/595/680
+     · blur amount tracks importance: 2.5px stage, 2px row/detail
+     · table rows: opacity 0→1 + translateY(3px authored → 6px)→0, 300ms
+     · phases, not a uniform cascade: container → contents → micro-chips →
+       a CONTENT beat that is content-timed, not entrance-timed
+   Our four content beats (the part round 1 had none of) are Knowzilla's own,
+   not transplants of the donor's ask-bar/kanban/workflow moments:
+     01 the row the answer came from marks itself, the answer lands line by
+        line, its sources pop, and the footer ticks to "Saved to library"
+     02 five rubric bars grow to value, then the graded score writes itself
+        back into the table row it belongs to
+     03 guidance rows arrive at reading pace with a "now" needle walking down
+        the panel, then the intent readout's confidence rows fill
+     04 the 2×2 intel grid populates cell by cell, the analytics bars draw
+        from an empty baseline, and one new row drops into the deal-rooms
+        table (space reserved from first paint — zero layout shift) */
+
+/* ── REVISION 3, 2026-07-27 (session 12, OWNER PIVOT) ─────────────────────
+   The owner suspended the flatness doctrine and set two benchmarks:
+   · SECTION type/spacing/air = Attio's live platform tour (DESIGN.md:268-273):
+     rail 16px/500 idle-gray→active-ink flip @500ms, intro pb-80, article h3
+     dual-tone max-w 560, feature rows h4 18px + p 16px gray grid-cols-2
+     gap-48, enormous inter-article air (donor articles run 931–1412px tall).
+   · COMPONENT physicality = v2 (design-assets/v2-measure/
+     v2-physicality-measure.md): headline 44px/1.1/600/−0.02em (§1), lede
+     18/1.625 (§1), chapter h3 = v2's PostCall H2 27px/1.15/600/−0.02em
+     (§1, PostCall.tsx:308), 56px heading rhythm (§2), window chrome 16px
+     radius + shadow-float + mist@60% bar + hover lift −2px/200ms (§3–4),
+     20px body pad, 16×12 list rows (§2).
+   The QUIET no-hover-lift rule and the "one shadow token per job" ladder in
+   the header above are SUPERSEDED for this section by that pivot. Chapter
+   04's showcase is now the v2 workflow canvas (see chapters/IntelDetail.*).
+   Canvas greens ride the ATTIO green grammar (owner directive, same day):
+   won-100 fills / won-200 borders / won-900 text / won-700 strokes+ticks —
+   v2's #4ca368 family is NOT ported, and solid won-900 area fills are
+   banned everywhere in the section (won-900 is a text/stroke colour). */
+
+/* ── section: the DESK ─────────────────────────────────────────────────── */
+
+/* TWO-PLANE PASS (session 13, owner direction 2026-07-29, prototyped on this
+   section only). The owner's diagnosis: v5 inherited one-plane flatness —
+   hairlines as abstract dividers floating in space — while v2, the
+   physicality benchmark, is a TWO-PLANE world:
+     · the DESK  — a continuous dotted-paper base plane that never goes away
+     · the SHEET — a bounded surface laid ON the desk, real hairline edges,
+                   desk visible in the margins beside it
+   THE LINE RULE (the deliverable made visible) — every line is exactly one of:
+     · drawn ON the desk        → dashed, faint        (see NOTE, none left)
+     · the EDGE of the sheet    → solid hairline-2     (.pc__panel, .pc__railcol)
+     · a rule INSIDE the sheet  → quietest, hairline-1 (chapter + feature rules)
+   Anything else is decoration and was DELETED. Under that rule the session-12
+   frame died here: the container border-inline verticals (tall floating rails
+   belonging to no surface), the full-width section top/bottom dividers (the
+   desk is a ground — its texture starting/stopping plus the surface-300 step
+   IS the join; a deliberate reversal of the session-12 "divider is built"
+   decision), and the full-bleed chapter rules — all gone.
+
+   ── REV 2, 2026-07-29: THE SHEET IS *ONE PANEL*, NOT CARDS ────────────────
+   Rev 1 of this pass got the sheet grammar wrong and the owner rejected it in
+   browser: it gave the TOC rail its own small rounded shadowed card and each
+   chapter another one — "not like this small card that our agent applied".
+   DELETED in rev 2: `.pc-sheet` entirely (white bg + 1px edge + 16px radius +
+   --shadow-card + 44/48/52 padding, wrapping every chapter's content), and the
+   `.pc-rail` card treatment (white bg + 1px edge + radius-card + --shadow-card
+   + 8/18 padding). Also deleted: the `.pc-chapter__tag` DASHED rule — dashed
+   lines are desk annotations and the tag now lives inside the panel; and the
+   96px inter-chapter desk gap, which had nothing left to expose.
+
+   What replaces them is the donor's actual container (measured, see below):
+   ONE bounded panel that holds the sticky rail AND all four chapters, with
+     · fixed left/right margins — desk gutters run the section's full height
+     · solid hairline edges on all four sides, square corners, NO shadow
+     · one interior vertical hairline splitting rail from content
+     · three GROUND BANDS per chapter (text / showcase / features) that give
+       the white → light-gray → white rotation the donor tints its demo areas
+       with, and the quietest interior rules only where no ground change lands.
+
+   ── MEASURED DONOR CONTAINER (attio.com platform tour) ───────────────────
+   From inspo/attio/design-assets/dumps2/{ALL-ANATOMY.txt:79-88,
+   anatomy-06-y1614.json}, dumps3/sticky-mechanics.json, dumps4/article-*-
+   tree.json, plus pixel probes of shots/desktop-02..09:
+     frame        1392px wide inside a 1440 container with 24px page padding;
+                  border-x 1px #E4E7EC; NO top/bottom border; NO radius
+     grid         24 × 57.906px, no gap; rail = cols 1–6 (347.5px = 6/24),
+                  articles = cols 7–24 (1043px = 18/24)
+     text inset   100%/24 of the frame = 57.9px — the SAME number as the
+                  articles' own 100%/18 inset, so rail labels, intro and
+                  chapter text hang off one grid line
+     rail         nav sticky top:116 (= site header), padding-top 112px, paints
+                  its own opaque ground, z-30
+     divider      1px #E4E7EC at x=372, running the whole rail+articles row
+                  (y 2027→8093), NOT across the intro row
+     grounds      section + rail + text bands + feature rows #FAFAFB;
+                  every chapter's SHOWCASE band #F3F4F6 (bg-surface-subtle).
+                  There is NO #FFFFFF anywhere in the donor tour, and no
+                  per-chapter alternation — the alternation is band-wise and
+                  repeats identically in all five chapters.
+     interior     1px #E4E7EC between chapters (content column only, absent in
+                  the rail gutter) and above the showcase band / feature row
+     ≤1024        container `max-lg:contents` → the frame border-x and the
+                  24px padding both COLLAPSE and the tour goes full-bleed; the
+                  rail <ol> is display:none
+
+   ── REV 3, 2026-07-29: three owner corrections on the rev-2 build ────────
+   Reviewed in browser at :5175, three changes ordered:
+     A. The intro block moves INSIDE the sheet — the panel's top hairline sits
+        ABOVE the heading. (Rev 2 had it on the desk above the panel, flagged
+        at the time as an assumption to confirm. This is also what the DONOR
+        does, so the deviation recorded in §OUR TRANSLATION 5 is now closed.)
+     B. "it made the sheet too smal lenght wise maybe increase it by 10 to
+        20 %" → the measure goes 1200 → 1380 (+15%), gutters 120 → 30px at
+        1440. See §OUR TRANSLATION 1.
+     C. "the main panel only is visible through horizontal side for this whole
+        section" → the desk shows ONLY as the two side gutters. The section's
+        152px opening and 96px closing air moved INSIDE the sheet (the intro's
+        padding-top and the last chapter's feature-band padding-bottom), so the
+        panel spans the section's full height and no desk band is left above or
+        below it. .pc__container now has zero block padding.
+
+   ── OUR TRANSLATION (deviations, all deliberate) ─────────────────────────
+   1. WIDTH. The donor frame is 1392 of a 1440 container (24px page padding).
+      Rev 2 put ours on the page's declared 1200 measure (120px gutters); the
+      owner judged that too narrow, so rev 3 widens it 15% to 1380 — which
+      lands within 12px of the donor frame, with the rail/content columns
+      within 3px/10px of the donor's 347.5/1043. The gutter is then 30px each
+      side at 1440 (donor 24px). Recorded cost: 1380 is now the widest measure
+      on the page — Hero, HVU, Stats and Footer run 1280 — so the panel
+      overhangs its neighbours' text columns by 50px each side; the
+      pacing-verify MANIFEST measure for this section was updated 1200 → 1380
+      so the declaration is not a lie. The gutter width itself is marked `~`:
+      it is a consequence of our measure, not a donor number.
+   2. GROUNDS. #FAFAFB→#F3F4F6 becomes surface-100 #ffffff → surface-200
+      #fafafa. Our desk is already surface-300 #f6f6f6, so the showcase band
+      could NOT take #f6f6f6: the panel edge would then have the same tone on
+      both sides for ~600px of every chapter and the sheet would leak into the
+      desk. #fafafa keeps a real step at the edge in every band; the trade is a
+      5-unit band step where the donor has 7.
+   3. LINE HIERARCHY. The donor spends ONE hairline token (#E4E7EC) on all four
+      jobs. The owner asked for a hierarchy, so: edges + rail divider take
+      hairline-2 #ececeb (our #E4E7EC equivalent), interior rules drop a full
+      step to hairline-1 #f6f6f6.
+   4. INTERIOR RULES ONLY WHERE THE GROUND DOESN'T CHANGE. The donor rules
+      above the showcase band and the feature row as well; we let the ground
+      step carry those two joins (the page-level rule this project already
+      lives by) and keep a rule only at the chapter↔chapter seam, where white
+      meets white.
+   5. TOP + BOTTOM EDGES — REV 4 (owner, 2026-07-29): FULL-BLEED HORIZONTALS,
+      INSET VERTICALS, CROSSING CORNERS. Rev 3 closed the panel as a rectangle
+      on all four sides; the owner's actual grammar (stated after seeing it,
+      and matching the donor's own arrangement of full-bleed separators +
+      border-x-only frame): the sheet's HORIZONTAL edges stretch screen edge
+      to screen edge, its VERTICAL edges stay inset at the panel margins, and
+      at the corners the horizontal passes through the vertical and keeps
+      going — a drafting-sheet register-mark crossing, not a sealed box.
+      Implementation: the horizontals live on the SECTION (border-block on
+      .pc, full viewport width — legal under the line rule because the panel
+      is flush with the section's top/bottom, so they are still the sheet's
+      edges, extended across the desk); the verticals stay on .pc__panel
+      (border-inline). This amends the line rule's edge clause: horizontal
+      edges are full-bleed, vertical edges are inset.
+   6. NO DASHED LINE SURVIVES in this section — the tag rule was the only
+      holder of the desk-annotation class and it moved inside the panel.
+      Recorded, not hidden: the class is legal, just unpopulated here. */
+/* ── REV 5, 2026-07-29 (session 14): THE DESK LEFT THIS SECTION ───────────
+   The two-plane pass above was prototyped here and has now been rolled out
+   page-wide (owner: "the dotted thing will be the main bg panel"). So this
+   section stops owning a desk: `svg.pc__desk` and the section's own
+   surface-300 ground are both DELETED, and `.pc` is transparent — the page's
+   single desk plane (App.tsx → <PageDesk>, PagePlanes.css) shows through its
+   two gutters instead. Tone and dot geometry are unchanged by construction:
+   they moved, they were not re-authored. What this buys, beyond one less copy
+   of the same layer: no doubled dot alpha inside this section, and no tone
+   seam where the section's local ground used to start and stop against the
+   page's. Everything else in this file — the panel, the line rule, the bands,
+   the sticky rail — is untouched. */
+.pc {
+  /* still a stacking context: the plates, overlays and cite marks inside the
+     chapters all carry z-indexes that must not escape into the page ladder */
+  position: relative;
+  isolation: isolate;
+  color: var(--color-ink);
+  /* REV 4: the sheet's horizontal edges, run FULL-BLEED across the desk
+     (§OUR TRANSLATION 5). The panel is flush with the section's block edges,
+     so these lines sit exactly on the sheet's top/bottom and cross its inset
+     vertical edges at the corners. */
+  border-block: 1px solid var(--color-hairline-2);
+  /* nav Product target: same 104px clearance the chapters use, so the sheet's
+     top hairline lands 24px under the 80px sticky nav rather than beneath it */
+  scroll-margin-top: 104px;
+}
+
+/* (`.pc__desk` lived here from session 13 until session 14's page-wide
+   rollout. Its geometry — 10px tile, 1×1px rect at (4.5,4.5) — and its two
+   paint values — gray-500, opacity 0.6 — were not changed, only moved:
+   components/PageDesk.tsx holds the measurement, .page-desk in PagePlanes.css
+   holds the paint.) */
+
+/* height class 'tall', standard 152/96 — but REV 3 moves BOTH of those numbers
+   INSIDE the panel (the intro's padding-top and the last chapter's feature-band
+   padding-bottom), because the owner's rev-3 correction is that the desk shows
+   only through the two side gutters: the sheet spans the section's full height,
+   so the container itself has ZERO block padding.
+
+   WIDTH, rev 3: the owner judged the rev-2 sheet "too small lengthwise, maybe
+   increase it by 10 to 20 %". +15% originally produced a 1380px panel.
+   REV 5 (owner, 2026-07-29): align the panel's two desktop edges with the hero
+   rails. Both now sit 40px from their respective viewport edges, producing a
+   1360px panel at 1440. The panel remains centred and symmetric.
+   Gutter maths (the panel is centred at every width):
+     1440 → container 1440, pad 40  = 40px of desk each side
+     1920 → container 1440 centred  = 280px
+     1280 → container 1280, pad 40  = 40px
+     1024 → container 1024, pad 40  = 40px
+      768 → pad 24                  = 24px
+      390 → pad 24                  = 24px  */
+.pc__container {
+  max-width: 1440px;
+  margin-inline: auto;
+  padding: 0 40px;
+}
+
+/* ── intro: dual-tone headline + the loop lede, no eyebrow, no badge ─────
+   REV 3 (owner): the intro is INSIDE the sheet, spanning both panel columns,
+   and it carries the section's 152px opening air — so the panel's top hairline
+   IS the section's top edge and no desk band is left above the heading. This is
+   also the donor's arrangement (intro row inside the frame at pt-152 pb-80,
+   dumps2/ALL-ANATOMY.txt:82-85; DESIGN.md:268-269). Inset 56px = the donor's
+   100%/24 text inset (57.9px at 1390 → 57.5px at 1380, taken to a whole px),
+   the same line the rail labels and the chapter bands hang off. */
+
+.pc__intro {
+  grid-column: 1 / -1;
+  padding: 152px 56px 80px;
+}
+
+/* v2 section headline: 44px / 1.1 / 600 / −0.02em (v2-physicality §1) — the
+   owner's "fonts look so shallow" fix. Attio's tour h2 is the same scale
+   neighbourhood (40px, DESIGN.md:269). */
+.pc__headline {
+  margin: 0;
+  /* the intro block now spans the whole panel, so the type column needs its own
+     measure (it used to come from .pc__intro's max-width) */
+  max-width: 760px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(36px, 3.6vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  text-wrap: balance;
+}
+
+.pc__headline span {
+  color: var(--color-gray-700);
+}
+
+/* The plain-language statement of the whole loop. Owner edits at checkpoint.
+   v2 lede: 18px / 1.625 / 400 (v2-physicality §1). */
+.pc__lede {
+  margin: 24px 0 0;
+  max-width: 58ch;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.625;
+  letter-spacing: -0.1px;
+  color: var(--color-gray-700);
+}
+
+/* ── rail + chapter column ────────────────────────────────────────────── */
+
+/* ── THE PANEL: one continuous sheet on the desk ────────────────────────
+   Two grid rows: the intro spanning 1/-1, then the rail + chapters row. Attio's
+   intro row closes on pb-80 before the articles begin (DESIGN.md:268) — that
+   80px is now INSIDE the sheet, carried by .pc__intro's padding-bottom.
+
+   Geometry, donor-proportional: the rail column is 6/24 of the measure exactly
+   as the donor's is (347.5 = 6/24 × 1390 → 340 = 6/24 × 1360), and the content
+   column takes the remaining 18/24 = 1020px against the donor's 1043px. No column-gap: the columns MEET, and the interior
+   hairline on the rail column's right edge is the join — a gap would put a strip
+   of panel ground between two grounds and re-invent the floating divider this
+   pass deleted.
+
+   NO border-radius (donor: none anywhere in the frame) and NO overflow:hidden
+   — an overflow-clipped ancestor becomes the scrollport for position:sticky
+   and would freeze the rail. Square corners are also what let the tinted
+   showcase bands run clean into the left and right edges.
+
+   NO box-shadow. The panel is defined by its edges, exactly as the donor's is
+   (the extraction records zero shadows anywhere in the tour); the only shadow
+   left in the section is --shadow-float on the product window inside it. */
+.pc__panel {
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  background: var(--color-surface-100);
+  /* REV 4: verticals only — the horizontals are full-bleed on .pc itself
+     (§OUR TRANSLATION 5, crossing corners). */
+  border-inline: 1px solid var(--color-hairline-2);
+}
+
+/* The rail's column — a grid item in the SECOND row (default align stretch), so
+   its border-right runs the full height of the rail+chapters row the way the
+   donor's x=372 divider does, and stops short of the intro exactly as the
+   donor's does, instead of stopping at the sticky nav's own box.
+   padding-top 107px: the donor drops its rail 112px below the grid row top
+   (nav padding-top: 112px, dumps2/anatomy-06-y1614.json); our rows carry 5px
+   of their own top padding, so 107 + 5 puts the first label's line box on the
+   donor's 112px line. Left inset 56px = the shared text inset. */
+.pc__railcol {
+  border-right: 1px solid var(--color-hairline-2);
+  padding: 107px 32px 64px 56px;
+}
+
+.pc__articles {
+  min-width: 0;
+}
+
+/* ── the left rail ──────────────────────────────────────────────────────
+   ROUND 3 (owner): the instrument spine is RETIRED — the gray-400 vertical
+   hairline and the travelling 2px ink tick are gone. The rail is bare text;
+   the active row announces itself by GROWING: a composited transform scale
+   (1.07, origin left center) over 450ms on the house entrance ease, running
+   together with the existing 500ms colour flip. Transform only — no
+   font-size change, no reflow, and the settled state re-rasters sharp.
+
+   SESSION 13 rev 1 made the rail a small sheet CARD — rejected by the owner
+   ("not like this small card that our agent applied"). Rev 2 removes the card
+   outright: no border, no radius, no shadow, no padding, no align-self (the
+   rail is no longer a grid item — .pc__railcol is). What is left is the donor's
+   own rail: bare sticky text in a column, opaque so content can never show
+   through it (the donor's nav paints #FAFAFB for the same reason; ours takes
+   the panel's own surface-100, which is invisible against it by design). */
+
+.pc-rail {
+  position: sticky;
+  /* nav is sticky h-20 (80px); 32px of air under it. Donor: top:116 = its own
+     site-header height (dumps3/sticky-mechanics.json). */
+  top: 112px;
+  background: var(--color-surface-100);
+}
+
+.pc-rail__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Rail pitch, corrected 2026-07-29 (owner: "we have too much gaps" vs Attio).
+   The donor's <ol> class is `lg:gap-2` = 8px (computed gap: 8px,
+   dumps2/anatomy-06-y1614.json) — an earlier comment here read it as `gap-8`
+   (32px) and set our pitch to 18+24+18 = 60px, i.e. double the donor's.
+   Donor pitch = 22px line + 8px gap = 30px. Ours: 22px line + 5px/5px padding
+   = 32px pitch, no list gap — same optical 10px between line boxes, and the
+   padding keeps a contiguous 32px pointer target instead of a bare 22px one.
+   The 22px left indent left with the spine it used to clear. */
+.pc-rail__link {
+  display: grid;
+  /* single column since 2026-07-29 — the owner removed the rail numerals
+     (the 26px index column left with them) */
+  grid-template-columns: minmax(0, 1fr);
+  align-items: baseline;
+  padding: 5px 0;
+  text-decoration: none;
+  color: inherit;
+  border-radius: var(--radius-micro);
+  transform-origin: left center;
+  /* grow ease = house entrance curve; component-scoped literal (rule 8) */
+  transition: transform 450ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.pc-rail__row.is-active .pc-rail__link {
+  transform: scale(1.07);
+}
+
+/* Attio: 16px/500 on a 22px line (donor computed lineHeight), colour-only flip
+   over 500ms (DESIGN.md:271-273). Idle is
+   PALER than the donor's #505967 — "idle pale gray, active ink" is the
+   owner's explicit direction for this round (~, owner-directed). */
+.pc-rail__label {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 22px;
+  letter-spacing: -0.16px;
+  color: var(--color-gray-500);
+  transition: color 500ms cubic-bezier(0, 0, 0, 1);
+}
+
+.pc-rail__row.is-active .pc-rail__label {
+  color: var(--color-ink);
+}
+
+/* Description-reveal variant (checkpoint A/B — `railDescriptions` prop).
+   The sentence is ALWAYS in the layout at a fixed 36px, so the reveal moves
+   opacity and blur only and the rail never shifts by a pixel. */
+.pc-rail__desc {
+  height: 36px;
+  margin-top: 2px;
+  overflow: hidden;
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: -0.05px;
+  color: var(--color-gray-600);
+  opacity: 0;
+  filter: blur(2px);
+  transition:
+    opacity 500ms cubic-bezier(0, 0, 0, 1),
+    filter 500ms cubic-bezier(0, 0, 0, 1);
+}
+
+.pc-rail__row.is-active .pc-rail__desc {
+  opacity: 1;
+  filter: blur(0);
+}
+
+/* (the travelling needle `.pc-rail__tick` was retired in round 3 with the
+   spine — the grow transition on `.pc-rail__link` is the active mark now) */
+
+/* ── chapter article: three ground bands inside the panel ─────────────── */
+
+/* REV 2: a chapter is no longer a card on the desk — it is a PART of the panel,
+   built from the donor's three stacked full-width bands (dumps4/article-*-
+   tree.json). It has no box of its own: no background, no border, no radius,
+   no shadow, no padding. The 96px `padding-bottom` that used to expose desk
+   between sheets is gone with the sheets; the bands' own paddings carry the
+   rhythm now (chapter 01's features close on 64px, chapter 02's tag opens on
+   64px → 128px across the seam, inside the donor's own inter-article air). */
+.pc-chapter {
+  /* the sticky nav is 80px; keep the headline clear of it on an anchor jump */
+  scroll-margin-top: 104px;
+}
+
+/* THE ONE INTERIOR RULE BETWEEN CHAPTERS — quietest class (hairline-1), and
+   only here, because this is the single seam in the panel where the ground does
+   NOT change (a feature band on surface-100 meets the next text band on
+   surface-100). Chapter 01 gets none: the panel's own top edge is above it.
+   The donor draws #E4E7EC here; ours drops a full step, per the owner's line
+   hierarchy (header §OUR TRANSLATION 3). */
+.pc-chapter + .pc-chapter {
+  border-top: 1px solid var(--color-hairline-1);
+}
+
+/* Band 1 — the text band, on the panel ground. Donor headline block: pt-16
+   pb-11 = 64 / 44 (dumps4/article-0-tree.json). Inset 56px = the donor's
+   shared 100%/24 text inset (57.9px at 1390 → 57.5px at our 1380 measure,
+   taken to a whole px). */
+.pc-chapter__lead {
+  padding: 64px 56px 44px;
+}
+
+/* Band 2 — THE SHOWCASE BAND, one tonal step down: the donor tints the demo
+   area of every chapter (#FAFAFB → #F3F4F6 `bg-surface-subtle`), which is the
+   white / light-gray / white rotation read off the live section. Ours is
+   surface-100 → surface-200; surface-300 was unavailable because it is the
+   desk's own tone and the panel edge would have gone tonally blind along every
+   showcase band (header §OUR TRANSLATION 2). Runs edge to edge of the content
+   column, so the tint meets the panel's right edge and the interior vertical
+   divider on the left — that full-width reach is what makes it a BAND rather
+   than another card. No rule above or below it: the ground change is the join.
+   40px vertical inset so the product window's shadow has somewhere to fall. */
+.pc-chapter__show {
+  padding: 40px 56px;
+  background: var(--color-surface-200);
+}
+
+/* Band 3 — the feature band, back on the panel ground. */
+.pc-chapter__feat {
+  padding: 48px 56px 64px;
+}
+
+/* REV 3: the section's 96px closing air moves INSIDE the sheet, so the panel's
+   bottom hairline is the section's bottom edge and no desk band is left under
+   it (owner: desk visible through the side gutters only). */
+.pc-chapter:last-child .pc-chapter__feat {
+  padding-bottom: 96px;
+}
+
+/* The chapter tag: an INTERIOR label, no longer a desk annotation. The v2
+   SectionTag dashed rule (`border-t border-dashed border-line-strong pt-3`,
+   v2 craft.tsx:57-78) is DELETED — dashed belongs to the desk and the tag sits
+   inside the panel now. The label face is unchanged: Inter 600 / 12px / 1.2px
+   tracking / uppercase / tabular-nums (design.md §"Label face"; mono retired).
+   Index one step lighter than the label, v2's exact relationship. */
+.pc-chapter__tag {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--color-gray-700);
+  font-variant-numeric: tabular-nums;
+}
+
+.pc-chapter__tagindex {
+  color: var(--color-gray-500);
+}
+
+.pc-chapter__tagsep {
+  color: var(--color-gray-500);
+}
+
+/* v2's PostCall band headline, verbatim: 27px / 1.15 / 600 / −0.02em
+   (v2-physicality §1, PostCall.tsx:308). Max-width from Attio's article h3
+   (560px, DESIGN.md:278). Was 24px/500 — the "shallow" read. */
+.pc-chapter__h {
+  margin: 0;
+  max-width: 560px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 27px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  text-wrap: pretty;
+}
+
+.pc-chapter__h span {
+  color: var(--color-gray-700);
+}
+
+/* ── showcase band + plate ────────────────────────────────────────────── */
+
+/* (`.pc-band` / the `Band` wrapper is GONE in rev 2 — the showcase band is a
+   GROUND now, .pc-chapter__show, and it owns the spacing the wrapper used to
+   add. Headline → showcase still joins on air + the tonal step, no rule.) */
+
+/* The plate is the donor's band. It runs out to the container edge (the 1200
+   measure line) rather than stopping at the text column, because a mock that
+   stops where the prose stops cannot read as a window onto a larger app.
+   DEVIATION from round 1, which kept the plate inside the 780px text column
+   and centred a small table in it.
+
+   WINDOW CHROME, 2026-07-27 (owner: the mocks "read as frameless fragments
+   bleeding into the page" and must read as ACTUAL APP WINDOWS). The plate IS
+   the window now: title bar on top (mock/Window.tsx's `WindowBar`, imported
+   verbatim so there is exactly one chrome in the house), stage below it as
+   the window body, and --shadow-frame on the frame — the token whose whole
+   licence is "recorded product-moment windows" (CLAUDE.md rule 9). No hover
+   lift: the section is QUIET and the window is furniture, not an affordance.
+
+   GROUND: unchanged and already a three-step ladder — section surface-300
+   (#f6f6f6) → window body surface-200 (#fafafa) → cards surface-100 (#fff),
+   with the title bar taking surface-200 from `WindowBar`. So the frame reads
+   off the section ground on a real tonal step plus the hairline and the
+   shadow; nothing needed inventing, and no ground moved.
+
+   The stage keeps a fixed 580px so the whole composition (every card and
+   overlay is positioned in % of it) is byte-identical to before the chrome
+   arrived — the bar adds its own height ABOVE the composition rather than
+   eating into it. */
+/* SESSION 12 (owner pivot): the frame upgrades to v2's measured window
+   physicality (v2-physicality-measure.md §3–4):
+     · radius 16px (v2 rounded-2xl) — DIVERGES from the hero Window's 12px
+       radius-card chrome on purpose; the hero is untouched. Flagged.
+     · --shadow-float (v2 puts shadow-float on every mock Window; the old
+       --shadow-frame read too faint for the pivot's benchmark).
+     · hover lift: −2px translate + --shadow-hover over 200ms ease-out —
+       v2's canonical `transition-[transform,box-shadow] duration-200
+       ease-out hover:-translate-y-0.5` (§3). Supersedes this file's earlier
+       "no hover lift (QUIET)" note. Killed under reduced motion.
+   ROUND 3 (owner, vs Attio's "Companies to work" showcase): CHROMELESS —
+   the WindowBar (traffic lights + title) came off the chapter plates; the
+   §window chrome block above is superseded. The plate keeps the card depth
+   (16px radius, hairline, shadow-float, hover lift — the owner liked the
+   depth) and the top-most chrome-like row is now the mock's own in-product
+   toolbar (pc-bar / ch04's copy column), exactly like the donor's table
+   toolbar. The hero + WriteBack windows keep WindowBar (chrome="v2" variant
+   preserved in mock/Window.tsx, no longer called from chapters). */
+.pc-plate {
+  position: relative;
+  /* session 13: the -20px right bleed is gone — it was authored against the
+     deleted frame verticals, and a window overhanging its sheet's edge would
+     break the paper-on-paper read. The window sits fully ON the sheet. */
+  border: 1px solid var(--color-hairline-2);
+  border-radius: 16px;
+  background: var(--color-surface-100);
+  box-shadow: var(--shadow-float);
+  overflow: hidden;
+  transition:
+    transform 200ms ease-out,
+    box-shadow 200ms ease-out;
+}
+
+.pc-plate:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.pc-stage {
+  position: relative;
+  height: 580px;
+  /* the compositions' tonal bed (was on the plate): ground surface-300 →
+     bed surface-200 → cards surface-100, unchanged ladder */
+  background: var(--color-surface-200);
+}
+
+/* chapter 04's canvas band owns its own height and stays on the white window
+   body, exactly as v2's PostCall panel does (regions supply their own beds) */
+.pc-stage--flow {
+  height: auto;
+  background: var(--color-surface-100);
+}
+
+/* ── the app card (base surface) ──────────────────────────────────────── */
+
+.pc-card {
+  position: absolute;
+  top: 11%;
+  left: 6.5%;
+  width: 72.5%;
+  border: 1px solid var(--color-hairline-2);
+  border-radius: 6px;
+  background: var(--color-surface-100);
+}
+
+/* The donor's right-edge mask, on the CARD, at its measured stops. The card
+   is fully inside the plate; the mask alone makes the data read as continuing
+   past the frame, and it is also what makes room for the overlay to land on
+   ghosted columns instead of live ones. */
+/* `black` here is not a palette colour: mask-image defaults to mask-mode
+   alpha, so only the gradient's ALPHA channel is read and the RGB is
+   discarded. Written as the keyword rather than a hex so the palette-purity
+   gate is not asked to adjudicate a value that never reaches a pixel. */
+.pc-card--wide {
+  -webkit-mask-image: linear-gradient(to right, black var(--pc-mask, 50%), transparent 100%);
+  mask-image: linear-gradient(to right, black var(--pc-mask, 50%), transparent 100%);
+}
+
+/* Chapter 03's card (SESSION 12): the context column was cut outright —
+   "too much info, messy" — so the card is the guidance feed alone: narrower,
+   unmasked, with the intent readout genuinely overlapping its right edge. */
+.pc-card--live {
+  width: 60%;
+}
+
+/* Chapter 02's scorecard (session 12): narrow enough that the persona
+   overlay (left edge ~53% of the plate) only overlaps the card's right
+   padding, never a rubric bar or value. Sits a step lower to balance the
+   thinner content in the 580px stage. */
+.pc-card--score {
+  top: 15%;
+  width: 46%;
+}
+
+/* app toolbar — NOT window chrome: no traffic lights, no title bar.
+   16px side pad = v2's titlebar/list-row standard (§2: 16×12). */
+.pc-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 46px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--color-hairline-2);
+}
+
+.pc-bar__title {
+  font-size: 13px;
+  font-weight: 550;
+  line-height: 18px;
+  letter-spacing: -0.13px;
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+
+.pc-bar__count {
+  padding: 1px 6px;
+  border-radius: var(--radius-micro);
+  background: var(--color-gray-200);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 15px;
+  color: var(--color-gray-700);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.pc-bar__spacer {
+  flex: 1 1 auto;
+}
+
+.pc-ctl {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 21px;
+  padding: 0 7px;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--radius-micro);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 15px;
+  color: var(--color-gray-700);
+  white-space: nowrap;
+}
+
+.pc-ctl__caret {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  color: var(--color-gray-500);
+}
+
+/* ── table ────────────────────────────────────────────────────────────── */
+
+/* Rows open up to the donor density: Attio's tour table runs 36px rows
+   (§geometry above), v2 list rows pad 16×12 (v2-physicality §2). Was 34/12. */
+.pc-tr {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--pc-cols);
+  align-items: center;
+  column-gap: 12px;
+  height: 38px;
+  padding: 0 16px;
+  border-top: 1px solid var(--color-hairline-2);
+}
+
+.pc-tr--head {
+  height: 32px;
+  border-top: 0;
+}
+
+/* the reserved slot the late-arriving row drops into (chapter 04) */
+.pc-tr-slot {
+  position: relative;
+  height: 38px;
+}
+
+.pc-tr-slot .pc-tr {
+  position: absolute;
+  inset: 0;
+}
+
+/* the "just written" wash behind the arriving row — sits UNDER the row's
+   content and clears once, so the settled table shows no trace of it */
+.pc-tr__tint {
+  position: absolute;
+  z-index: 0;
+  inset: 1px 0 0;
+  background: var(--color-won-100);
+  pointer-events: none;
+}
+
+.pc-th {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: 0;
+  color: var(--color-gray-600);
+  white-space: nowrap;
+}
+
+.pc-th__sort {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  color: var(--color-gray-500);
+}
+
+/* Cells sit ABOVE the row's mark layer. Without this the mark — an absolutely
+   positioned sibling — paints over the static cells and blanks the row. */
+.pc-td {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  /* 13px — one step up toward the donor's 14px effective cell size, part of
+     the "shallow fonts" fix (was 12.5px on 34px rows) */
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 18px;
+  letter-spacing: -0.05px;
+  color: var(--color-gray-700);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pc-td--nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── cell atoms ───────────────────────────────────────────────────────── */
+
+.pc-check {
+  display: inline-grid;
+  place-items: center;
+  width: 13px;
+  height: 13px;
+  border: 1px solid var(--color-gray-400);
+  border-radius: 3px;
+  background: var(--color-surface-100);
+}
+
+.pc-check.is-on {
+  border-color: var(--color-ink);
+  background: var(--color-ink);
+  color: var(--color-surface-100);
+}
+
+.pc-check svg {
+  width: 9px;
+  height: 9px;
+}
+
+/* 16px type/logo chip. Its tint IS the type — five owned tints, the way the
+   donor uses five brand logos. Marks at 16px, well inside the ≤24px rule. */
+.pc-glyph {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  flex: none;
+  border-radius: var(--radius-micro);
+  border: 1px solid transparent;
+}
+
+.pc-glyph svg {
+  width: 11px;
+  height: 11px;
+}
+
+.pc-glyph--gray {
+  background: var(--color-gray-200);
+  border-color: var(--color-gray-300);
+  color: var(--color-gray-700);
+}
+
+.pc-glyph--ink {
+  background: var(--color-gray-900);
+  color: var(--color-surface-100);
+}
+
+.pc-glyph--accent {
+  background: var(--color-accent-100);
+  border-color: var(--color-accent-200);
+  color: var(--color-accent-700);
+}
+
+.pc-glyph--won {
+  background: var(--color-won-100);
+  border-color: color-mix(in srgb, var(--color-won-900) 22%, transparent);
+  color: var(--color-won-900);
+}
+
+.pc-glyph--risk {
+  background: var(--color-risk-100);
+  border-color: color-mix(in srgb, var(--color-risk-900) 20%, transparent);
+  color: var(--color-risk-900);
+}
+
+/* `max-width: 100%` is load-bearing, not defensive. The cell inherits
+   `white-space: nowrap`, which makes an inline-flex box's preferred MINIMUM
+   width equal its full text width, so shrink-to-fit refuses to go below it and
+   the box overflows a narrow cell. The cell then hard-clips it mid-glyph, with
+   no ellipsis, because `text-overflow` only truncates text — never an
+   overflowing inline-level box. Capping the box hands the overflow back to the
+   name span (a flex item, so blockified), which ellipsises properly.
+   Found at 390 on 2026-07-27: `.pc-td` 168px vs a 216px scrollWidth. */
+.pc-entity {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* The donor underlines its primary entity name; the underline is what makes
+   a table cell read as a record rather than as a word. */
+.pc-entity__name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: -0.05px;
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--color-gray-400);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.pc-person {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.pc-person__name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Avatar disks stay neutral on purpose: a row's colour budget is spent on the
+   type glyph and the score pill, and the donor's disks are photographs. */
+.pc-avatar {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  flex: none;
+  border-radius: 50%;
+  border: 1px solid var(--color-gray-300);
+  background: var(--color-gray-200);
+  font-size: 8.5px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.1px;
+  color: var(--color-gray-700);
+}
+
+.pc-avatar--sm {
+  width: 16px;
+  height: 16px;
+  font-size: 8px;
+  border-color: var(--color-surface-100);
+}
+
+.pc-stack {
+  display: inline-flex;
+  align-items: center;
+}
+
+.pc-stack .pc-avatar + .pc-avatar {
+  margin-left: -5px;
+}
+
+/* Bordered tinted numeric pill — the donor's score cell. */
+.pc-score {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 19px;
+  padding: 0 6px;
+  border: 1px solid;
+  border-radius: var(--radius-micro);
+  font-size: 11.5px;
+  font-weight: 550;
+  line-height: 17px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.pc-score--gray {
+  border-color: var(--color-gray-300);
+  background: var(--color-gray-200);
+  color: var(--color-gray-800);
+}
+
+.pc-score--ink {
+  border-color: var(--color-gray-400);
+  background: var(--color-surface-100);
+  color: var(--color-ink);
+}
+
+.pc-score--won {
+  border-color: color-mix(in srgb, var(--color-won-900) 22%, transparent);
+  background: var(--color-won-100);
+  color: var(--color-won-900);
+}
+
+.pc-score--risk {
+  border-color: color-mix(in srgb, var(--color-risk-900) 20%, transparent);
+  background: var(--color-risk-100);
+  color: var(--color-risk-900);
+}
+
+.pc-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.pc-status__dot {
+  width: 5px;
+  height: 5px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--color-gray-400);
+}
+
+.pc-status--ink .pc-status__dot {
+  background: var(--color-ink);
+}
+
+.pc-status--won .pc-status__dot {
+  /* bright tick-green for dots (Attio grammar, owner directive 2026-07-27) */
+  background: var(--color-won-700);
+}
+
+.pc-status--risk .pc-status__dot {
+  background: var(--color-risk-900);
+}
+
+.pc-status--risk {
+  color: var(--color-gray-800);
+}
+
+/* Neutral bordered pill — categories, stages, chip rows. */
+.pc-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 19px;
+  padding: 0 8px;
+  border: 1px solid var(--color-gray-300);
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 17px;
+  letter-spacing: -0.02px;
+  color: var(--color-gray-700);
+  white-space: nowrap;
+}
+
+.pc-chip--ink {
+  border-color: var(--color-gray-400);
+  color: var(--color-ink);
+}
+
+.pc-chip--won {
+  border-color: color-mix(in srgb, var(--color-won-900) 22%, transparent);
+  background: var(--color-won-100);
+  color: var(--color-won-900);
+}
+
+.pc-chip--risk {
+  border-color: color-mix(in srgb, var(--color-risk-900) 20%, transparent);
+  background: var(--color-risk-100);
+  color: var(--color-risk-900);
+}
+
+/* The provenance mark — the section's only lavender, and a tint, not a fill. */
+.pc-source {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 100%;
+  padding: 3px 7px;
+  border-radius: var(--radius-micro);
+  background: var(--color-accent-100);
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: -0.04px;
+  color: var(--color-accent-700);
+}
+
+.pc-source__glyph {
+  width: 11px;
+  height: 11px;
+  flex: none;
+}
+
+/* value bars — width is markup, the beat only reveals it */
+.pc-track {
+  position: relative;
+  display: block;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--color-gray-200);
+  overflow: hidden;
+}
+
+.pc-track__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 3px;
+}
+
+.pc-track__fill--ink {
+  background: var(--color-gray-800);
+}
+
+/* won-700, not won-900: a bar fill is stroke-scale, and the bright step is
+   the one Attio reserves for strokes/ticks/dots (owner directive 2026-07-27 —
+   won-900 is a text colour, never an area fill). */
+.pc-track__fill--won {
+  background: var(--color-won-700);
+}
+
+.pc-track__fill--risk {
+  /* bright stroke-red, same logic as the won bars: the -900 steps are text
+     colours, never area fills (owner green directive, applied symmetrically) */
+  background: var(--color-risk-700);
+}
+
+/* An analytics column: a baseline hairline and a column that draws up from
+   it. The track is not filled, so what you read is the bar, not a slot. */
+.pc-col {
+  position: relative;
+  display: block;
+  height: 26px;
+  border-bottom: 1px solid var(--color-gray-300);
+}
+
+.pc-col__fill {
+  position: absolute;
+  inset: auto 0 0 0;
+  border-radius: 2px;
+  background: var(--color-gray-800);
+}
+
+/* ── overlay ──────────────────────────────────────────────────────────
+   Donor ratios: 340px wide (32.6% of its band), left edge at 52.9%, over-
+   hanging the card's right edge by 136px and its bottom by 45px. Ours keeps
+   the 340px absolute width — on our narrower band that is ~40%, which is the
+   "large, genuinely overlapping" proportion the revision brief asked for. */
+
+.pc-ov {
+  position: absolute;
+  z-index: 10;
+  right: 7.4%;
+  bottom: 6%;
+  width: 340px;
+  max-width: 46%;
+  border: 1px solid var(--color-hairline-2);
+  border-radius: 8px;
+  background: var(--color-surface-100);
+  /* owned warm-ink float token; the zero-shadow rule was lifted for this
+     section by the owner on 2026-07-27 */
+  box-shadow: var(--shadow-float);
+  overflow: hidden;
+}
+
+/* Top-anchored variant. Sits 3% above the card's own top (11%), so it still
+   overhangs a card edge and still reads as floating — the overhang just moves
+   from the bottom to the top. */
+.pc-ov--tr {
+  bottom: auto;
+  top: 8%;
+}
+
+/* Centred variant. The centring MUST use the independent `translate` property,
+   not `transform`: the arrival beat animates `transform` to `none`, which would
+   otherwise wipe the -50% the moment the entrance settled and drop the overlay
+   half its height. (Latent — no chapter uses `cr` today; corrected so the kit
+   cannot hand the next chapter a broken placement.) */
+.pc-ov--cr {
+  bottom: auto;
+  top: 50%;
+  translate: 0 -50%;
+}
+
+.pc-ov__head {
+  padding: 12px 14px 13px;
+  border-bottom: 1px solid var(--color-hairline-2);
+}
+
+.pc-ov__headrow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.pc-ov__label {
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 16px;
+  color: var(--color-gray-600);
+}
+
+.pc-ov__aside {
+  margin-left: auto;
+  font-size: 11.5px;
+  line-height: 16px;
+  color: var(--color-gray-600);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.pc-ov__title {
+  margin: 8px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: -0.14px;
+  color: var(--color-ink);
+  text-wrap: pretty;
+}
+
+.pc-ov__sub {
+  margin: 4px 0 0;
+  font-size: 11.5px;
+  line-height: 16px;
+  color: var(--color-gray-600);
+  font-variant-numeric: tabular-nums;
+}
+
+.pc-ov__body {
+  padding: 12px 14px;
+}
+
+.pc-ov__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 30px;
+  border-bottom: 1px solid var(--color-hairline-2);
+}
+
+.pc-ov__body > .pc-ov__row:first-child {
+  margin-top: -4px;
+}
+
+.pc-ov__row:last-child {
+  border-bottom: 0;
+}
+
+.pc-ov__rowlabel {
+  width: 68px;
+  flex: none;
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 16px;
+  color: var(--color-gray-600);
+}
+
+.pc-ov__rowvalue {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  line-height: 18px;
+  color: var(--color-gray-800);
+}
+
+.pc-ov__foot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--color-hairline-2);
+  background: var(--color-surface-200);
+}
+
+.pc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--color-ink);
+  color: var(--color-surface-100);
+  font-size: 12px;
+  font-weight: 550;
+  line-height: 18px;
+  letter-spacing: -0.06px;
+  white-space: nowrap;
+}
+
+/* Light-pill grammar (owner directive 2026-07-27: Attio never fills with its
+   darkest green — won-100 ground, won-900 text, 1px won ring). The ring is an
+   inset box-shadow so the borderless 26px pill keeps its height; same
+   colour-mix strength as .pc-chip--won. */
+.pc-btn--won {
+  background: var(--color-won-100);
+  color: var(--color-won-900);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-won-900) 22%, transparent);
+}
+
+.pc-textbtn {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  color: var(--color-gray-600);
+  white-space: nowrap;
+}
+
+.pc-ov__muted {
+  font-size: 11.5px;
+  line-height: 16px;
+  color: var(--color-gray-600);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* the free-form block under the labelled rows */
+.pc-ov__block {
+  padding-top: 12px;
+}
+
+.pc-btn__tick {
+  width: 10px;
+  height: 10px;
+  flex: none;
+}
+
+/* ── chapter 01: the sourced answer ───────────────────────────────────── */
+
+.pc-answer {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 19px;
+  letter-spacing: -0.05px;
+  color: var(--color-gray-800);
+}
+
+/* the answer arrives one line at a time, at reading pace */
+.pc-answer > span {
+  display: block;
+}
+
+.pc-sources {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  margin-top: 11px;
+}
+
+.pc-sources > span {
+  display: inline-flex;
+  max-width: 100%;
+}
+
+/* The table row the answer was drawn from marks itself: a wash across the row
+   and a 2px ink edge — the section's needle idiom again, at row scale. Sits
+   UNDER the cells (first child of the row) so it never dims the data. */
+.pc-cite {
+  position: absolute;
+  z-index: 0;
+  inset: 1px 0 0;
+  background: var(--color-gray-100);
+  border-left: 2px solid var(--color-ink);
+  pointer-events: none;
+}
+
+/* ── scored value (chapter 03 confidence readout) ─────────────────────── */
+
+.pc-rubric__value {
+  font-size: 12px;
+  font-weight: 550;
+  line-height: 17px;
+  text-align: right;
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── chapter 03: the live panel (single column since session 12) ─────────── */
+
+.pc-guide {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  /* v2's 20px body-pad standard, minus the needle's 20px left gutter share */
+  padding: 15px 20px 16px 20px;
+  border-top: 1px solid var(--color-hairline-2);
+}
+
+.pc-live__feed > .pc-guide:first-child {
+  border-top: 0;
+}
+
+.pc-guide__top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pc-guide__title {
+  font-size: 13px;
+  font-weight: 550;
+  line-height: 18px;
+  letter-spacing: -0.06px;
+  color: var(--color-ink);
+}
+
+.pc-guide__line {
+  margin: 0;
+  font-size: 13px;
+  line-height: 20px;
+  letter-spacing: -0.05px;
+  color: var(--color-gray-800);
+}
+
+.pc-guide__foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* inline after the source chip (session 12) — right-anchored, the pill sat
+   exactly where the intent-readout overlay lands and was occluded */
+.pc-guide__conf {
+  margin-left: 2px;
+}
+
+/* confidence rows in the intent readout (chapter 03) */
+.pc-conf + .pc-conf {
+  margin-top: 11px;
+}
+
+.pc-conf__top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.pc-conf__state {
+  margin-left: auto;
+  font-size: 11.5px;
+  line-height: 16px;
+  color: var(--color-gray-600);
+  white-space: nowrap;
+}
+
+.pc-conf .pc-rubric__value {
+  width: 22px;
+}
+
+/* the "now" needle — the rail's idiom, one scale down, walking the feed */
+.pc-now {
+  position: absolute;
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 2px;
+  background: var(--color-ink);
+  opacity: 0;
+}
+
+.pc-now.is-on {
+  opacity: 1;
+}
+
+/* (the chapter-03 context column was cut in session 12 — styles removed) */
+
+/* ── feature rows (all four chapters) ─────────────────────────────────
+   SESSION 12: restructured to the donor's ACTUAL tour feature row —
+   "2×h4 feature row: h4 18px + p 16px #6F7988, grid-cols-2 gap-12"
+   (DESIGN.md:278). A weighted 18px/600 head over a 16px gray paragraph is
+   the depth the flattened single-block dual-tone paragraph lacked. */
+
+/* STRUCTURE PASS (session 12): the feature block trades its floating 2-col
+   text grid for v2's ruled-cell grammar — a solid top rule with a 32px inset
+   (v2 Features.tsx:84 `border-t border-line pt-12`) and a shared interior
+   column rule (v2 Features.tsx:118 `border-l pl-6`; PlatformBento.tsx:268
+   shared-hairline cells). The Attio h4+p type inside the cells is untouched.
+   SESSION 13 (line rule): these are now rules INSIDE the panel — the quietest
+   class of line, one full step under the panel's hairline-2 edges. hairline-1
+   #f6f6f6 is the owned quietest step (it is also exactly the desk ground
+   showing "through" the paper, which is what an interior rule on paper is).
+   REV 2: the block's own top rule + margin-top + padding-top are GONE — the
+   feature BAND (.pc-chapter__feat) supplies the air, and the join above it is a
+   ground change (surface-200 showcase → surface-100 feature band), which under
+   the line rule needs no line at all. The interior COLUMN rule and the second-
+   row rule below stay: no ground changes there. */
+.pc-features {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 0; /* the donor's gap-12 becomes 40px pad each side of the rule */
+  row-gap: 40px;
+}
+
+.pc-feature {
+  max-width: 46ch;
+  padding-right: 40px;
+}
+
+/* right-column cells carry the shared vertical rule */
+.pc-feature:nth-child(even) {
+  border-left: 1px solid var(--color-hairline-1);
+  padding-left: 40px;
+  padding-right: 0;
+}
+
+/* a second grid row (chapter 01's third, half-width feature) opens on its own
+   cell-scoped rule — v2 bento cells rule only where a neighbour exists */
+.pc-feature:nth-child(n + 3) {
+  border-top: 1px solid var(--color-hairline-1);
+  padding-top: 32px;
+}
+
+.pc-feature h4 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 26px;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  text-wrap: pretty;
+}
+
+.pc-feature p {
+  margin: 8px 0 0;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.625;
+  letter-spacing: -0.08px;
+  color: var(--color-gray-700);
+  text-wrap: pretty;
+}
+
+/* ── the beat engine ──────────────────────────────────────────────────
+   Every beat is one class + two custom properties. Only opacity, transform
+   and filter animate. `both` fill keeps the pre-state during the delay and
+   the post-state forever after, which is what "settles" means here. */
+
+@keyframes pc-kf-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pc-kf-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes pc-kf-soft {
+  from { opacity: 0; filter: blur(2.25px); }
+  to { opacity: 1; filter: blur(0); }
+}
+
+@keyframes pc-kf-row {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes pc-kf-lift {
+  from { opacity: 0; transform: translateY(14px) scale(0.988); filter: blur(2.5px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+
+@keyframes pc-kf-pop {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes pc-kf-bar {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes pc-kf-colbar {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+.pc .pc-a {
+  opacity: 0;
+}
+
+.pc .pc-a--bar {
+  opacity: 1;
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.pc .pc-a--colbar {
+  opacity: 1;
+  transform: scaleY(0);
+  transform-origin: center bottom;
+}
+
+.pc .pc-a--out {
+  opacity: 1;
+}
+
+.pc .pc-a.pc-go {
+  animation-duration: var(--pc-dur, 425ms);
+  animation-timing-function: var(--ease-entrance);
+  animation-delay: var(--enter-delay, 0ms);
+  animation-fill-mode: both;
+}
+
+.pc .pc-a--fade.pc-go { animation-name: pc-kf-fade; }
+.pc .pc-a--out.pc-go { animation-name: pc-kf-out; }
+.pc .pc-a--soft.pc-go { animation-name: pc-kf-soft; }
+.pc .pc-a--row.pc-go { animation-name: pc-kf-row; }
+.pc .pc-a--lift.pc-go { animation-name: pc-kf-lift; }
+.pc .pc-a--pop.pc-go { animation-name: pc-kf-pop; }
+.pc .pc-a--bar.pc-go { animation-name: pc-kf-bar; }
+.pc .pc-a--colbar.pc-go { animation-name: pc-kf-colbar; }
+
+/* two states in one grid cell: the swap costs zero layout and settles on b */
+.pc-swap {
+  display: inline-grid;
+  align-items: center;
+  justify-items: start;
+}
+
+.pc-swap > * {
+  grid-area: 1 / 1;
+}
+
+.pc .pc-swap__b {
+  opacity: 0;
+}
+
+.pc .pc-swap__a.pc-go {
+  animation: pc-kf-out 220ms var(--ease-entrance) var(--pc-out, 0ms) both;
+}
+
+.pc .pc-swap__b.pc-go {
+  animation: pc-kf-pop 300ms var(--ease-entrance) var(--pc-in, 0ms) both;
+}
+
+/* the walking needle: appear on its row, clear when the next row lands */
+.pc .pc-now.pc-go {
+  animation:
+    pc-kf-fade 240ms var(--ease-entrance) var(--pc-in, 0ms) both,
+    pc-kf-out 220ms var(--ease-entrance) var(--pc-out, 0ms) forwards;
+}
+
+.pc .pc-now.pc-now--last.pc-go {
+  animation: pc-kf-fade 240ms var(--ease-entrance) var(--pc-in, 0ms) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pc .pc-a,
+  .pc .pc-a.pc-go,
+  .pc .pc-swap__a.pc-go,
+  .pc .pc-swap__b.pc-go,
+  .pc .pc-now.pc-go {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  .pc .pc-rail__label,
+  .pc .pc-rail__desc,
+  .pc .pc-rail__link {
+    transition: none;
+  }
+
+  /* reduced motion: colour flip only — no grow */
+  .pc .pc-rail__row.is-active .pc-rail__link {
+    transform: none;
+  }
+
+  .pc .pc-rail__desc {
+    filter: none;
+  }
+
+  /* the v2 hover lift is motion — killed with the rest */
+  .pc .pc-plate {
+    transition: none;
+  }
+
+  .pc .pc-plate:hover {
+    transform: none;
+    box-shadow: var(--shadow-float);
+  }
+}
+
+/* (the ≤1120px plate-bleed reset left with the bleed — session 13) */
+
+/* ── ≤1024px: the rail goes, the chapters keep their own headings ─────
+   Everything below is a reflow of the SAME nodes — no mobile duplicates, no
+   display:none swap pairs. The rail is the one hidden element, which the
+   brief sanctions explicitly. */
+
+@media (max-width: 1024px) {
+  /* The panel KEEPS its four edges and its desk gutters below lg — this is a
+     deliberate divergence from the donor, whose container is `max-lg:contents`
+     so the frame border-x and the page padding both collapse and the tour goes
+     full-bleed (dumps2/ALL-ANATOMY.txt:80, responsive-tablet/mobile.json). We
+     keep the sheet because the sheet-on-desk read IS the deliverable here; a
+     full-bleed tour on a dotted section would put dots only above and below the
+     tour and read as a bug. Reported as a deviation. */
+  .pc__panel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* the rail's whole column leaves, taking the interior vertical hairline with
+     it — there is no second column left for it to divide */
+  .pc__railcol {
+    display: none;
+  }
+}
+
+/* ── ≤900px: the stage unstacks — same nodes, static flow ─────────────
+   The stage is CAPPED at the desktop card width (620px) and centred. Without
+   the cap the mocks stretch to the full plate as the viewport narrows, which
+   inverts the point of the composition: at 768 a four-column row spread over
+   ~690px put the score pill and the owner disk at opposite edges with a hole
+   between them, and every mock read looser on a tablet than on a desktop.
+   Capping keeps the authored density at every width — the plate just gains
+   margin, exactly as the donor's own band does. Found at 768 on 2026-07-27. */
+
+@media (max-width: 900px) {
+  /* The inset moved from the plate to the STAGE when the window bar landed
+     (2026-07-27) — a title bar that starts 20px in from its own frame is not
+     a title bar. The stage's cap carries the inset with it (620px of card +
+     20px each side = 660px) so the authored card width is unchanged. */
+  .pc-stage {
+    position: static;
+    height: auto;
+    display: grid;
+    gap: 16px;
+    padding: 20px;
+    max-width: 660px;
+    margin-inline: auto;
+  }
+
+  .pc-card {
+    position: static;
+    width: auto;
+  }
+
+  .pc-card--wide {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .pc-ov,
+  .pc-ov--cr,
+  .pc-ov--tr {
+    position: static;
+    width: auto;
+    max-width: none;
+    transform: none;
+    translate: none;
+  }
+
+  /* The mask is gone, so the two columns it used to ghost would now be fully
+     legible at a third of their desktop width. They leave instead, and the
+     four that carry the chapter's claim keep their proportions. */
+  .pc-tr {
+    grid-template-columns: var(--pc-cols-md, var(--pc-cols));
+  }
+
+  .pc-td--drop {
+    display: none;
+  }
+
+  .pc-card--live {
+    width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  /* the desk gutter tightens to 24px; block padding stays 0 (it lives inside
+     the sheet now — see .pc__intro / :last-child .pc-chapter__feat) */
+  .pc__container {
+    padding: 0 24px;
+  }
+
+  .pc__intro {
+    padding: 80px 24px 48px;
+  }
+
+  .pc-chapter__tag {
+    margin-bottom: 16px;
+  }
+
+  /* the bands keep their grammar (ground rotation + edge-to-edge reach), only
+     the insets tighten. 24px inside a 720px panel at 768 leaves the mock the
+     same 670px it had inside the deleted sheet — byte-identical composition. */
+  .pc-chapter__lead {
+    padding: 40px 24px 28px;
+  }
+
+  .pc-chapter__show {
+    padding: 24px;
+  }
+
+  .pc-chapter__feat {
+    padding: 32px 24px 40px;
+  }
+
+  .pc-chapter:last-child .pc-chapter__feat {
+    padding-bottom: 64px;
+  }
+
+  /* same 620px cap, tighter inset (14px each side) */
+  .pc-stage {
+    padding: 14px;
+    max-width: 648px;
+  }
+
+  /* single column: the interior column rule goes; items become a segmented
+     list on inter-item rules instead (v2's own mobile feature-list fallback,
+     Features.tsx:122 border-b dividers) */
+  .pc-features {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 20px;
+  }
+
+  .pc-feature,
+  .pc-feature:nth-child(even) {
+    border-left: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .pc-feature:nth-child(n + 3) {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .pc-feature + .pc-feature {
+    /* interior rule, quietest (session 13 line rule) */
+    border-top: 1px solid var(--color-hairline-1);
+    padding-top: 20px;
+  }
+
+  .pc-feature {
+    font-size: 16px;
+    line-height: 25px;
+  }
+}
+
+/* ── ≤520px: phone — the row gives up its secondary name column ───────── */
+
+@media (max-width: 520px) {
+  /* phone: the band insets thin to 14px so the mocks keep their density — the
+     plate lands at 312px, exactly what it measured inside the deleted sheet at
+     390 (342 content − 2 panel border − 28 inset), i.e. zero regression. */
+  .pc__intro {
+    padding: 72px 14px 40px;
+  }
+
+  .pc-chapter__lead {
+    padding: 34px 14px 24px;
+  }
+
+  .pc-chapter__show {
+    padding: 18px 14px;
+  }
+
+  .pc-chapter__feat {
+    padding: 26px 14px 34px;
+  }
+
+  .pc-chapter:last-child .pc-chapter__feat {
+    padding-bottom: 56px;
+  }
+
+  .pc-tr {
+    grid-template-columns: var(--pc-cols-sm, var(--pc-cols-md, var(--pc-cols)));
+    column-gap: 10px;
+    padding: 0 10px;
+  }
+
+  .pc-ctl {
+    display: none;
+  }
+
+  /* the secondary person column keeps its disk and gives up its name, so the
+     primary column gets the width instead of every cell ellipsising */
+  .pc-td--tight .pc-person__name,
+  .pc-td--tight .pc-entity__name {
+    display: none;
+  }
+
+  .pc-th.pc-td--tight {
+    visibility: hidden;
+  }
+
+  .pc-bar__title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* NOT FIXED — six document names still ellipsise mid-word here at 390
+     ("Enterprise prici…", "Objection cards…"). Measured 2026-07-29: the name
+     span is 113px against 174–189px of text. A type step down to 12px + a
+     tighter icon gap was TRIED and REVERTED: the name column is
+     `minmax(0, 1fr)`, so shrinking the text does not grow the column — it went
+     189→174px against an unchanged 113px and every row still ellipsised, for a
+     pure legibility loss. Closing the 61px gap needs the grid template to give
+     up columns (COLS_SM in KnowledgeDetail.tsx drops the 22px initials and the
+     18px checkbox, ≈60px with their gaps) plus a `.pc-td--drop-sm` cell rule
+     mirroring the `.pc-td--drop` pattern in the ≤900 block — and the same pass
+     applied to every chapter table, not just this one. That is a structural
+     change to a deliberately tuned table; it needs a checkpoint, not a nudge. */
+}

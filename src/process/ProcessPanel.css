@@ -1,0 +1,599 @@
+/* ===========================================================================
+ * /process — the design-process gallery SHELL.
+ *
+ * SCOPE. This file styles the SHELL only — page ground, sidebar, main column,
+ * section rhythm, and the Overview chapter's own furniture. All six chapters are
+ * separate components; five are authored elsewhere and bring their own scoped
+ * styles. Nothing here reaches into them beyond a small set of helpers they may
+ * opt into if they want the same joins as the rest of the page: `.pp-sec`,
+ * `.pp-eyebrow`, `.pp-h`, `.pp-p`, `.pp-grp`, `.pp-meta`, `.pp-btn`, `.pp-tag`,
+ * `.pp-note`, `.pp-empty`.
+ *
+ * VISUAL LANGUAGE: rebuilt natively from `design-system/showcase.html`'s idioms
+ * (owner's instruction — the rendered showcase IS the target look): warm paper
+ * grounds, a 96px section rhythm with one 1px hairline at each join, an
+ * `01 — Chapter` eyebrow over a display-40 head over a ~640px measure, framed
+ * specimens on surface-100, and pill buttons carrying the 50ms-in / 300ms-out
+ * asymmetric hover.
+ *
+ * Two deliberate departures from the donor file, both required by standing
+ * project rules rather than taste:
+ *   · NO MONOSPACE. The showcase leans on JetBrains Mono for every label, hex
+ *     and readout; mono was retired page-wide 2026-07-25, so the same job is
+ *     done by Inter 600 / 1.2px tracking / tabular-nums (`.pp-eyebrow`) and by
+ *     Inter 500 / 0.4px tracking / tabular-nums (`.pp-meta`).
+ *   · NO OLIVE. `--kz-olive-*` is retired in favour of `--kz-signal-*`.
+ *
+ * Everything is `pp-` prefixed, so nothing here can reach the landing page or
+ * any of the scenes mounted in the component frames.
+ * ======================================================================== */
+
+.pp {
+  min-height: 100vh;
+  background: var(--kz-surface-100);
+  color: var(--kz-ink);
+  font: var(--kz-type-body-15);
+  letter-spacing: var(--kz-ls-body-15);
+  display: grid;
+  grid-template-columns: 256px minmax(0, 1fr);
+}
+
+.pp-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------------------------------------------------------------------------
+ * TYPE HELPERS — the label face, mono-free.
+ * ------------------------------------------------------------------------- */
+.pp-eyebrow {
+  font: 600 12px/16px var(--kz-font-body);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-ink-secondary);
+}
+
+.pp-meta {
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.4px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-700);
+}
+
+.pp-h {
+  font: var(--kz-type-display-40);
+  letter-spacing: var(--kz-ls-display-40);
+  margin: 16px 0 12px;
+}
+
+.pp-p {
+  font: var(--kz-type-body-15);
+  letter-spacing: var(--kz-ls-body-15);
+  color: var(--kz-ink-secondary);
+  max-width: 640px;
+  margin: 0 0 48px;
+}
+
+.pp-p a,
+.pp-body a {
+  color: var(--kz-accent-700);
+  text-decoration: none;
+  border-bottom: 1px solid var(--kz-accent-300);
+}
+
+.pp-grp {
+  font: 600 12px/16px var(--kz-font-body);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-600);
+  margin: 48px 0 20px;
+}
+
+/* ---------------------------------------------------------------------------
+ * SIDEBAR
+ * ------------------------------------------------------------------------- */
+.pp-side {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--kz-hairline-2);
+  background: var(--kz-surface-200);
+}
+
+.pp-side__head {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid var(--kz-hairline-2);
+}
+
+.pp-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--kz-radius-micro);
+  background: var(--kz-accent-600);
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.pp-side__title {
+  font: 500 17px/24px var(--kz-font-display);
+  letter-spacing: -0.17px;
+  margin: 0;
+}
+
+.pp-side__sub {
+  font: var(--kz-type-body-14);
+  letter-spacing: var(--kz-ls-body-14);
+  color: var(--kz-ink-secondary);
+  margin: 6px 0 0;
+}
+
+.pp-side__sub a {
+  color: var(--kz-accent-700);
+  text-decoration: none;
+  border-bottom: 1px solid var(--kz-accent-300);
+  /* Wraps as one unit: a two-line underlined link in a 208px column reads as
+     two broken links. */
+  white-space: nowrap;
+}
+
+.pp-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 12px 24px;
+}
+
+.pp-nav__label {
+  font: 600 12px/16px var(--kz-font-body);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-600);
+  padding: 0 12px;
+  margin: 0 0 12px;
+}
+
+.pp-nav__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pp-nav__item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  padding: 9px 12px;
+  border: 0;
+  border-left: 2px solid transparent;
+  border-radius: 0 var(--kz-radius-tile) var(--kz-radius-tile) 0;
+  background: transparent;
+  color: var(--kz-ink-secondary);
+  font: var(--kz-type-label-13);
+  letter-spacing: var(--kz-ls-label-13);
+  cursor: pointer;
+  /* Asymmetric hover: 50ms in / 300ms out (A). */
+  transition:
+    background-color 300ms cubic-bezier(0.2, 0, 0, 1),
+    color 300ms cubic-bezier(0.2, 0, 0, 1),
+    border-color 300ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.pp-nav__item:hover {
+  background: var(--kz-surface-300);
+  color: var(--kz-ink);
+  transition-duration: 50ms;
+}
+
+.pp-nav__item.is-active {
+  background: var(--kz-surface-100);
+  border-left-color: var(--kz-ink);
+  color: var(--kz-ink);
+}
+
+.pp-nav__n {
+  font: 600 11px/16px var(--kz-font-body);
+  letter-spacing: 0.4px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-500);
+}
+
+.pp-nav__item.is-active .pp-nav__n {
+  color: var(--kz-accent-600);
+}
+
+/* ---------------------------------------------------------------------------
+ * BUTTONS — squircle, with the asymmetric 50ms-in / 300ms-out hover.
+ *
+ * The RADIUS is the one deliberate difference from the landing page, at the
+ * owner's call (2026-07-29): the page's buttons are pills, and every control in
+ * this gallery is a squircle at `--kz-radius-tile`, so gallery chrome never reads
+ * as part of a scene it is framing. The pill survives only where a specimen is
+ * DOCUMENTING the page's own button (§02 focus ring, §03 hover tile).
+ * ------------------------------------------------------------------------- */
+.pp-btn {
+  height: 32px;
+  padding: 0 14px;
+  border-radius: var(--kz-radius-tile);
+  border: 1px solid var(--kz-gray-400);
+  background: var(--kz-surface-100);
+  color: var(--kz-ink);
+  font: var(--kz-type-label-13);
+  letter-spacing: var(--kz-ls-label-13);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  transition:
+    background-color 300ms cubic-bezier(0.2, 0, 0, 1),
+    border-color 300ms cubic-bezier(0.2, 0, 0, 1),
+    color 300ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.pp-btn:hover {
+  background: var(--kz-surface-300);
+  border-color: var(--kz-gray-500);
+  transition-duration: 50ms;
+}
+
+.pp-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.pp-btn:disabled:hover {
+  background: var(--kz-surface-100);
+  border-color: var(--kz-gray-400);
+}
+
+.pp-btn--primary {
+  background: var(--kz-ink);
+  border-color: var(--kz-ink);
+  color: #ffffff;
+}
+
+.pp-btn--primary:hover {
+  background: var(--kz-gray-800);
+  border-color: var(--kz-gray-800);
+}
+
+.pp-btn--sm {
+  height: 26px;
+  padding: 0 10px;
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.4px;
+}
+
+.pp-row {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.pp-tag {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 9px;
+  border-radius: var(--kz-radius-tag);
+  background: var(--kz-surface-300);
+  color: var(--kz-ink-secondary);
+  font: 600 10px/16px var(--kz-font-body);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------
+ * MAIN COLUMN + SECTION RHYTHM
+ * ------------------------------------------------------------------------- */
+.pp-main {
+  min-width: 0;
+}
+
+.pp-wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 40px 160px;
+}
+
+.pp-hdr {
+  padding: 96px 0 8px;
+}
+
+.pp-hdr h1 {
+  font: var(--kz-type-display-64);
+  letter-spacing: var(--kz-ls-display-64);
+  margin: 24px 0 0;
+  max-width: 860px;
+}
+
+.pp-hdr h1 .pp-dim {
+  color: var(--kz-ink-secondary);
+}
+
+.pp-sec {
+  padding-top: 96px;
+}
+
+.pp-sec + .pp-sec {
+  border-top: 1px solid var(--kz-hairline-2);
+}
+
+.pp-body {
+  max-width: 660px;
+}
+
+.pp-body p {
+  margin: 0 0 18px;
+  color: var(--kz-ink-secondary);
+}
+
+.pp-body p strong {
+  color: var(--kz-ink);
+  font-weight: 500;
+}
+
+.pp-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* A SMALL NOTE. One load-bearing fact, one sentence, no box shouting for it —
+ * a 2px left rule and 13px of muted type. Replaced the bordered callout panels
+ * on the owner's instruction (2026-07-29): a paragraph in a box reads as a thing
+ * to skip, and half of them were three sentences where one was the fact. */
+.pp-note {
+  margin: 24px 0 0;
+  padding: 0 0 0 12px;
+  border-left: 2px solid var(--kz-gray-400);
+  font: 450 13px/19px var(--kz-font-body);
+  letter-spacing: -0.05px;
+  color: var(--kz-gray-700);
+  max-width: 620px;
+}
+
+.pp-note b,
+.pp-note strong {
+  color: var(--kz-ink);
+  font-weight: 500;
+}
+
+/* Chapter index (Overview) — the six chapters, with counts read off the data. */
+.pp-index {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--kz-hairline-2);
+  border: 1px solid var(--kz-hairline-2);
+  border-radius: var(--kz-radius-tile);
+  overflow: hidden;
+  margin-top: 32px;
+}
+
+.pp-index__c {
+  appearance: none;
+  border: 0;
+  text-align: left;
+  background: var(--kz-surface-100);
+  color: inherit;
+  padding: 16px 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font: inherit;
+  transition: background-color 300ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.pp-index__c:hover {
+  background: var(--kz-surface-200);
+  transition-duration: 50ms;
+}
+
+.pp-index__n {
+  font: 600 11px/16px var(--kz-font-body);
+  letter-spacing: 0.4px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-500);
+}
+
+.pp-index__t {
+  font: 500 13px/16px var(--kz-font-body);
+  letter-spacing: -0.13px;
+  color: var(--kz-ink);
+}
+
+.pp-index__v {
+  margin-left: auto;
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.4px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-600);
+}
+
+/* ---------------------------------------------------------------------------
+ * THE OPENING SHEET (Overview) — one image, large, first.
+ * ------------------------------------------------------------------------- */
+.pp-sheet {
+  margin: 0;
+  border: 1px solid var(--kz-hairline-2);
+  border-radius: var(--kz-radius-card);
+  background: var(--kz-surface-200);
+  overflow: hidden;
+  box-shadow: var(--kz-shadow-frame);
+}
+
+.pp-sheet img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* The Overview mark sits directly on the main ground. Its transparent 300px
+   placement area leaves a 276px maximum render, matching the gallery size;
+   the mascot is centred rather than anchored to the left edge. */
+.pp-sheet--mark {
+  width: min(100%, 300px);
+  height: 300px;
+  margin-inline: auto;
+  padding: 12px;
+  display: grid;
+  place-items: center;
+}
+
+.pp-sheet--mark img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 276px;
+  object-fit: contain;
+}
+
+.pp-sheet figcaption {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--kz-hairline-2);
+  background: var(--kz-surface-100);
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.4px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-600);
+}
+
+/* Chapter-specific furniture (image grids, mounted-scene frames and motion
+ * specimens) belongs to the chapter components and their scoped styles. */
+
+/* Placeholder while a data-driven chapter has nothing to show yet. */
+.pp-empty {
+  border: 1px dashed var(--kz-gray-400);
+  border-radius: var(--kz-radius-card);
+  background: var(--kz-surface-200);
+  padding: 48px 32px;
+  text-align: center;
+  color: var(--kz-ink-secondary);
+  font: var(--kz-type-body-14);
+  letter-spacing: var(--kz-ls-body-14);
+}
+
+.pp-empty__t {
+  font: 500 17px/24px var(--kz-font-body);
+  letter-spacing: -0.17px;
+  color: var(--kz-ink);
+  margin-bottom: 8px;
+}
+
+/* ---------------------------------------------------------------------------
+ * RESPONSIVE
+ * ------------------------------------------------------------------------- */
+@media (max-width: 1080px) {
+  .pp-index {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .pp {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pp-side {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--kz-hairline-2);
+  }
+
+  .pp-side__head {
+    padding: 18px 24px 14px;
+  }
+
+  .pp-nav {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 12px;
+  }
+
+  .pp-nav__label {
+    display: none;
+  }
+
+  .pp-nav__list {
+    display: flex;
+    gap: 6px;
+  }
+
+  .pp-nav__item {
+    white-space: nowrap;
+    border-left: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: var(--kz-radius-tile);
+  }
+
+  .pp-nav__item.is-active {
+    border-left: 0;
+    border-bottom-color: var(--kz-ink);
+  }
+
+  .pp-wrap {
+    padding: 0 24px 120px;
+  }
+
+  .pp-hdr {
+    padding-top: 56px;
+  }
+
+  .pp-hdr h1 {
+    font-size: 40px;
+    line-height: 44px;
+    letter-spacing: -0.4px;
+  }
+
+  .pp-h {
+    font-size: 32px;
+    line-height: 36px;
+    letter-spacing: -0.32px;
+  }
+
+  .pp-sec {
+    padding-top: 64px;
+  }
+
+}
+
+@media (max-width: 560px) {
+  .pp-index {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Reduced motion: nothing in the shell is load-bearing, so it all collapses. */
+@media (prefers-reduced-motion: reduce) {
+  .pp .pp-btn,
+  .pp .pp-nav__item,
+  .pp .pp-index__c {
+    transition-duration: 0.001ms !important;
+  }
+}

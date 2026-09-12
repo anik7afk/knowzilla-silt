@@ -1,0 +1,120 @@
+/* SideInstruments — the CSS half of the scale/readout.
+ *
+ * Everything here derives from ONE custom property, --si-p (0→1), which the
+ * scroll driver writes on the instrument root. No per-tick JS, no React
+ * re-renders: 21 ticks + a marker all read the same variable.
+ *
+ * --si-p is registered with @property so it can be interpolated and so it
+ * inherits a real number (an unregistered custom property is a token stream,
+ * which makes calc() on it fragile across browsers).
+ */
+
+@property --si-p {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+.si {
+  --si-p: 0;
+}
+
+/* THE RULER IS CONSUMED, NOT FILLED (owner, 2026-07-27): "when the rail
+ * starts moving in term going from zero to hundred the lower part of it
+ * should disappare". A tick holds its rest ink while the marker is still
+ * BELOW it (--t > --si-p) and erases as the marker passes, so the scale is
+ * eaten from 00 upward and at --si-p: 1 only the top row and the marker are
+ * left standing.
+ *
+ * The ×4.5 spreads each row's fade across ~1.5 rows of travel (a row is 1/20
+ * of --t), so they go out one after another rather than the whole lower half
+ * blinking off together. Deliberately NO lit state and no travelling
+ * highlight: the marker is the only mark that moves, and a glow running ahead
+ * of it would be exactly the travelling-comet idiom this project bans.
+ *
+ * The 0.34 ceiling is the SAME dim floor H1 measured, kept because it is now
+ * the rail's only ink rather than its rest state:
+ *
+ * THE DIM FLOOR IS THE WHOLE LEGIBILITY FIX (H1, 2026-07-26). The user read
+ * the rails as having no scroll animation. They always did — there was a
+ * 54-point lit/dim luminance delta — but the DIM state was invisible: at
+ * gray-500 (#afafaf, luminance 175) behind opacity 0.28 a tick composited to
+ * 229 over the #fafafa ground (250), i.e. 21 points of contrast at 1.5px. You
+ * perceived a short ruler, not a ruler filling up, because there was no
+ * visible TRACK for the marker to travel along.
+ *
+ * Acceptance (delta = ground luminance 250 − the tick composited over it):
+ *   dim ≥ 40 · lit ≥ 70 · lit − dim ≥ 45.
+ *
+ * Raising this floor alone CANNOT satisfy that at gray-500: dim ≥ 40 needs
+ * f ≥ 0.533 and lit − dim ≥ 45 needs f ≤ 0.400. For any single ink of
+ * ground-delta D the window [40/D, 1 − 45/D] is only non-empty when D ≥ 85,
+ * and gray-500's D is 75. So the ink moved too — see INK in
+ * SideInstruments.tsx, where graphite's mark is now gray-700 (D = 137.9).
+ * At 0.34 that gives 46.9 points off the ground, which is what keeps the
+ * un-consumed part of the ruler readable now that nothing lights.
+ */
+.si-tick {
+  opacity: clamp(0, calc((var(--t) - var(--si-p)) * 4.5 + 0.34), 0.34);
+}
+
+/* The caption sits BELOW the ruler, so it is part of what gets consumed —
+   it leaves early, well before the marker reaches the top, so the rail is
+   down to pure instrument for most of the travel. Gone at --si-p: 1/3. */
+.si-caption {
+  opacity: clamp(0, calc(1 - var(--si-p) * 3), 1);
+}
+
+/* The marker rides the ruler. The column is 21 rows of 1.5px at a 7px gap
+   (21 × 1.5 + 20 × 7 = 171.5px), and the marker sits in a zero-height box
+   directly beneath it, so travelling -171.5px puts it at the "100" row and
+   0 puts it at "00". Transform only — never `top` — so it stays on the
+   compositor and can't invalidate layout while scrolling.
+
+   Owner 2026-07-27: a triangle playhead, not a dot, pointing INWARD on both
+   rails. Drawn with borders, so the element is 0×0 and its 8px border box is
+   the triangle — which is also why the TSX gives it a TEXT colour: borders
+   resolve `currentColor`, a background would paint nothing.
+
+   Two things here are load-bearing and easy to break:
+   · the element keeps Tailwind's `-translate-y-1/2`, which lands on the
+     `translate` PROPERTY and so composes with this `transform` instead of
+     replacing it. Hero.tsx's measureRail() reads the element's static top
+     (rect.top already carries that -50%, and it adds back height/2), so the
+     -50% is what actually centres the marker on its tick. Remove it and the
+     marker sits half a triangle low at every scroll position.
+   · height comes from the two transparent borders, so changing the triangle's
+     size changes what -50% resolves to — re-run hero-curtain-verify's
+     marker-on-00 / marker-on-100 assertions after any resize. */
+.si-marker {
+  width: 0;
+  height: 0;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  transform: translateY(calc(-1 * var(--si-p) * 171.5px));
+}
+
+.si-rail--left .si-marker {
+  border-left: 6px solid currentColor;
+}
+
+.si-rail--right .si-marker {
+  border-right: 6px solid currentColor;
+}
+
+/* Reduced motion: the driver parks --si-p at 1, which under the consume rule
+   would erase the entire ruler and leave two bare triangles floating beside
+   the headline. "Content renders in final state" cannot mean "renders as
+   nothing", so the settled frame here is the WHOLE ruler at rest ink with the
+   marker parked at 100 — a static instrument that has finished its travel,
+   which is the same thing the scene says without animating it. The caption
+   stays for the same reason: it is the rail's only label. */
+@media (prefers-reduced-motion: reduce) {
+  .si-tick {
+    opacity: 0.34;
+  }
+
+  .si-caption {
+    opacity: 1;
+  }
+}

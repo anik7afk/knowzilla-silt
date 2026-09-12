@@ -1,0 +1,276 @@
+/* PAGE PLANES — the two-plane world, rolled out page-wide.
+   Owner direction, 2026-07-29 (session 14), stated verbatim: "the dotted thing
+   will be the main bg panel. the hero section panel is going to be a white
+   panel, so the hero section is on top of the main bg on a white panel, and
+   that whole thing stretches to the HVU section. HVU is going to be on the main
+   dotted bg. the animation between KineticConversation and HVU will be a new
+   one, like attio's — so it does NOT feel like the kinetic section is going up
+   while revealing the HVU section."
+
+   This file owns the PAGE-LEVEL grammar only. The grammar sentence locked on
+   PlatformChapters still governs THAT section, unchanged:
+
+     HORIZONTAL lines are FULL-BLEED, VERTICAL lines are INSET at the panel
+     margins, and at the corners the horizontal passes THROUGH the vertical
+     and keeps going — a drafting-sheet register crossing, not a sealed box.
+
+   ── OWNER CORRECTION, same day: THIS SHEET HAS NO MARGINS ────────────────
+   The first build of this pass gave the hero sheet the tour panel's exact
+   geometry (1440 container, 30px page padding → a 1380px panel with inset
+   `border-inline` verticals and desk showing through two gutters). The owner
+   rejected the reading: "when i said full screen with the 2nd white panel i
+   meant complete full." So the hero sheet is COMPLETE FULL-BLEED — viewport
+   edge to viewport edge, no gutters, no desk beside it.
+   Its VERTICAL edges are therefore not hidden, they are GONE: a 1px hairline
+   painted at x=0 and x=viewport-1 is not an edge anyone can read, it is a line
+   the browser happens to draw at the screen boundary. Only the two horizontals
+   survive, and they were already full-bleed.
+   The grammar sentence is not broken by this, it is narrowed: it describes a
+   sheet that HAS margins. This one has none, so it has no vertical edges to
+   inset and no corners to cross. PlatformChapters keeps its margins and its
+   full four-line grammar exactly as the owner approved it in session 13 —
+   its geometry is untouched by this pass and session13-two-plane-shots.mjs
+   still holds it.
+   Consequence worth recording: after the owner's second same-day ruling
+   ("make this section white panel again" — HVU is a white sheet too, see
+   below), the desk is now visible ONLY around the tour panel's margins
+   (PlatformChapters' two gutters and its own air). It is not visible anywhere
+   alongside this sheet or HVU.
+
+   ── THE THREE PLANES ────────────────────────────────────────────────────
+   1. `.page` — the DESK. One continuous dotted plane behind the entire document:
+      the surface-300 tone from the root's Tailwind class plus a repeating dot
+      tile, the SAME translation of v2's DotGrid that PlatformChapters shipped in
+      session 13, hoisted out of that section so there is one desk and one dot
+      lattice for the whole page (§THE DESK TILE below has the measurement, the
+      two baked paint values and why it is a tile rather than an <svg> layer).
+      PlatformChapters' LOCAL desk (`svg.pc__desk` + `.pc`'s surface-300 ground)
+      was DELETED in this pass — two desks printed on top of each other would
+      double the dot density in that section and put a tone seam at its joins.
+   2. `.sheet` — the white SHEET the page opens on: Hero + IntegrationsStrip +
+      KineticConversation, one continuous surface-100 surface at FULL VIEWPORT
+      WIDTH (owner correction above). One element carries all three of its jobs
+      — the pin, the white ground, and the two full-bleed horizontal hairlines —
+      so there is no container and no panel div to drift out of sync. Because it
+      spans the viewport, every section inside it keeps EXACTLY the widths it had
+      before this pass: the hero frame, its side rails and KineticConversation's
+      card all measure off the viewport again, so nothing inside the sheet had to
+      be re-fitted.
+   3. `.planes__over` — the layer HVU rides. HVU is its OWN full-bleed sheet
+      (owner second ruling 2026-07-29: "make this section white panel again"; the
+      section in this slot is now the glass scene, HvuGlass, whose ground is the
+      same surface-100 — see HvuGlass.css). It sits ABOVE the hero sheet with an
+      opaque ground, which is what makes the KC→HVU transition below possible.
+
+   ── THE KC→HVU TRANSITION (work item 4) ─────────────────────────────────
+   The rejected feel was "the kinetic section goes up and reveals HVU". What
+   ships instead: the sheet's bottom end (KC, at its settled final frame) STOPS
+   DEAD and HVU — riding the desk plane — slides up OVER it.
+
+   MECHANISM, and why this shape: `.sheet` is a sticky box held by a NEGATIVE
+   TOP inset — `top: calc(100svh - var(--sheet-h))`, i.e. "hold once your top
+   has risen a viewport past your own height", which is the same constraint as
+   "hold when your bottom edge reaches the bottom of the scrollport" written
+   from the other end. (It has to be written that way: `bottom: 0` does NOT
+   engage on a box taller than the scrollport in Chromium — measured, see
+   Sheet.tsx, which is also where `--sheet-h` comes from and why.) The sheet
+   therefore flows normally for its whole length and then freezes, in place, at
+   the exact moment KC's own sticky pin reaches the end of its 260svh track.
+   Everything after it keeps scrolling.
+   HVU is the next box in flow and is on the higher layer, so it climbs over the
+   frozen sheet and covers it. The pin releases when the containing block
+   (`.planes`, which ends at HVU's bottom) can no longer hold it — and at that
+   instant the sheet's bottom edge coincides exactly with PlatformChapters' top
+   edge, so the sheet can never leak into the tour's desk gutters.
+
+   Three properties of this construction are load-bearing:
+     · ZERO layout change. No negative margins, no spacers, no extra document
+       height, and KineticConversation's 260svh track is untouched — so its
+       scrub, its arm/disarm hysteresis and its clock are bit-for-bit what they
+       were. (Measured consequence, not an assumption: KC's progress p reaches
+       1 exactly when its pin would release, i.e. exactly when the sheet
+       freezes, and its clock t is capped at SETTLE_T by then. The scene is
+       therefore ALREADY at its final frame when HVU starts to cover it —
+       nothing is cut off.)
+     · ZERO per-frame work. No JS, no rAF, no scroll listener: `position:
+       sticky` is compositor-driven. transform/opacity/filter-only remains true
+       of the scroll path because there is no animated property at all here.
+     · KC's files are not touched. The pin belongs to the sheet wrapper.
+
+   ── DONOR PROVENANCE (A), and what is ours ──────────────────────────────
+   The owner asked for "a new one, like attio's", and the donor turns out to
+   have this transition family MEASURED, twice, in two directions:
+
+   A1 the SDK curtain — a whole-section scroll-over. The leaving dark section is
+      `relative z-10` and scrolls off; the incoming one is `relative z-0
+      -mt-[100svh]` (computed margin-top -900px at 1440×900) with an inner
+      `h-[250svh]` wrapper holding a `sticky top-(--site-header-height)` panel,
+      and the two are children of a `div.relative.isolate`.
+      inspo/attio/design-assets/dumps2/anatomy-10-y9192.json:24,300,370,390 ·
+      dumps3/sticky-mechanics.json entry 6 (top 116px, h 784 = 900−116) ·
+      DESIGN.md:382-389 · animation-system/motion.md:138 (row D2).
+      Hold length: 250svh − 100svh ≈ 1.5 viewports.
+   A2 the hero — the direction the owner actually described: the headline block
+      is `sticky top-116` with a NEGATIVE bottom margin (-60px computed at lg)
+      and the next block, the card viewport, is `sticky top-0` and RISES OVER
+      it. DESIGN.md:150-185 · dumps3/sticky-mechanics.json entries 2-4.
+
+   The rule both of them obey, and the one thing that is not negotiable here:
+   NOTHING IS TWEENED. dumps3/scrub-sdk-overlap.json samples the curtain 18
+   times across 3400px of scroll and both sections report `transform: none`,
+   `opacity: 1` at EVERY sample, each moving exactly 200px per 200px of scroll;
+   dumps5/scrub-hero.json says the same of the hero card (27 samples, size
+   constant, `transform: none`). motion.md:17,21-23: the choreography is
+   "produced entirely by CSS position:sticky + negative margins … driven by
+   scrollTop through sticky geometry, not by a timeline", and DESIGN.md:587
+   instructs copying the sticky construction itself rather than re-animating it.
+   There is therefore no easing and no duration to import — by design.
+
+   OURS, and the deviation, recorded: we take A2's DIRECTION (the leaving thing
+   pins, the arriving thing climbs over it) with A1's VOCABULARY (whole-section
+   CSS sticky + a z-index ladder inside an `isolation: isolate` parent, zero
+   animated properties). We do NOT use the donor's negative margin: it exists
+   only to buy the incoming section a viewport of overlap, and `sticky
+   bottom: 0` buys the same overlap out of the sheet's own geometry without
+   adding or removing a single pixel of document height — which is what keeps
+   KineticConversation's 260svh track bit-for-bit intact. Consequence, measured
+   rather than tuned: the hold lasts HVU's own height (~1.1 viewports at
+   1440×900) against the donor's ~1.5, and the cover phase is exactly one
+   scrollport. No number in this file was invented; the one `~` is the choice to
+   put a scroll-over on THIS boundary at all (the donor hands its own
+   dark→dotted-plane join to plain scroll, DESIGN.md:389).
+
+   REDUCED MOTION: `.sheet` drops to `position: static`. No pin, no overlap,
+   plain document flow — the sections simply follow one another. */
+
+/* ── THE DESK TILE ────────────────────────────────────────────────────────
+   GEOMETRY, measured — v2's DotGrid (../v2/src/components/craft.tsx:32-33): a
+   10px tile carrying a single 1×1px rect at (4.5, 4.5). The half-pixel placement
+   is deliberate: it antialiases into a soft 2×2 speck, and that speck IS the v2
+   look, not a rounding artifact.
+   PAINT, both owned tokens, baked into the tile: fill #afafaf = --color-gray-500
+   (the nearest owned neutral to v2's text-ink-300 #b4b6bb, the DotGrid default)
+   at fill-opacity 0.6 = v2's own desk composition (../v2/src/app/_page.tsx:20
+   `opacity-60`). They are literals ONLY because CSS cannot interpolate a
+   custom property into a url() — the two numbers are the tokens', and this
+   comment is their trace. v2's radial fade mask is NOT ported: it is a
+   single-viewport hero device and on a page-tall plane it would blank the middle
+   of the document. The desk must stay continuous — "it never goes away".
+
+   WHY A TILED BACKGROUND AND NOT AN <svg> PATTERN LAYER. Session 13 painted the
+   desk with an absolutely-positioned document-tall <svg> whose rect was filled
+   from a <pattern>. Hoisting that to the whole page made it ~13000px tall, and
+   filling a rect that size through a pattern costs a raster spike as the scroll
+   crosses fresh tiles: measured 2026-07-29 over four full-page rAF scrubs at
+   1440×900, one pass in three threw a single 31–33ms frame, and hiding the layer
+   removed it (scripts/session9-page.mjs's zero-tolerance trace caught it). The
+   same tile as a repeating background-image is decoded once and repeated by the
+   compositor: four passes, worst frame 18.7ms, zero frames over 25ms. Identical
+   pixels, no element, no layer. */
+.page {
+  position: relative;
+  /* still a stacking context: sections that paint their own ground without being
+     positioned must not be able to outrank anything laid over the desk */
+  isolation: isolate;
+  --desk-tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Crect x='4.5' y='4.5' width='1' height='1' fill='%23afafaf' fill-opacity='0.6'/%3E%3C/svg%3E");
+  /* the plane: dots over the desk tone. The tile's origin is this element's
+     padding box, i.e. the document's own top-left — which is the lattice every
+     other copy of the desk has to agree with (see HeardVsUnderstood.css §desk). */
+  background-image: var(--desk-tile);
+  background-size: 10px 10px;
+}
+
+/* The containing block for the sheet's pin. Ends at HVU's bottom edge, which is
+   what releases the pin exactly as PlatformChapters arrives (see header).
+   `isolation: isolate` is the donor's own construction for exactly this job
+   (`div.relative.isolate` as the shared parent of the two overlapping sections,
+   dumps2/anatomy-10-y9192.json root): it scopes the sheet/HVU layer ladder to
+   this wrapper, so HVU's z-index:1 cannot out-paint the sections that come
+   after it, without putting `.planes` itself on a z-layer of its own. */
+.planes {
+  position: relative;
+  isolation: isolate;
+}
+
+/* ── THE SHEET ────────────────────────────────────────────────────────── */
+
+.sheet {
+  /* THE PIN — see §KC→HVU TRANSITION in the header, and Sheet.tsx for why the
+     offset is spelled as a negative `top` rather than `bottom: 0` and where
+     --sheet-h comes from. The fallback is deliberately absurd: with no measured
+     height the inset is ~-200000px, the pin can never engage, and the page
+     degrades to the plain-flow join it had before this pass — never to a frozen
+     hero.
+     (Briefly removed on 2026-07-29 while the glass HVU landed, then restored the
+     same session: "wait maybe no dont remove the animation scroll that we had
+     from kinetic to hvu." The climb-over stands.) */
+  position: sticky;
+  top: calc(100svh - var(--sheet-h, 200000px));
+  z-index: 0;
+  /* THE GROUND. Full-bleed by construction — a block element at the page's own
+     width, no max-width, no padding, no margin-inline (owner correction: the
+     sheet is "complete full"). No border-inline either: its vertical edges would
+     land exactly on the viewport's edges, where a hairline is not a readable
+     edge, so they are removed rather than hidden. */
+  background: var(--color-surface-100);
+}
+
+/* The sheet's HORIZONTAL edges: full-bleed, the sheet's only two lines. Same
+   LINE as `.pc`'s border-block — same token, same 1px, same full-viewport reach —
+   but drawn OUT OF FLOW rather than as a border, and that difference is
+   load-bearing, not a stylistic preference:
+
+   `border-block` on this wrapper adds a 1px row above the hero, which moves the
+   hero's content to document y=81 while its four sticky layers still pin at
+   top:80 (and KineticConversation's pin, which is frozen and cannot be edited,
+   also pins at 80). The headline therefore rested at 81 and jumped to 80 on the
+   first scroll pixel — caught by scripts/hero-curtain-verify.mjs, whose whole job
+   is "the headline must not move while it dissolves". Out-of-flow lines cost
+   zero layout, so the hero's rest position and its pinned position are the same
+   number again and the gate is green. PlatformChapters keeps its real
+   border-block: nothing in that section pins to a hard-coded offset.
+
+   Painting: `.sheet`'s own white ground paints in the block-background layer,
+   below these positioned pseudo-elements, so the two lines always read against
+   the sheet rather than being buried by it. */
+.sheet::before,
+.sheet::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--color-hairline-2);
+  pointer-events: none;
+}
+
+.sheet::before {
+  top: 0;
+}
+
+.sheet::after {
+  bottom: 0;
+}
+
+/* (`.sheet__container` (1440 / 30px) and `.sheet__panel` (white + border-inline)
+   lived here for one build of this pass, giving the hero sheet the tour panel's
+   exact margins. Both are DELETED by the owner's "complete full" correction —
+   see the header. Nothing replaced them: `.sheet` is a plain full-width block,
+   which is also why no `max-width`, `margin-inline` or `padding` appears on it.
+   It deliberately has NO overflow clipping either: an overflow-clipped ancestor
+   becomes the scrollport for position:sticky and would freeze the hero's four
+   sticky layers and KineticConversation's pin.) */
+
+/* HVU's layer. Above the sheet, so it can climb over the frozen tail — this
+   single z-index is what makes the transition read as "the arriving plane covers
+   the held one" rather than "the held one is uncovered from underneath". */
+.planes__over {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet {
+    position: static;
+  }
+}

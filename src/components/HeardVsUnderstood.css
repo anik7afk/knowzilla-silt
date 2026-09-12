@@ -1,0 +1,1999 @@
+/* Heard vs Understood — split comparison, raw hearing vs contextual meaning.
+   Skin: Natural (white surface, 1px hairlines, zero shadows). Type: Inter
+   Display headline, Inter (label face; mono retired 2026-07-25) metadata/labels/data. Accent (lavender)
+   marks understanding; the raw HEARD side stays colorless gray. Waveform +
+   the two live readouts are driven from one rAF loop in the .tsx; everything
+   below is color/entrance state on scene classes. */
+
+.hvu {
+  --hvu-enter: cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  background: var(--color-surface-100);
+  color: var(--color-ink);
+  padding: 120px 0 120px;
+  overflow: hidden;
+}
+
+.hvu__container {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 40px;
+}
+
+/* ── metadata row + hairline ──────────────────────────────────────────── */
+
+.hvu__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--color-ink);
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--color-hairline-2);
+}
+
+.hvu__dot {
+  color: var(--color-gray-500);
+}
+
+.hvu__live {
+  color: var(--color-signal-700); /* telemetry — live signal */
+}
+
+.hvu__headline {
+  margin: 40px 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4.6vw, 52px);
+  line-height: 1.04;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+.hvu__sub {
+  margin: 16px 0 0;
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.5;
+  font-weight: 450;
+  letter-spacing: -0.01em;
+  color: var(--color-gray-700);
+}
+
+/* ── split body ───────────────────────────────────────────────────────── */
+
+.hvu__body {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 56px 1fr;
+  gap: 32px;
+  margin-top: 56px;
+  padding-top: 48px;
+  border-top: 1px solid var(--color-hairline-2);
+  min-height: 340px;
+}
+
+.hvu__col {
+  min-width: 0;
+}
+
+.hvu__eyebrow {
+  margin: 0 0 40px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  /* R1 (S9): structural metadata label — neutral, never lavender */
+  color: var(--color-gray-700);
+}
+
+/* ── divider + chevron node + lag telemetry ───────────────────────────── */
+
+.hvu__divider {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* R1 (S9): the spine the eye crosses. A 1px lavender line read as a
+   scratch; a 2px matte gray line reads as a drawn, deliberate device. */
+.hvu__divider::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--color-gray-500);
+}
+
+.hvu__chevron {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full, 9999px);
+  background: var(--color-surface-100);
+  /* R1 (S9): node ring, ink glyph. 2px, not the table's 1.5px — Blink
+     floors fractional border-widths to 1px, which would have silently
+     shipped the exact "scratch" weight the round exists to remove. */
+  border: 2px solid var(--color-gray-400);
+  transition: transform 300ms var(--hvu-enter);
+}
+
+/* the moment understanding catches hearing: one pulse — the lag collapses */
+@keyframes hvu-cross {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.28);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.hvu.is-understood .hvu__chevron {
+  animation: hvu-cross 520ms var(--hvu-enter);
+}
+
+.hvu-lag {
+  position: absolute;
+  top: calc(50% + 30px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 300ms var(--hvu-enter),
+    transform 300ms var(--hvu-enter);
+}
+
+/* lag telemetry surfaces only once the left side has finished hearing —
+   it exists to measure the gap before understanding arrives */
+.hvu.is-heardfull .hvu-lag {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hvu-lag__label {
+  /* sans label needs the weight mono carried in its advance (2026-07-25) */
+  font-weight: 550;
+  color: var(--color-gray-600);
+}
+
+.hvu-lag__delta {
+  color: var(--color-signal-700); /* telemetry number */
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* the one semantic beat at the divider. It goes INK, not accent: the
+   section's single accent mark is the rule under "predictability." (the
+   actual payload) — spending accent here too would give this 10.5px
+   readout three colours (ink glyph / lavender word / signal number) in the
+   exact spot the user called out. gray-600 → ink still reads as a state
+   change, and leaves signal blue as the only colour on the spine. */
+.hvu.is-understood .hvu-lag__label {
+  color: var(--color-ink);
+}
+
+/* ── sentences ────────────────────────────────────────────────────────── */
+
+.hvu-sentence {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(26px, 3.1vw, 38px);
+  line-height: 1.12;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.hvu-sentence--heard .hvu-word {
+  color: var(--color-gray-600);
+  opacity: 0.28;
+  filter: blur(1.2px);
+  transition:
+    opacity 360ms var(--hvu-enter),
+    filter 360ms var(--hvu-enter);
+}
+
+.hvu-sentence--heard .hvu-word.is-heard {
+  opacity: 1;
+  filter: blur(0);
+}
+
+/* right side: silent until understanding, then words resolve to ink L→R */
+.hvu-sentence--understood {
+  color: var(--color-ink);
+}
+
+.hvu-sentence--understood .hvu-word {
+  display: inline;
+  opacity: 0;
+  filter: blur(4px);
+  transition:
+    opacity 460ms var(--hvu-enter),
+    filter 460ms var(--hvu-enter);
+  transition-delay: calc(var(--wi) * 70ms);
+}
+
+.hvu-sentence--understood.is-on .hvu-word {
+  opacity: 1;
+  filter: blur(0);
+}
+
+.hvu-word--key {
+  position: relative;
+  isolation: isolate;
+  white-space: nowrap;
+}
+
+.hvu-underline {
+  position: absolute;
+  z-index: -1;
+  left: -0.06em;
+  right: -0.04em;
+  bottom: -0.04em;
+  height: 1.08em;
+  background: var(--color-signal-200);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 520ms var(--hvu-enter);
+  transition-delay: 520ms; /* after the words have resolved */
+}
+
+.hvu-sentence--understood.is-on .hvu-underline {
+  transform: scaleX(1);
+}
+
+/* ── left: waveform + counter ─────────────────────────────────────────── */
+
+.hvu-wave {
+  margin-top: 40px;
+  height: 88px;
+}
+
+.hvu-wave__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* own compositor layer so the per-frame stroke does not re-raster the
+     serif/display glyph layers around it */
+  will-change: transform;
+}
+
+.hvu-counter {
+  margin-top: 20px;
+}
+
+.hvu-counter__num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-gray-700);
+}
+
+/* ── right: context columns ───────────────────────────────────────────── */
+
+.hvu-ctx {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.hvu-ctx__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 20px;
+  opacity: 0;
+  transform: translateY(10px);
+  filter: blur(3px);
+  transition:
+    opacity 440ms var(--hvu-enter),
+    transform 440ms var(--hvu-enter),
+    filter 440ms var(--hvu-enter);
+}
+
+.hvu-ctx__item + .hvu-ctx__item {
+  border-left: 1px solid var(--color-hairline-2);
+}
+
+.hvu-ctx__item:first-child {
+  padding-left: 0;
+}
+
+.hvu-ctx__item.is-shown {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.hvu-ctx__key {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-gray-700); /* R1 (S9): structural metadata key */
+}
+
+.hvu-ctx__val {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  color: var(--color-gray-700);
+}
+
+.hvu-ctx__bullet {
+  color: var(--color-gray-500);
+  margin-right: 5px;
+}
+
+/* ── verdict ──────────────────────────────────────────────────────────── */
+
+.hvu-resolution {
+  margin: 44px 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.2vw, 27px);
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--color-ink);
+  opacity: 0;
+  transform: translateY(12px);
+  filter: blur(4px);
+  transition:
+    opacity 560ms var(--hvu-enter),
+    transform 560ms var(--hvu-enter),
+    filter 560ms var(--hvu-enter);
+}
+
+.hvu-resolution.is-shown {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.hvu-resolution__sep {
+  margin-inline: 12px;
+  color: var(--color-gray-400);
+}
+
+.hvu-resolution__conf {
+  color: var(--color-gray-700);
+}
+
+/* ── responsive ───────────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .hvu__body {
+    grid-template-columns: 1fr;
+    gap: 0;
+    min-height: 0;
+  }
+
+  .hvu__divider {
+    flex-direction: row;
+    gap: 20px;
+    height: 96px;
+    justify-content: flex-start;
+  }
+
+  .hvu__divider::before {
+    top: 50%;
+    bottom: auto;
+    left: 0;
+    right: 0;
+    width: auto;
+    height: 2px;
+  }
+
+  .hvu-lag {
+    position: relative;
+    top: auto;
+    flex-direction: row;
+    gap: 10px;
+    align-items: baseline;
+    background: var(--color-surface-100);
+    padding-right: 12px;
+  }
+
+  .hvu__col--heard {
+    padding-bottom: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hvu {
+    padding: 72px 0 80px;
+  }
+
+  .hvu__container {
+    padding-inline: 24px;
+  }
+
+  .hvu__eyebrow {
+    margin-bottom: 28px;
+  }
+
+  .hvu-wave {
+    margin-top: 32px;
+  }
+}
+
+@media (max-width: 520px) {
+  .hvu-ctx {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .hvu-ctx__item {
+    padding-left: 0;
+  }
+
+  .hvu-ctx__item + .hvu-ctx__item {
+    border-left: 0;
+    padding-top: 20px;
+    border-top: 1px solid var(--color-hairline-2);
+  }
+}
+
+/* ══ FULL SCENE — expressive hearing → guidance composition ═════════════
+   The standalone scene keeps the large sentence and continuous voice wave,
+   but gains one physical stage and product-true Deal Room / Live Suggestion
+   content. The wave runs only while the section is visible; reduced motion
+   receives the same fully resolved static frame. */
+.hvu--full {
+  padding: 104px 0 120px;
+}
+
+.hvu--full .hvu__container {
+  max-width: 1280px;
+}
+
+.hvu--full .hvu__headline {
+  max-width: 980px;
+  font-size: clamp(44px, 5vw, 68px);
+  line-height: 1.02;
+  font-weight: 550;
+  letter-spacing: -0.035em;
+}
+
+.hvu__headline-word {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(5px);
+  transform: translateY(18px);
+}
+
+.hvu__headline-word:not(:last-child) {
+  margin-right: 0.22em;
+}
+
+.hvu--full.is-visible .hvu__headline-word {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+  transition:
+    opacity 360ms var(--hvu-enter),
+    filter 420ms var(--hvu-enter),
+    transform 620ms var(--hvu-enter);
+  transition-delay: calc(80ms + var(--wi) * 70ms);
+}
+
+.hvu--full .hvu__meta {
+  flex-wrap: wrap;
+  row-gap: 8px;
+}
+
+.hvu--full .hvu__meta > span:not(.hvu__dot) {
+  white-space: nowrap;
+}
+
+.hvu--full .hvu__sub {
+  max-width: 58ch;
+  font-size: 17px;
+}
+
+.hvu--full .hvu__body {
+  grid-template-columns: minmax(0, 0.92fr) 72px minmax(0, 1.08fr);
+  gap: 24px;
+  min-height: 420px;
+  margin-top: 56px;
+  padding: 40px;
+  border: 1px solid var(--color-hairline-2);
+  border-radius: 16px;
+  background: var(--color-surface-300);
+  box-shadow: var(--shadow-float);
+}
+
+.hvu--full .hvu__col {
+  align-self: stretch;
+  min-width: 0;
+}
+
+.hvu--full .hvu__col--heard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px 0;
+}
+
+.hvu--full .hvu__col--understood {
+  padding: 24px 0 24px 24px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.hvu--full .hvu__eyebrow {
+  margin-bottom: 28px;
+}
+
+.hvu--full .hvu-sentence {
+  font-size: clamp(28px, 2.65vw, 36px);
+}
+
+.hvu--full .hvu-sentence--raw {
+  max-width: 38ch;
+  font-family: var(--font-sans);
+  font-size: clamp(18px, 1.65vw, 23px);
+  line-height: 1.5;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.hvu--full .hvu-sentence--raw .hvu-word {
+  display: inline-block;
+  color: var(--color-gray-800);
+  opacity: 0.18;
+  filter: blur(2px);
+  transform: translateY(5px);
+  transition:
+    color 620ms var(--hvu-enter),
+    opacity 520ms var(--hvu-enter),
+    filter 620ms var(--hvu-enter),
+    transform 700ms var(--hvu-enter);
+  transition-delay: calc(100ms + var(--wi) * 38ms);
+}
+
+.hvu--full .hvu-sentence--raw .hvu-word:not(:last-child) {
+  margin-right: 0.26em;
+}
+
+.hvu--full .hvu-sentence--raw.is-on .hvu-word {
+  color: var(--color-gray-800);
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+.hvu--full .hvu-sentence--understood .hvu-word {
+  transition-duration: 620ms, 720ms;
+  transition-delay: calc(120ms + var(--wi) * 90ms);
+}
+
+.hvu--full .hvu-wave {
+  height: 104px;
+  margin-top: 32px;
+}
+
+.hvu--full .hvu-counter {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-hairline-2);
+}
+
+.hvu-counter__label {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 550;
+  color: var(--color-gray-700);
+}
+
+.hvu--full .hvu__divider::before {
+  top: 50%;
+  right: 0;
+  bottom: auto;
+  left: 0;
+  width: auto;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-gray-400) 24%,
+    var(--color-gray-400) 76%,
+    transparent
+  );
+  transform: translateY(-1px);
+}
+
+.hvu--full .hvu-lag {
+  top: calc(50% + 30px);
+  max-width: 68px;
+  padding: 8px 4px;
+  background: var(--color-surface-300);
+  white-space: normal;
+  line-height: 1.35;
+}
+
+.hvu--full .hvu-lag__label {
+  color: var(--color-gray-800);
+}
+
+.hvu--full .hvu-ctx {
+  gap: 8px;
+  margin-top: 28px;
+}
+
+.hvu--full .hvu-ctx__item {
+  min-width: 0;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid var(--color-hairline-2);
+  border-radius: 8px;
+  background: var(--color-surface-200);
+}
+
+.hvu--full .hvu-ctx__item + .hvu-ctx__item {
+  border-left: 1px solid var(--color-hairline-2);
+}
+
+.hvu--full .hvu-ctx__key,
+.hvu--full .hvu-ctx__val {
+  overflow: hidden;
+  font-family: var(--font-sans);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hvu--full .hvu-ctx__key {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.hvu--full .hvu-ctx__val {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-gray-800);
+}
+
+.hvu--full .hvu-resolution {
+  display: block;
+  margin: 20px 0 0;
+  padding: 16px 18px;
+  border: 1px solid var(--color-hairline-2);
+  border-radius: 8px;
+  background: var(--color-surface-200);
+  font-family: var(--font-sans);
+  letter-spacing: 0;
+}
+
+.hvu-resolution__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 10px;
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-gray-700);
+}
+
+.hvu-resolution__ask {
+  padding: 4px 8px;
+  border-radius: 9999px;
+  background: var(--color-signal-100);
+  color: var(--color-signal-700);
+}
+
+.hvu--full .hvu-resolution > strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--color-ink);
+}
+
+.hvu--full .hvu-resolution > p {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 500;
+  color: var(--color-gray-700);
+}
+
+@media (max-width: 900px) {
+  .hvu--full .hvu__body {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: 28px;
+  }
+
+  .hvu--full .hvu__divider {
+    height: 80px;
+  }
+
+  .hvu--full .hvu__divider::before {
+    top: 50%;
+    bottom: auto;
+  }
+
+  .hvu--full .hvu-lag {
+    top: auto;
+    max-width: none;
+    padding-inline: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .hvu--full {
+    padding: 80px 0;
+  }
+
+  .hvu--full .hvu__headline {
+    font-size: 42px;
+  }
+
+  .hvu--full .hvu__body {
+    margin-top: 40px;
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .hvu--full .hvu__col--heard {
+    padding: 12px 4px;
+  }
+
+  .hvu--full .hvu__col--understood {
+    padding: 18px 4px 4px;
+  }
+
+  .hvu--full .hvu-ctx {
+    grid-template-columns: 1fr;
+  }
+
+  .hvu--full .hvu-ctx__item + .hvu-ctx__item {
+    padding-top: 12px;
+    border-top: 1px solid var(--color-hairline-2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hvu__headline-word {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ══ FLOW VARIANT ═══════════════════════════════════════════════════════
+   Landing-page version. No waveform of any kind (the frozen KineticConversation
+   wave owns that idiom directly above); no giant sentence (spent by the
+   neighbours) — nothing here exceeds 40px. Structure and the divider/telemetry
+   signature are inherited from the base rules above; everything below either
+   re-scales or replaces. */
+
+/* ── §sheet — THE FLOW VARIANT IS ITS OWN WHITE SHEET ──────────────────────
+   Session 14 first put this section directly on the dotted desk ("HVU is going
+   to be on the main dotted bg"); the owner reviewed it in-browser the same day
+   and reversed that one call: "make this section white panel again"
+   (2026-07-29, second ruling). So the flow variant is a full-bleed WHITE sheet,
+   same species as the hero sheet above it — surface-100 edge to edge, one
+   full-bleed horizontal hairline at its top (its leading edge), no vertical
+   edges (a full-bleed sheet has none to inset, per PagePlanes.css). The desk
+   is now visible only around PlatformChapters below.
+
+   THE GROUND MUST STAY OPAQUE, whatever its color: this section is the layer
+   that climbs OVER the pinned sheet (PagePlanes.css §KC→HVU TRANSITION). The
+   base .hvu already paints surface-100, but it is restated here because the
+   occlusion — not just the look — depends on it; a transparent HVU would show
+   the frozen KineticConversation card straight through its own body for the
+   whole length of the transition.
+
+   Its bottom join needs no line of its own: PlatformChapters' full-bleed
+   border-top is the register line where this sheet ends and the desk resumes. */
+.hvu--flow {
+  background: var(--color-surface-100);
+  /* Opening and closing air both at the page's full 152px measure (Natural's
+     graceful-empty-space ladder, the number PlatformChapters' intro opens on).
+     The 152px close is kept from the desk round even though the ground is white
+     again — it is half of what fixed the stray-hairline artifact at the tour's
+     seam (the resolved panel's bottom edge sits 152px clear of the tour's
+     full-bleed top edge instead of the old 96px). See the note on
+     .hvu-f__panel. */
+  padding: 152px 0;
+}
+
+/* the sheet's leading edge — the line the owner watches climb over the pinned
+   KC during the transition. Out of flow like the hero sheet's own horizontals
+   (PagePlanes.css: a real border here would cost a 1px layout row), full-bleed
+   per the locked grammar. */
+.hvu--flow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--color-hairline-2);
+  pointer-events: none;
+}
+
+.hvu--flow .hvu__container {
+  max-width: 1280px;
+}
+
+.hvu-f__head {
+  display: grid;
+  grid-template-columns: 1fr 56px 1fr;
+  gap: 32px;
+  align-items: end;
+}
+
+.hvu-f__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(27px, 3.1vw, 36px);
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+.hvu-f__sub {
+  margin: 14px 0 0;
+  max-width: 34ch;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 450;
+  letter-spacing: -0.01em;
+  color: var(--color-gray-700);
+}
+
+/* sentence-case, not an uppercase eyebrow — that idiom is capped page-wide */
+.hvu-f__meta {
+  grid-column: 3;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--color-gray-600);
+}
+
+.hvu-f__metasep {
+  margin-inline: 7px;
+  color: var(--color-gray-400);
+}
+
+/* ── the top rule, as a real-time progress readout (S9) ───────────────────
+   The line under the head row used to just sit there. It now draws from the
+   left edge as the scene resolves and reaches the far edge exactly as the
+   verdict lands — the section's quiet "still working / done" readout.
+   Track = the hairline that was already there (gray-300, 1.5px), so nothing
+   looks missing before the beat arms; the fill is the same line drawn in at
+   gray-500 — R1's device-line grey, but 1.5px against the divider spine's
+   2px, so the readout never out-weighs the spine it reports on.
+   Driven per-frame from the scene clock in the .tsx (scaleX from a left
+   origin on one isolated element — no width animation, nothing else
+   repaints). Monotonic: once complete it stays complete. */
+.hvu-f__rule {
+  position: relative;
+  margin-top: 40px;
+  height: 1.5px;
+  background: var(--color-gray-300);
+  overflow: hidden;
+}
+
+/* SESSION 14 briefly took this rule FULL-BLEED: on the desk, a container-width
+   horizontal was exactly the naked-hairline artifact class the owner rejected
+   at the tour's seam. With the section back on its own white sheet (owner,
+   2026-07-29: "make this section white panel again") that argument is gone —
+   inside a sheet this is an INTERIOR rule, the same species as the strip's
+   joins inside the hero sheet, so it returns to container width under the head
+   row it reports on. The one full-bleed horizontal this section owns now is
+   the sheet's own top edge (§sheet). */
+
+.hvu-f__rulefill {
+  display: block;
+  position: absolute;
+  inset: 0;
+  background: var(--color-gray-500);
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+.hvu-f__body {
+  margin-top: 0;
+  padding-top: 36px;
+  border-top: 0; /* the animated rule above replaces the static hairline */
+  min-height: 0;
+}
+
+/* the readout sits on the divider line — knock it out with the GROUND so it
+   reads as a gap in the line rather than a floating chip. The ground follows
+   the section: white again since the owner's 2026-07-29 second ruling (§sheet).
+   Solid, not translucent, deliberately: translucency would let the 2px spine
+   show through and the knockout would stop reading as a break in the line. */
+.hvu--flow .hvu-lag {
+  background: var(--color-surface-100);
+  padding-block: 7px;
+}
+
+.hvu-f__label {
+  margin: 0 0 24px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: var(--color-gray-600);
+}
+
+/* ── left: raw un-resolved stream (no labels, no timestamps, no rows) ──── */
+
+.hvu-f__raw {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 15.5px;
+  line-height: 1.85;
+  letter-spacing: 0;
+  color: var(--color-gray-600);
+}
+
+.hvu-f__rw {
+  opacity: 0;
+  filter: blur(1.4px);
+}
+
+/* one class flip carries all 25 words — stagger lives in the delay, so the
+   stream costs zero per-word React renders */
+.hvu-f__raw.is-on .hvu-f__rw {
+  opacity: 1;
+  filter: blur(0);
+  transition:
+    opacity 260ms var(--hvu-enter),
+    filter 260ms var(--hvu-enter);
+  transition-delay: calc(160ms + var(--wi) * 55ms);
+}
+
+/* ── right: the resolved reading (nothing over 48px) ──────────────────── */
+
+/* R2 (S9) — depth carries the argument instead of only the words: the raw
+   utterance stays FLAT on the tinted ground (nothing has processed it yet),
+   and the resolved reading is the one thing that lifts off it. Exactly one
+   side lifts; if both did, neither would read. Legal because the flow
+   ground is already tinted (surface-200) — Session 4's chapter map is
+   untouched.
+
+   SESSION 14 — THE STRAY-HAIRLINE ARTIFACT, and what holds it closed now that
+   the ground is white again (owner second ruling, see §sheet). The owner's
+   complaint at the tour's top seam ("a horizontal hairline near the top that
+   neither reaches the viewport edge nor terminates at the sheet's corner") was
+   THIS element's border-bottom: at 1440 it painted x≈780 w≈540, 96px above
+   PlatformChapters' full-bleed top edge, and on a near-white ground the box
+   itself was invisible so only the naked line read. On white the box is even
+   less separable by tone, so TWO things carry the fix:
+     1. the closing air stays at 152px (§sheet), which lifts that edge out of
+        the join's 120px neighbourhood entirely;
+     2. the panel is a CLOSED box — all four hairline-2 edges, radius, and the
+        shadow beat — so what shows near the join is a card's corner, never a
+        naked floating rule.
+   Everything about the element itself — fill, hairline-2 edge, radius, the
+   shadow beat — is unchanged. */
+.hvu-f__panel {
+  background: var(--color-surface-100);
+  border: 1px solid var(--color-hairline-2);
+  border-radius: var(--radius-card);
+  padding: 26px 30px 30px;
+  /* the lift itself is a beat: while the machine is still matching, the
+     panel is a flat waiting frame; it RISES on the frame understanding
+     lands. Paint-only, one element, once. */
+  box-shadow: var(--shadow-frame);
+  transition: box-shadow 620ms var(--hvu-enter);
+}
+
+.hvu--flow.is-understood .hvu-f__panel {
+  box-shadow: var(--shadow-card);
+}
+
+.hvu-f__clean {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(21px, 2.1vw, 26px);
+  line-height: 1.34;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--color-ink);
+}
+
+.hvu-f__clean .hvu-word {
+  display: inline;
+  opacity: 0;
+  filter: blur(4px);
+  transition:
+    opacity 460ms var(--hvu-enter),
+    filter 460ms var(--hvu-enter);
+  transition-delay: calc(var(--wi) * 70ms);
+}
+
+.hvu-f__clean.is-on .hvu-word {
+  opacity: 1;
+  filter: blur(0);
+}
+
+.hvu-f__clean.is-on .hvu-underline {
+  transform: scaleX(1);
+}
+
+/* the top rule lives on the first ROW, not the container, so it arrives
+   with its row instead of floating in an empty panel during the lag */
+.hvu-f__ctx {
+  margin-top: 28px;
+}
+
+.hvu-f__ctxrow:first-child {
+  border-top: 1px solid var(--color-gray-300);
+}
+
+.hvu-f__ctxrow {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--color-gray-300);
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.hvu-f__ctx.is-on .hvu-f__ctxrow {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 400ms var(--hvu-enter),
+    transform 400ms var(--hvu-enter);
+  transition-delay: calc(var(--wi) * 130ms);
+}
+
+.hvu-f__ctxkey {
+  flex: 0 0 88px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  /* R1 (S9): CRM / Prior call / Pricing are structural metadata keys —
+     the thing the user pointed at. Neutral mono, never lavender. */
+  color: var(--color-gray-700);
+}
+
+.hvu-f__ctxval {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--color-gray-800);
+}
+
+.hvu-f__res {
+  margin: 26px 0 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 520ms var(--hvu-enter),
+    transform 520ms var(--hvu-enter);
+}
+
+.hvu-f__res.is-on {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hvu-f__ressep {
+  margin-inline: 10px;
+  color: var(--color-gray-400);
+}
+
+.hvu-f__resconf {
+  font-weight: 450;
+  color: var(--color-gray-700);
+}
+
+@media (max-width: 900px) {
+  .hvu-f__head {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+
+  .hvu-f__meta {
+    grid-column: 1;
+  }
+
+  .hvu-f__rule {
+    margin-top: 32px;
+  }
+
+  .hvu-f__body {
+    margin-top: 0;
+    padding-top: 28px;
+  }
+
+  /* stacked: the spine rotates but stays the same device. The panel below
+     it is what the line hands the utterance to. */
+  .hvu--flow .hvu__divider {
+    height: 84px;
+  }
+
+  .hvu-f__panel {
+    padding: 22px 22px 26px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hvu--flow {
+    /* same reasoning as the desktop 152/152 (§sheet): symmetric air, held at
+       the MOBILE ladder's 80px rather than scaled up from desktop — the tour
+       below opens on 80 and closes on 64 at this width, and a 128px+ close
+       here would be out of scale with both. */
+    padding: 80px 0;
+  }
+
+  .hvu-f__raw {
+    font-size: 14.5px;
+    line-height: 1.8;
+  }
+
+  .hvu-f__ctxkey {
+    flex-basis: 80px;
+  }
+}
+
+@media (max-width: 520px) {
+  .hvu-f__ctxrow {
+    gap: 10px;
+  }
+
+  .hvu-f__ctxkey {
+    flex-basis: 80px;
+  }
+}
+
+/* ══ DOT HALO (task D3, 2026-07-26) ══════════════════════════════════════
+   Everything below is scoped under `.hvu--halo*`, which only the two
+   candidate modes add — mode `off` (the default, and what the landing page
+   renders) matches nothing here and the canvas is not even in the DOM.
+
+   THE MASK IS THE BOX. The canvas lives inside `.hvu-f__col--resolved` and
+   bleeds outward by `--hvu-halo-bleed`. On the split layout the resolved
+   column already sits `28px (half divider) + 32px (grid gap) = 60px` right
+   of the section's centre line, so a 40px bleed leaves the canvas 20px
+   clear of the spine and the field itself (max 38px out from the panel,
+   i.e. 2px inside the canvas edge) leaves ~22px of untouched ground before
+   the divider. There is no mask and no clip to regress.
+
+   The TOP bleed is 0 at every width, on purpose. There is already ~43px of
+   column above the panel (the label's row) for the field to use, and on the
+   stacked layout (≤900px) the spine rotates to horizontal and sits 40px
+   above the resolved column's top edge — a top bleed of 0 makes reaching it
+   geometrically impossible rather than a tuning question. */
+
+.hvu--halo .hvu-f__col--resolved {
+  position: relative;
+}
+
+/* the label and the panel stay above the field; the panel's surface-100 fill
+   would hide the dots behind it anyway, but z-order should not depend on that */
+.hvu--halo .hvu-f__label,
+.hvu--halo .hvu-f__panel {
+  position: relative;
+  z-index: 1;
+}
+
+/* the Δ-lag readout is in the divider column, i.e. a DOM sibling that paints
+   BEFORE the canvas; the field already yields to its measured box, and this
+   makes overpainting it impossible even if that measurement ever drifts */
+.hvu--halo .hvu-lag {
+  z-index: 2;
+}
+
+.hvu-f__halo {
+  --hvu-halo-bleed: 40px;
+  --hvu-halo-top: 0px;
+  position: absolute;
+  z-index: 0;
+  display: block;
+  top: calc(-1 * var(--hvu-halo-top));
+  left: calc(-1 * var(--hvu-halo-bleed));
+  /* SIZED, not inset — a <canvas> is a replaced element, so `width: auto`
+     with left+right set resolves to its INTRINSIC width (and the .tsx writes
+     that attribute every resize, which would feed straight back into layout).
+     Explicit calc() sizes break the loop and keep the box declarative. */
+  width: calc(100% + 2 * var(--hvu-halo-bleed));
+  height: calc(100% + var(--hvu-halo-top) + var(--hvu-halo-bleed));
+  pointer-events: none;
+  /* the field repaints only while the bloom front is moving (as-beat) or on
+     a resize — no per-frame work once it has settled, so no layer promotion */
+}
+
+/* ≤768: the container's inline padding is 24px, so the bleed narrows to
+   match. The field is then cut by the viewport edge rather than by an
+   arbitrary line inside the page, which reads as continuing off-page. */
+@media (max-width: 768px) {
+  .hvu-f__halo {
+    --hvu-halo-bleed: 24px;
+  }
+}
+
+/* `as-beat`: the halo bloom IS the arrival gesture, so the panel's
+   shadow-frame → shadow-card beat is removed and it holds R2's raised state
+   throughout. One lift, one event — two arrival gestures on the same element
+   would be the "two lifts = no lift" failure in motion form. */
+.hvu--flow.hvu--halo-beat .hvu-f__panel {
+  box-shadow: var(--shadow-card);
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hvu-f__rw,
+  .hvu-f__raw.is-on .hvu-f__rw,
+  .hvu-f__clean .hvu-word,
+  .hvu-f__ctxrow,
+  .hvu-f__ctx.is-on .hvu-f__ctxrow,
+  .hvu-f__res,
+  .hvu-f__panel {
+    transition: none;
+    transition-delay: 0s;
+  }
+
+  /* settled end state before the effect can write it — the progress rule
+     is simply already complete */
+  .hvu-f__rulefill {
+    transform: scaleX(1);
+    will-change: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hvu-sentence--heard .hvu-word,
+  .hvu-sentence--understood .hvu-word,
+  .hvu-underline,
+  .hvu-ctx__item,
+  .hvu-resolution,
+  .hvu__chevron,
+  .hvu-lag {
+    transition: none;
+  }
+
+  .hvu.is-understood .hvu__chevron {
+    animation: none;
+  }
+}
+
+/* ══ CONTEXT PRESS — flow redesign, 2026-07-29 ═══════════════════════════
+   One assembled product plate replaces the generic before/after split.
+   Audio + verified Deal Room context visibly combine into a verified Live
+   Suggestion and Next Step. The section stays one BEAT: it assembles once,
+   settles, and never loops. */
+.hvu--press .hvu__container {
+  max-width: 1280px;
+}
+
+.hvu-p__intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(300px, 0.72fr);
+  gap: 80px;
+  align-items: end;
+}
+
+.hvu-p__eyebrow {
+  margin: 0 0 16px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-signal-700);
+}
+
+.hvu-p__title {
+  max-width: 760px;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(40px, 4.8vw, 64px);
+  line-height: 1.02;
+  font-weight: 550;
+  letter-spacing: -0.035em;
+  color: var(--color-ink);
+}
+
+.hvu-p__sub {
+  max-width: 460px;
+  margin: 0 0 6px;
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.55;
+  font-weight: 450;
+  letter-spacing: -0.01em;
+  color: var(--color-gray-700);
+}
+
+.hvu-p__machine {
+  margin-top: 64px;
+  overflow: hidden;
+  border: 1px solid var(--color-hairline-2);
+  border-radius: 16px;
+  background: var(--color-surface-100);
+  box-shadow: var(--shadow-float);
+}
+
+.hvu-p__bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--color-hairline-2);
+  background: var(--color-surface-100);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 550;
+  color: var(--color-gray-700);
+}
+
+.hvu-p__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-ink);
+}
+
+.hvu-p__live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--color-signal-600);
+}
+
+.hvu-p__bar-sep {
+  width: 1px;
+  height: 16px;
+  background: var(--color-hairline-2);
+}
+
+.hvu-p__progress {
+  position: absolute;
+  right: 20px;
+  bottom: -1px;
+  left: 20px;
+  height: 2px;
+  overflow: hidden;
+}
+
+.hvu-p__progress > span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--color-signal-600);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.hvu-p__stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) 72px minmax(0, 1.1fr);
+  align-items: stretch;
+  gap: 0;
+  padding: 40px;
+  background: var(--color-surface-300);
+}
+
+.hvu-p__sources {
+  display: grid;
+  align-content: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.hvu-p__audio,
+.hvu-p__context,
+.hvu-p__result {
+  border: 1px solid var(--color-hairline-2);
+  border-radius: 12px;
+  background: var(--color-surface-100);
+}
+
+.hvu-p__audio {
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.hvu-p__audio.is-on {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 300ms var(--hvu-enter),
+    transform 480ms var(--hvu-enter);
+}
+
+.hvu-p__card-head,
+.hvu-p__suggestion-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 42px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--color-hairline-2);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.hvu-p__card-head > :last-child {
+  font-weight: 500;
+  color: var(--color-gray-700);
+}
+
+.hvu-p__audio-body {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr);
+  gap: 20px;
+  align-items: center;
+  min-height: 112px;
+  padding: 20px;
+}
+
+.hvu-p__wave {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  height: 40px;
+  padding-right: 20px;
+  border-right: 1px solid var(--color-hairline-2);
+}
+
+.hvu-p__wave span {
+  width: 3px;
+  height: var(--h);
+  border-radius: 9999px;
+  background: var(--color-gray-500);
+  transform: scaleY(0.25);
+  transform-origin: center;
+  transition: transform 480ms var(--hvu-enter);
+}
+
+@keyframes hvu-p-wave-live {
+  0%,
+  100% {
+    transform: scaleY(0.38);
+  }
+  35% {
+    transform: scaleY(1);
+  }
+  68% {
+    transform: scaleY(0.62);
+  }
+}
+
+.hvu-p__audio.is-on .hvu-p__wave span {
+  background: var(--color-signal-600);
+  transform: scaleY(1);
+  animation: hvu-p-wave-live 1080ms cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  animation-delay: calc(var(--i, 0) * -83ms);
+  animation-play-state: paused;
+  transition-delay: calc(var(--i, 0) * 35ms);
+}
+
+.hvu--press.is-visible .hvu-p__audio.is-on .hvu-p__wave span {
+  animation-play-state: running;
+}
+
+.hvu-p__audio-body p {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--color-gray-700);
+}
+
+.hvu-p__raw-word {
+  opacity: 0;
+  filter: blur(1.4px);
+}
+
+@keyframes hvu-p-word-listen {
+  0%,
+  72%,
+  100% {
+    opacity: 0.72;
+    transform: translateY(0);
+  }
+  82% {
+    opacity: 1;
+    transform: translateY(-1px);
+  }
+}
+
+.hvu-p__audio.is-on .hvu-p__raw-word {
+  opacity: 1;
+  filter: blur(0);
+  animation: hvu-p-word-listen 3600ms ease-in-out infinite;
+  animation-delay: calc(900ms + var(--wi) * 72ms);
+  animation-play-state: paused;
+  transition:
+    opacity 220ms var(--hvu-enter),
+    filter 260ms var(--hvu-enter);
+  transition-delay: calc(120ms + var(--wi) * 40ms);
+}
+
+.hvu--press.is-visible .hvu-p__audio.is-on .hvu-p__raw-word {
+  animation-play-state: running;
+}
+
+.hvu-p__context {
+  padding-bottom: 8px;
+  box-shadow: var(--shadow-frame);
+}
+
+.hvu-p__context-list {
+  display: grid;
+  padding: 8px;
+}
+
+.hvu-p__context-row {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 8px;
+  opacity: 0;
+  transform: translateX(-6px);
+}
+
+.hvu-p__context-row + .hvu-p__context-row {
+  border-top: 1px solid var(--color-hairline-2);
+  border-radius: 0;
+}
+
+.hvu--press.is-contextual .hvu-p__context-row {
+  opacity: 1;
+  transform: translateX(0);
+  transition:
+    opacity 320ms var(--hvu-enter),
+    transform 420ms var(--hvu-enter);
+  transition-delay: calc(var(--wi) * 110ms);
+}
+
+.hvu-p__context-row > span {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 500;
+  color: var(--color-gray-700);
+}
+
+.hvu-p__context-row > strong {
+  overflow: hidden;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.3;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-gray-800);
+}
+
+.hvu-p__transfer {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.hvu-p__transfer-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-gray-400) 22%,
+    var(--color-gray-400) 78%,
+    transparent
+  );
+  transform: scaleX(0);
+}
+
+.hvu--press.is-understood .hvu-p__transfer-line {
+  transform: scaleX(1);
+  transition: transform 520ms var(--hvu-enter);
+}
+
+.hvu-p__transfer-node {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 1px solid var(--color-gray-400);
+  border-radius: 9999px;
+  background: var(--color-surface-100);
+  box-shadow: var(--shadow-frame);
+  color: var(--color-gray-800);
+  transform: scale(0.8);
+  opacity: 0;
+}
+
+.hvu--press.is-understood .hvu-p__transfer-node {
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity 220ms var(--hvu-enter) 160ms,
+    transform 420ms var(--hvu-enter) 160ms;
+}
+
+.hvu-p__result-wrap {
+  position: relative;
+  display: grid;
+  align-content: center;
+  min-width: 0;
+}
+
+.hvu-p__result-label {
+  position: relative;
+  z-index: 2;
+  margin: 0 0 12px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 600;
+  color: var(--color-gray-700);
+}
+
+.hvu-p__result {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  min-height: 304px;
+  opacity: 0.36;
+  transform: translateY(10px) scale(0.985);
+  box-shadow: var(--shadow-frame);
+  transition:
+    opacity 280ms var(--hvu-enter),
+    transform 580ms var(--hvu-enter),
+    box-shadow 360ms var(--hvu-enter);
+}
+
+.hvu--press.is-understood .hvu-p__result {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  box-shadow: var(--shadow-card);
+}
+
+.hvu-p__suggestion-head {
+  justify-content: flex-start;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-gray-700);
+}
+
+.hvu-p__ask {
+  margin-left: auto;
+  padding: 4px 8px;
+  border-radius: 9999px;
+  background: var(--color-red-100);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--color-red-900);
+  opacity: 0;
+  transform: scale(0.82);
+}
+
+.hvu--press.is-understood .hvu-p__ask {
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity 180ms var(--hvu-enter) 260ms,
+    transform 360ms var(--hvu-enter) 260ms;
+}
+
+.hvu-p__result h3 {
+  margin: 28px 28px 0;
+  max-width: 19ch;
+  font-family: var(--font-display);
+  font-size: clamp(24px, 2.25vw, 32px);
+  line-height: 1.12;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--color-ink);
+}
+
+.hvu-p__result-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.hvu--press.is-understood .hvu-p__result-word {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 260ms var(--hvu-enter),
+    transform 520ms var(--hvu-enter);
+  transition-delay: calc(140ms + var(--wi) * 85ms);
+}
+
+.hvu-p__rationale {
+  margin: 14px 28px 0;
+  max-width: 50ch;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--color-gray-700);
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.hvu--press.is-understood .hvu-p__rationale {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 300ms var(--hvu-enter) 480ms,
+    transform 480ms var(--hvu-enter) 480ms;
+}
+
+.hvu-p__next {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 20px;
+  gap: 8px 16px;
+  align-items: center;
+  margin: 28px;
+  padding: 16px 18px;
+  border: 1px solid var(--color-hairline-2);
+  border-radius: 8px;
+  background: var(--color-surface-200);
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.hvu--press.is-resolved .hvu-p__next {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 300ms var(--hvu-enter),
+    transform 480ms var(--hvu-enter);
+}
+
+.hvu-p__next > span {
+  grid-column: 1 / -1;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--color-signal-700);
+}
+
+.hvu-p__next p {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.45;
+  font-weight: 550;
+  color: var(--color-ink);
+}
+
+.hvu-p__next > span,
+.hvu-p__next p,
+.hvu-p__next svg {
+  opacity: 0;
+  transform: translateY(5px);
+}
+
+.hvu--press.is-resolved .hvu-p__next > span,
+.hvu--press.is-resolved .hvu-p__next p,
+.hvu--press.is-resolved .hvu-p__next svg {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 240ms var(--hvu-enter) 220ms,
+    transform 380ms var(--hvu-enter) 220ms;
+}
+
+.hvu-p__next svg {
+  color: var(--color-gray-700);
+}
+
+.hvu--press.hvu--halo .hvu-f__halo {
+  top: 20px;
+  left: -24px;
+  width: calc(100% + 48px);
+  height: calc(100% - 20px);
+}
+
+@media (max-width: 900px) {
+  .hvu-p__intro {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .hvu-p__sub {
+    margin: 0;
+  }
+
+  .hvu-p__stage {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 32px;
+  }
+
+  .hvu-p__transfer {
+    height: 48px;
+  }
+
+  .hvu-p__transfer-line {
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    height: auto;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      var(--color-gray-400) 22%,
+      var(--color-gray-400) 78%,
+      transparent
+    );
+    transform: scaleY(0);
+  }
+
+  .hvu--press.is-understood .hvu-p__transfer-line {
+    transform: scaleY(1);
+  }
+
+  .hvu-p__transfer-node {
+    transform: rotate(90deg) scale(0.8);
+  }
+
+  .hvu--press.is-understood .hvu-p__transfer-node {
+    transform: rotate(90deg) scale(1);
+  }
+}
+
+@media (max-width: 600px) {
+  .hvu-p__title {
+    font-size: 40px;
+  }
+
+  .hvu-p__machine {
+    margin-top: 48px;
+    border-radius: 12px;
+  }
+
+  .hvu-p__bar {
+    min-height: 44px;
+    padding-inline: 16px;
+  }
+
+  .hvu-p__progress {
+    right: 16px;
+    left: 16px;
+  }
+
+  .hvu-p__stage {
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .hvu-p__audio-body {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .hvu-p__wave {
+    justify-content: flex-start;
+    padding: 0 0 12px;
+    border-right: 0;
+    border-bottom: 1px solid var(--color-hairline-2);
+  }
+
+  .hvu-p__context-row {
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .hvu-p__result h3,
+  .hvu-p__rationale {
+    margin-inline: 20px;
+  }
+
+  .hvu-p__next {
+    margin: 24px 20px 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hvu-p__audio,
+  .hvu-p__raw-word,
+  .hvu-p__wave span,
+  .hvu-p__context-row,
+  .hvu-p__transfer-line,
+  .hvu-p__transfer-node,
+  .hvu-p__result,
+  .hvu-p__ask,
+  .hvu-p__result-word,
+  .hvu-p__rationale,
+  .hvu-p__next,
+  .hvu-p__next > span,
+  .hvu-p__next p,
+  .hvu-p__next svg {
+    animation: none;
+    transition: none !important;
+  }
+
+  .hvu-p__wave span {
+    transform: scaleY(0.7);
+  }
+}

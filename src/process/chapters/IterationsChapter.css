@@ -1,0 +1,311 @@
+/* ===========================================================================
+ * §Iterations & ideas — ideation contact sheet.
+ *
+ * Same spec-book language as the rest of /process (warm paper, one 1px hairline
+ * per join, generous air, Inter Display heads, mono-free label face at Inter 600
+ * / 1.2px / tabular-nums). NO MONOSPACE, NO olive.
+ *
+ * Differs from §Mascot where the content differs: these are page screenshots,
+ * so tiles are wider (~280px), the reserved box is 16:10, and the image is
+ * `cover`-fit anchored to the top edge so the hero of each mock is what the eye
+ * lands on. All `pch-iter-` scoped.
+ * ======================================================================== */
+
+.pch-iter {
+  --pch-iter-tile: 280px;
+  color: var(--kz-ink);
+  font: var(--kz-type-body-15);
+  letter-spacing: var(--kz-ls-body-15);
+}
+
+.pch-iter__eyebrow {
+  font: 600 12px/16px var(--kz-font-body);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-ink-secondary);
+  margin: 0;
+}
+
+.pch-iter__h {
+  font: var(--kz-type-display-40);
+  letter-spacing: var(--kz-ls-display-40);
+  margin: 16px 0 12px;
+}
+
+.pch-iter__intro {
+  font: var(--kz-type-body-15);
+  letter-spacing: var(--kz-ls-body-15);
+  color: var(--kz-ink-secondary);
+  max-width: 640px;
+  margin: 0 0 32px;
+}
+
+.pch-iter__empty {
+  color: var(--kz-ink-secondary);
+  margin: 0;
+}
+
+/* -------------------------------------------------------------- round index */
+
+/* Same bar as the Components filter (owner, 2026-07-29: "make both same"):
+ * one sticky row, chips scroll horizontally behind a mask fade instead of
+ * wrapping, identical chip anatomy. It stays below the shell's mobile header
+ * and the lightbox. */
+.pch-iter__index {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  margin: 0 -8px 8px;
+  padding: 12px 8px;
+  background: var(--kz-surface-100);
+  border-bottom: 1px solid var(--kz-hairline-2);
+}
+
+.pch-iter__index-chips {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  gap: 6px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  mask-image: linear-gradient(to right, #000 calc(100% - 20px), transparent);
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 20px), transparent);
+}
+
+.pch-iter__index-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.pch-iter__indexitem {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 7px;
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid var(--kz-hairline-2);
+  border-radius: var(--kz-radius-tile);
+  background: var(--kz-surface-200);
+  color: var(--kz-ink-secondary);
+  font: 500 12px/16px var(--kz-font-body);
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background 300ms ease-out,
+    border-color 300ms ease-out,
+    color 300ms ease-out;
+}
+
+.pch-iter__indexitem:hover {
+  border-color: var(--kz-gray-400);
+  color: var(--kz-ink);
+  transition-duration: 50ms;
+}
+
+.pch-iter__indexn {
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  opacity: 0.62;
+}
+
+/* ------------------------------------------------------------------- rounds */
+
+.pch-iter__round {
+  border-top: 1px solid var(--kz-hairline-2);
+  padding: 28px 0 56px;
+  /* Clears the sticky round index (~53px), so a jump lands the round head
+   * below the bar instead of under it. */
+  scroll-margin-top: 76px;
+  content-visibility: auto;
+}
+
+.pch-iter__rhead {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0 0 20px;
+}
+
+.pch-iter__rname {
+  font: 600 12px/16px var(--kz-font-body);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-800);
+  margin: 0;
+}
+
+.pch-iter__rcount {
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.4px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-600);
+}
+
+/* --------------------------------------------------------------------- grid */
+
+.pch-iter__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--pch-iter-tile), 1fr));
+  gap: 24px 20px;
+}
+
+.pch-iter__tile {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: zoom-in;
+  font: inherit;
+  color: inherit;
+}
+
+.pch-iter__well {
+  display: block;
+  aspect-ratio: 16 / 10;
+  background: var(--kz-surface-200);
+  border: 1px solid var(--kz-hairline-2);
+  border-radius: var(--kz-radius-tile);
+  overflow: hidden;
+  transition:
+    border-color 50ms ease-out,
+    box-shadow 50ms ease-out;
+}
+
+.pch-iter__tile:hover .pch-iter__well,
+.pch-iter__tile:focus-visible .pch-iter__well {
+  border-color: var(--kz-gray-400);
+  box-shadow: var(--kz-shadow-frame);
+}
+
+.pch-iter__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.pch-iter__cap {
+  display: block;
+  margin-top: 8px;
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.4px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-700);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ----------------------------------------------------------------- lightbox */
+
+.pch-iter__lb {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 48px;
+  background: rgb(22 21 20 / 0.72);
+  animation: pch-iter-fade 160ms var(--kz-ease-entrance) both;
+}
+
+.pch-iter__lbfig {
+  margin: 0;
+  max-width: min(1280px, 100%);
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pch-iter__lbimg {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100vh - 168px);
+  object-fit: contain;
+  background: var(--kz-surface-100);
+  border-radius: var(--kz-radius-card);
+  box-shadow: var(--kz-shadow-float);
+}
+
+.pch-iter__lbcap {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  color: var(--kz-surface-200);
+}
+
+.pch-iter__lbtitle {
+  font: var(--kz-type-label-13);
+  letter-spacing: var(--kz-ls-label-13);
+}
+
+.pch-iter__lbround {
+  font: 600 11px/16px var(--kz-font-body);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-500);
+}
+
+.pch-iter__lbclose {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 0.28);
+  background: rgb(255 255 255 / 0.08);
+  color: var(--kz-surface-100);
+  font: 600 13px/1 var(--kz-font-body);
+  cursor: pointer;
+  transition:
+    background-color 50ms ease-out,
+    border-color 50ms ease-out;
+}
+
+.pch-iter__lbclose:hover {
+  background: rgb(255 255 255 / 0.18);
+  border-color: rgb(255 255 255 / 0.5);
+}
+
+@keyframes pch-iter-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .pch-iter {
+    --pch-iter-tile: 220px;
+  }
+
+  /* Same reasoning as the Components bar: the shell's mobile header owns the
+   * top edge below 900px, so the index scrolls with the page instead. */
+  .pch-iter__index {
+    position: static;
+  }
+
+  .pch-iter__lb {
+    padding: 24px 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pch-iter__lb {
+    animation: none;
+  }
+}

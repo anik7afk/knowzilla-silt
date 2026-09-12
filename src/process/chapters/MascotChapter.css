@@ -1,0 +1,299 @@
+/* ===========================================================================
+ * §Mascot — contact-sheet grid.
+ *
+ * Visual language taken from `design-system/showcase.html` as rebuilt in
+ * ProcessPanel.css: warm paper, one 1px hairline per join, generous air, Inter
+ * Display heads, and the mono-free label face (Inter 600 / 1.2px / tabular).
+ * NO MONOSPACE anywhere (retired 2026-07-25); NO olive.
+ *
+ * Mascot frames are mixed: square-ish PNG renders and 16:10 JPG sheets. Rather
+ * than crop them, every tile is a fixed 4:3 well on surface-200 with
+ * `object-fit: contain` — the frame shape stays readable and the grid keeps one
+ * baseline. Everything is `pch-mas-` scoped.
+ * ======================================================================== */
+
+.pch-mas {
+  --pch-mas-tile: 240px;
+  color: var(--kz-ink);
+  font: var(--kz-type-body-15);
+  letter-spacing: var(--kz-ls-body-15);
+}
+
+.pch-mas__eyebrow {
+  font: 600 12px/16px var(--kz-font-body);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-ink-secondary);
+  margin: 0;
+}
+
+.pch-mas__h {
+  font: var(--kz-type-display-40);
+  letter-spacing: var(--kz-ls-display-40);
+  margin: 16px 0 12px;
+}
+
+.pch-mas__intro {
+  font: var(--kz-type-body-15);
+  letter-spacing: var(--kz-ls-body-15);
+  color: var(--kz-ink-secondary);
+  max-width: 640px;
+  margin: 0 0 56px;
+}
+
+.pch-mas__empty {
+  color: var(--kz-ink-secondary);
+  margin: 0;
+}
+
+/* ------------------------------------------------------------------- rounds */
+
+.pch-mas__round {
+  border-top: 1px solid var(--kz-hairline-2);
+  padding: 28px 0 56px;
+  /* Off-screen rounds are skipped entirely; the inline
+     `contain-intrinsic-size` from the component reserves their height. */
+  content-visibility: auto;
+}
+
+.pch-mas__rhead {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0 0 20px;
+}
+
+.pch-mas__rname {
+  font: 600 12px/16px var(--kz-font-body);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-800);
+  margin: 0;
+}
+
+.pch-mas__rcount {
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.4px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-600);
+}
+
+/* --------------------------------------------------------------------- grid */
+
+.pch-mas__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--pch-mas-tile), 1fr));
+  gap: 20px 16px;
+}
+
+.pch-mas__tile {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: zoom-in;
+  font: inherit;
+  color: inherit;
+}
+
+.pch-mas__well {
+  display: block;
+  aspect-ratio: 4 / 3;
+  background: var(--kz-surface-200);
+  border: 1px solid var(--kz-hairline-2);
+  border-radius: var(--kz-radius-tile);
+  overflow: hidden;
+  transition: border-color 50ms ease-out;
+}
+
+.pch-mas__tile:hover .pch-mas__well,
+.pch-mas__tile:focus-visible .pch-mas__well {
+  border-color: var(--kz-gray-400);
+}
+
+.pch-mas__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.pch-mas__cap {
+  display: block;
+  margin-top: 8px;
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.4px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-700);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------- pose library */
+
+/* No well, no card: the transparent cut-outs sit straight on the chapter
+   ground, four to a row, height-normalised so each row reads as one line-up.
+   The grid is a fixed four columns on purpose (owner call) — auto-fill would
+   drift the count with viewport width. */
+
+.pch-mas__pgrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 44px 16px;
+}
+
+.pch-mas__pose {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+  font: inherit;
+  color: inherit;
+}
+
+.pch-mas__pimg {
+  display: block;
+  height: var(--pch-mas-pose-h, 190px);
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  transition: opacity 300ms ease-out;
+}
+
+.pch-mas__pose:hover .pch-mas__pimg,
+.pch-mas__pose:focus-visible .pch-mas__pimg {
+  opacity: 0.82;
+  transition-duration: 50ms;
+}
+
+.pch-mas__pcap {
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.4px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-600);
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ----------------------------------------------------------------- lightbox */
+
+.pch-mas__lb {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 48px;
+  background: rgb(22 21 20 / 0.72);
+  animation: pch-mas-fade 160ms var(--kz-ease-entrance) both;
+}
+
+.pch-mas__lbfig {
+  margin: 0;
+  max-width: min(1100px, 100%);
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pch-mas__lbimg {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100vh - 168px);
+  object-fit: contain;
+  background: var(--kz-surface-100);
+  border-radius: var(--kz-radius-card);
+  box-shadow: var(--kz-shadow-float);
+}
+
+.pch-mas__lbcap {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  color: var(--kz-surface-200);
+}
+
+.pch-mas__lbtitle {
+  font: var(--kz-type-label-13);
+  letter-spacing: var(--kz-ls-label-13);
+}
+
+.pch-mas__lbround {
+  font: 600 11px/16px var(--kz-font-body);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-500);
+}
+
+.pch-mas__lbclose {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 0.28);
+  background: rgb(255 255 255 / 0.08);
+  color: var(--kz-surface-100);
+  font: 600 13px/1 var(--kz-font-body);
+  cursor: pointer;
+  transition:
+    background-color 50ms ease-out,
+    border-color 50ms ease-out;
+}
+
+.pch-mas__lbclose:hover {
+  background: rgb(255 255 255 / 0.18);
+  border-color: rgb(255 255 255 / 0.5);
+}
+
+@keyframes pch-mas-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .pch-mas {
+    --pch-mas-tile: 180px;
+    --pch-mas-pose-h: 140px;
+  }
+
+  .pch-mas__lb {
+    padding: 24px 16px;
+  }
+}
+
+@media (max-width: 560px) {
+  .pch-mas {
+    --pch-mas-pose-h: 120px;
+  }
+
+  .pch-mas__pgrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pch-mas__lb {
+    animation: none;
+  }
+}

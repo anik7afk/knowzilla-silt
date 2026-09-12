@@ -1,0 +1,133 @@
+/* BetterAsYouNavigate — Attio changelog snap row + soft close band. */
+
+.bay-scroller {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(240px, 1fr);
+  gap: 0;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  border-radius: 16px;
+  border: 1px solid var(--color-hairline-2);
+  background: var(--color-surface-100);
+  box-shadow: var(--shadow-card);
+  -webkit-overflow-scrolling: touch;
+}
+
+.bay-card {
+  scroll-snap-align: start;
+  padding: 28px 24px 32px;
+  border-right: 1px solid var(--color-hairline-2);
+  min-height: 220px;
+  opacity: 0;
+  filter: blur(2px);
+  transition: background 300ms ease, border-color 300ms ease;
+}
+
+.bay-scroller.is-in .bay-card {
+  animation: bay-card 520ms var(--ease-entrance) var(--card-delay) both;
+}
+
+@keyframes bay-card {
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.bay-card:last-child {
+  border-right: 0;
+}
+
+.bay-card:hover {
+  background: var(--color-surface-200);
+}
+
+.bay-card time {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-gray-600);
+}
+
+.bay-card h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  font-weight: 550;
+  line-height: 1.3;
+  color: var(--color-ink);
+}
+
+.bay-card p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--color-gray-700);
+}
+
+.bay-newsletter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-top: 48px;
+  padding-top: 40px;
+  border-top: 1px solid var(--color-hairline-2);
+}
+
+.bay-newsletter__lead {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2.4vw, 28px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--color-ink);
+  max-width: 22ch;
+}
+
+.bay-newsletter__lead span {
+  color: var(--color-gray-600);
+}
+
+.bay-newsletter__cta {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: var(--color-ink);
+  color: var(--color-surface-100);
+  font-size: 14px;
+  font-weight: 550;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 150ms ease;
+}
+
+.bay-newsletter__cta:hover {
+  opacity: 0.88;
+}
+
+@media (max-width: 768px) {
+  .bay-scroller {
+    grid-auto-columns: minmax(220px, 78vw);
+  }
+
+  .bay-newsletter {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bay-card,
+  .bay-scroller.is-in .bay-card {
+    animation: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+}

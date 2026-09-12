@@ -1,0 +1,327 @@
+/* Kinetic conversation — recorded-moment poster on Natural's hero-scrub
+   grammar. The section is a tall scroll track with a sticky stage under the
+   80px nav (donor: .hero-dashboard height 220vh+80px / sticky top:80px). A
+   48px lavender-paper square grows LINEARLY to the full poster card via the
+   --grow custom property consumed in calc() — the donor mechanism verbatim
+   (width/height in the scroll path is the measured donor grammar; the card
+   carries will-change like the source). Everything inside the card is
+   opacity/filter/transform driven off scrubbed virtual time (see tsx). */
+
+.kinetic {
+  position: relative;
+  background: var(--color-surface-100);
+  /* the scroll drives only the entrance now (~2 wheel gestures to full card);
+     the performance then plays on its own clock while the pin holds */
+  height: 260svh;
+  /* the card animates width/height (donor grammar), so the browser's scroll
+     anchoring picks a node inside it, watches its edges move, and "corrects"
+     scrollY on its own — measured ±18–36px drift that eats wheel input and
+     shoves p back across the arm line. Opt the whole section out. */
+  overflow-anchor: none;
+}
+
+.kinetic__pin {
+  position: sticky;
+  top: 80px; /* nav is h-20, same as the donor's 80px */
+  height: calc(100svh - 80px);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── the growing card ───────────────────────────────────────────────────── */
+
+.kinetic-card {
+  position: relative;
+  /* donor-linear growth: seed 48px → measured target, number × length calc */
+  width: calc(48px + (var(--cw, 1200px) - 48px) * var(--grow, 0));
+  height: calc(48px + (var(--ch, 640px) - 48px) * var(--grow, 0));
+  border-radius: calc(1.5px + 0.5px * var(--grow, 0));
+  overflow: hidden;
+  /* the poster's lavender paper (accent-100 → accent-200), zero shadows */
+  background: linear-gradient(135deg, var(--color-accent-100) 0%, #e8ebfc 58%, var(--color-accent-200) 100%);
+  will-change: width, height; /* donor carries exactly this */
+  /* confine the grain layer's blend to this card's own paper */
+  isolation: isolate;
+}
+
+/* content box is FIXED at the grown size and centred, so the card growth only
+   moves the clip — nothing inside ever reflows during the scrub */
+.kinetic-card__inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--cw, 1200px);
+  height: var(--ch, 640px);
+  transform: translate(-50%, -50%);
+}
+
+/* ── grain: the paper's tooth, on the CARD only ──────────────────────────
+   Lives on the FIXED-size inner box (not the resizing card) so the tile
+   phase can't crawl while the card grows — the growth only moves the clip.
+   First child in DOM order at z-index 0, so it paints on the gradient and
+   UNDER the wave, the quote (z2) and the intro/guide (z3): nothing we
+   overlay is ever textured. `overlay` keeps mid-gray neutral, so the grain
+   adds tooth without laying a gray veil over the lavender. */
+.kinetic-card__inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: var(--kc-grain, 0.55);
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  background-repeat: repeat;
+  /* centred phase: the card grows from its centre, so the tile grid must too */
+  background-position: center;
+}
+
+.kinetic__wave {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  top: 50%;
+  height: min(72%, 460px);
+  transform: translateY(-50%);
+  pointer-events: none;
+  /* own compositor layer: per-frame canvas updates must not re-raster the
+     giant serif glyph layers above (probe: 42ms → 16.7ms frame mean) */
+  will-change: transform;
+}
+
+/* ── intro line: reads at the card's centre, then docks to top centre ───── */
+
+.kinetic-intro {
+  position: absolute;
+  left: 50%;
+  top: var(--dock-y, 26px);
+  z-index: 3;
+  /* sans, quiet: the first iteration's soft gray read best (user) — the line
+     opens the scene at reading weight, then recedes further once docked */
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--color-ink);
+  white-space: nowrap;
+  opacity: 0.6;
+  /* rest = dock; the opening state is a pure vertical drop to card centre */
+  transform: translate3d(-50%, var(--i-dy, 0px), 0);
+  transition:
+    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 800ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.kinetic-intro.is-docked {
+  opacity: 0.34;
+  transform: translate3d(-50%, 0, 0);
+}
+
+/* ── the buyer's words: empty space that fills in, letter by letter ─────── */
+
+.kinetic-quote {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+  text-align: center;
+  /* Didone display face straight from the user's poster reference — the
+     high-contrast hairline serifs ARE the look; Newsreader stays the page's
+     serif everywhere else */
+  font-family: 'Bodoni Moda Variable', var(--font-serif);
+  font-weight: 600;
+  font-style: normal; /* no italic anywhere in this section (user mandate) */
+  letter-spacing: -0.01em;
+  line-height: 1.02;
+  color: var(--color-ink);
+  /* exit path: the quote leaves as ONE block, fast — reversing letter by
+     letter read as lag (user); re-entry cancels back to full smoothly */
+  transition: opacity 300ms ease;
+}
+
+.kinetic-quote.is-exiting {
+  opacity: 0;
+}
+
+/* letters reset behind the faded block must SNAP, not transition — the block
+   returns to opacity 1 for the next entrance, and a letter still mid-fade
+   would ghost the whole quote back in for ~380ms (seen on video, 2026-07-25) */
+.kinetic-quote.is-exiting .kinetic-quote__letter {
+  transition: none;
+}
+
+.kinetic-quote__line {
+  display: block;
+  white-space: nowrap;
+  /* fallback before the poster-fit pass lands */
+  font-size: clamp(28px, 7.5vw, 120px);
+}
+
+.kinetic-quote__fit {
+  display: inline-block;
+  position: relative; /* the hanging quotation marks anchor to this box */
+}
+
+/* hanging quotation marks — absolutely positioned so they sit OUTSIDE the
+   justified block and can't disturb the equal-width fit. They ink in with
+   the first letter and out with the last, same motion as the letters. */
+.kinetic-quote__mark {
+  position: absolute;
+  opacity: 0;
+  filter: blur(5px);
+  transition:
+    opacity 380ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 380ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.kinetic-quote__mark--open {
+  right: calc(100% + 0.04em);
+}
+
+.kinetic-quote__mark--close {
+  left: calc(100% + 0.04em);
+}
+
+.kinetic-quote__mark.is-on {
+  /* marks frame the speech, they aren't speech — same quiet layer as the
+     scene's other supporting text (intro 0.34, guide 0.55) */
+  opacity: 0.38;
+  filter: blur(0);
+}
+
+/* words stay inline so their trailing spaces survive; the flicker animation
+   is opacity-only, which inline boxes handle fine */
+.kinetic-quote__letter {
+  display: inline-block; /* filter needs a box; costs cross-letter kerning */
+  opacity: 0;
+  filter: blur(5px);
+  /* long-tailed ease, no steps anywhere — the reveal must read smooth, not
+     flickery (user, 2026-07-25; the hot-word flicker animation is gone) */
+  transition:
+    opacity 380ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 380ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.kinetic-quote__letter.is-on {
+  opacity: 1;
+  filter: blur(0);
+}
+
+/* ── the answer: the scene's one anchor — a quiet two-line stack, no
+   punctuation, never louder than the quote (user mandate) ───────────────── */
+
+.kinetic-guide {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: 30px;
+  transform: translate(-50%, 8px);
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 450;
+  letter-spacing: 0.005em;
+  color: var(--color-ink);
+  white-space: nowrap;
+  opacity: 0;
+  transition:
+    opacity 640ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 640ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.kinetic-guide.is-on {
+  opacity: 0.55;
+  transform: translate(-50%, 0);
+}
+
+/* on exit the guide leaves inside the quote's 300ms window, not its own
+   lazy 640ms — the whole scene fades as one block */
+.kinetic-guide.is-exiting {
+  transition-duration: 250ms, 250ms;
+}
+
+.kinetic-guide__eyebrow {
+  display: block;
+  margin-bottom: 7px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  /* same ink as the guide line — one quiet voice, not two colors (user) */
+  color: inherit;
+}
+
+.kinetic-guide__text {
+  display: block;
+}
+
+/* ── responsive ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .kinetic-intro {
+    font-size: 12px;
+  }
+
+  .kinetic-guide {
+    font-size: 12px;
+    bottom: 22px;
+    white-space: normal;
+    width: calc(100% - 40px);
+  }
+}
+
+/* ── reduced motion: donor pattern — no pin, no scrub, finished poster ──── */
+
+@media (prefers-reduced-motion: reduce) {
+  .kinetic {
+    height: auto;
+    padding: 96px 0;
+  }
+
+  .kinetic__pin {
+    position: relative;
+    top: auto;
+    height: 100svh;
+  }
+
+  .kinetic-card {
+    width: var(--cw, 1200px);
+    height: var(--ch, 640px);
+    border-radius: 2px;
+  }
+
+  .kinetic-intro,
+  .kinetic-quote__letter,
+  .kinetic-guide {
+    transition: none;
+  }
+
+  .kinetic-intro {
+    opacity: 0.34;
+    transform: translate3d(-50%, 0, 0);
+  }
+
+  .kinetic-quote__letter {
+    opacity: 1;
+    filter: none;
+    transition: none;
+  }
+
+  .kinetic-quote__mark {
+    opacity: 0.38;
+    filter: none;
+    transition: none;
+  }
+
+  .kinetic-guide {
+    opacity: 0.55;
+    transform: translate(-50%, 0);
+  }
+}

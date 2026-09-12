@@ -1,0 +1,577 @@
+/* HvuGlass — iOS-glass HVU scene. Standalone audition at /hvu-glass, and the
+   landing-page HVU section via variant="flow" (§flow at the bottom of this file).
+   All selectors scoped under .hvug; does not touch HeardVsUnderstood. */
+
+.hvug {
+  --hvug-enter: cubic-bezier(0.22, 1, 0.36, 1);
+  /* GROUND — WHITE (owner, 2026-07-29: "the section now has off white bg,
+     remove it and match it with our white bg"). The audition's flat #e6e6e6 is
+     gone; the page's surface-100 sheet runs through this section too, and the
+     frost now reads against the voice weave behind the card rather than against
+     a darker room. Opaque either way — see the note below. */
+  --hvug-ground: var(--color-surface-100);
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  padding: 104px 0 120px;
+  color: var(--color-ink);
+  /* Opaque, always: in the flow this section is the layer that climbs over the
+     pinned sheet (PagePlanes.css §KC→HVU TRANSITION). */
+  background: var(--hvug-ground);
+}
+
+.hvug__container {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 40px;
+}
+
+/* §head — CENTRED (owner, 2026-07-29). With the meta row gone the section
+   opens on the headline itself, so the block is centred over the plate rather
+   than ragged-left against a full-width card: title and lede share one optical
+   axis with the glass below them, and the air above/below comes from the
+   section measure instead of a 40px offset under a deleted caption. */
+.hvug__head {
+  max-width: 900px;
+  margin: 0 auto 56px;
+  text-align: center;
+}
+
+.hvug__headline {
+  margin: 0;
+  font-family: var(--font-display);
+  /* the page's section-title step, identical to the HVU title it replaces
+     (.hvu-p__title): Attio's 64 top of scale, never above it. */
+  font-size: clamp(40px, 4.8vw, 64px);
+  line-height: 1.02;
+  font-weight: 550;
+  letter-spacing: -0.035em;
+  color: var(--color-ink);
+}
+
+.hvug__headline-word {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(5px);
+  transform: translateY(18px);
+}
+
+.hvug__headline-word:not(:last-child) {
+  margin-right: 0.22em;
+}
+
+.hvug.is-visible .hvug__headline-word {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+  transition:
+    opacity 360ms var(--hvug-enter),
+    filter 420ms var(--hvug-enter),
+    transform 620ms var(--hvug-enter);
+  transition-delay: calc(80ms + var(--wi) * 70ms);
+}
+
+.hvug__sub {
+  margin: 18px auto 0;
+  max-width: 58ch;
+  font-family: var(--font-sans);
+  /* section lede, same as .hvu-p__sub / the hero's */
+  font-size: 17px;
+  line-height: 1.55;
+  font-weight: 450;
+  letter-spacing: -0.01em;
+  color: var(--color-gray-700);
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.hvug.is-visible .hvug__sub {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 420ms var(--hvug-enter),
+    transform 520ms var(--hvug-enter);
+  transition-delay: var(--enter-delay, 0ms);
+}
+
+/* ── stage: voice weave bed + glass ───────────────────────────────────── */
+
+.hvug__stage {
+  position: relative;
+  /* the head block owns the gap (.hvug__head margin-bottom) — one spacing
+     source, so the centred title can't drift away from its plate */
+  margin-top: 0;
+}
+
+/* Live voice weave sits BEHIND the glass — the frost samples it.
+   Softly peeks past the card edges so the bed is obvious. */
+.hvug-wave--bed {
+  position: absolute;
+  z-index: 0;
+  left: -4%;
+  right: -4%;
+  top: 6%;
+  bottom: 6%;
+  margin: 0;
+  height: auto;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.hvug-wave__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+
+/* ── iOS glass card ───────────────────────────────────────────────────── */
+
+.hvug__glass {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) 72px minmax(0, 1.08fr);
+  gap: 24px;
+  min-height: 420px;
+  padding: 40px;
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  outline: 1px solid rgba(22, 21, 20, 0.05);
+  outline-offset: -1px;
+  background: rgba(255, 255, 255, 0.34);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(22, 21, 20, 0.07),
+    0 8px 24px rgba(22, 21, 20, 0.08),
+    0 28px 64px rgba(22, 21, 20, 0.14);
+  /* Soft enough that the weave still reads through */
+  -webkit-backdrop-filter: blur(22px);
+  backdrop-filter: blur(22px);
+  overflow: hidden;
+}
+
+.hvug__col {
+  position: relative;
+  z-index: 1;
+  align-self: stretch;
+  min-width: 0;
+}
+
+.hvug__col--heard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px 0;
+}
+
+.hvug__col--understood {
+  padding: 24px 0 24px 24px;
+}
+
+.hvug__eyebrow {
+  margin: 0 0 28px;
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  /* in-plate label = .kz-eyebrow's 11px, one step under the section meta row */
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-gray-700);
+}
+
+.hvug__divider {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.hvug__chevron {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.28);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    0 4px 14px rgba(22, 21, 20, 0.1);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
+}
+
+/* Animate only the glyph, not the frosted circle. Scaling a backdrop-filtered
+   parent forced repaints and made the handoff flash; this short compositor-only
+   nudge stays crisp and completes as the right side begins. */
+.hvug__chevron svg {
+  opacity: 0.55;
+  transform: translateX(-3px);
+  will-change: transform, opacity;
+}
+
+@keyframes hvug-cross {
+  from {
+    opacity: 0.55;
+    transform: translateX(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.hvug.is-understood .hvug__chevron svg {
+  opacity: 1;
+  transform: translateX(0);
+  animation: hvug-cross 240ms var(--hvug-enter) both;
+}
+
+/* The card's own two-step ladder, both on the display scale's rungs and both
+   BELOW the section title: the resolved sentence is the loudest thing inside
+   the glass at the 32 step (24 → 32), the raw stream is body-scale sans so it
+   reads as material, not as a headline. */
+.hvug-sentence {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(24px, 2.4vw, 32px);
+  line-height: 1.12;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.hvug-sentence--raw {
+  max-width: 38ch;
+  font-family: var(--font-sans);
+  font-size: clamp(16px, 1.45vw, 18px);
+  line-height: 1.55;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.hvug-sentence--raw .hvug-word {
+  display: inline-block;
+  color: var(--color-gray-800);
+  opacity: 0.18;
+  filter: blur(2px);
+  transform: translateY(5px);
+  transition:
+    color 620ms var(--hvug-enter),
+    opacity 520ms var(--hvug-enter),
+    filter 620ms var(--hvug-enter),
+    transform 700ms var(--hvug-enter);
+  transition-delay: calc(100ms + var(--wi) * 38ms);
+}
+
+.hvug-sentence--raw .hvug-word:not(:last-child) {
+  margin-right: 0.26em;
+}
+
+.hvug-sentence--raw.is-on .hvug-word {
+  color: var(--color-gray-800);
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+.hvug-sentence--understood {
+  color: var(--color-ink);
+}
+
+.hvug-sentence--understood .hvug-word {
+  display: inline;
+  opacity: 0;
+  filter: blur(4px);
+  transition:
+    opacity 620ms var(--hvug-enter),
+    filter 720ms var(--hvug-enter);
+  transition-delay: calc(120ms + var(--wi) * 90ms);
+}
+
+.hvug-sentence--understood.is-on .hvug-word {
+  opacity: 1;
+  filter: blur(0);
+}
+
+.hvug-word--key {
+  position: relative;
+  isolation: isolate;
+  white-space: nowrap;
+}
+
+.hvug-underline {
+  position: absolute;
+  z-index: -1;
+  left: -0.06em;
+  right: -0.04em;
+  bottom: -0.04em;
+  height: 1.08em;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--color-signal-200) 88%, white);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 520ms var(--hvug-enter);
+  transition-delay: 520ms;
+}
+
+.hvug-sentence--understood.is-on .hvug-underline {
+  transform: scaleX(1);
+}
+
+.hvug-ctx {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 28px;
+}
+
+.hvug-ctx__item {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 4px 12px rgba(22, 21, 20, 0.05);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  backdrop-filter: blur(18px) saturate(1.2);
+  opacity: 0;
+  transform: translateY(10px);
+  filter: blur(3px);
+  transition:
+    opacity 440ms var(--hvug-enter),
+    transform 440ms var(--hvug-enter),
+    filter 440ms var(--hvug-enter);
+}
+
+.hvug-ctx__item.is-shown {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.hvug-ctx__key,
+.hvug-ctx__val {
+  overflow: hidden;
+  font-family: var(--font-sans);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hvug-ctx__key {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-gray-700);
+}
+
+.hvug-ctx__val {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-gray-800);
+}
+
+.hvug-resolution {
+  display: block;
+  margin: 20px 0 0;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 6px 18px rgba(22, 21, 20, 0.06);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  backdrop-filter: blur(20px) saturate(1.2);
+  font-family: var(--font-sans);
+  letter-spacing: 0;
+  opacity: 0;
+  transform: translateY(12px);
+  filter: blur(4px);
+  transition:
+    opacity 560ms var(--hvug-enter),
+    transform 560ms var(--hvug-enter),
+    filter 560ms var(--hvug-enter);
+}
+
+.hvug-resolution.is-shown {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.hvug-resolution__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 10px;
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-gray-700);
+}
+
+.hvug-resolution__ask {
+  padding: 4px 8px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--color-signal-100) 85%, white);
+  color: var(--color-signal-700);
+  border: 1px solid color-mix(in srgb, var(--color-signal-300) 35%, transparent);
+}
+
+.hvug-resolution > strong {
+  display: block;
+  font-family: var(--font-display);
+  /* the 20px rung — below the resolved sentence (24–32), above plate body */
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--color-ink);
+}
+
+.hvug-resolution > p {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 450;
+  color: var(--color-gray-700);
+}
+
+@media (max-width: 900px) {
+  .hvug__glass {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: 28px;
+    border-radius: 22px;
+  }
+
+  /* single column: the arrow becomes a compact horizontal handoff band. */
+  .hvug__divider {
+    flex-direction: row;
+    height: 72px;
+  }
+
+  .hvug__col--understood {
+    padding: 18px 0 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .hvug {
+    padding: 80px 0;
+  }
+
+  .hvug__container {
+    padding-inline: 20px;
+  }
+
+  .hvug__headline {
+    font-size: 40px;
+  }
+
+  .hvug__stage {
+    margin-top: 40px;
+  }
+
+  .hvug__glass {
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .hvug__col--heard {
+    padding: 12px 4px;
+  }
+
+  .hvug__col--understood {
+    padding: 18px 4px 4px;
+  }
+
+  .hvug-ctx {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ══ FLOW VARIANT — this scene AS the landing page's HVU section ═══════════
+   Replaces the Context Press plate in the `.planes__over` slot (App.tsx). It
+   inherits everything above; only the section box changes, because in the flow
+   the section is not a page of its own:
+
+   - no `min-height: 100vh` — the section is as tall as its content,
+   - the page's 152px opening/closing measure instead of 104/120 (the same air
+     the sheet it climbs over uses — HeardVsUnderstood.css §sheet),
+   - NO leading hairline: the previous section is a white sheet and this one is
+     the gray-300~ step, so the ground change IS the edge. A hairline on top of
+     a tonal step is the naked-hairline artifact the owner rejected at the
+     tour's seam.
+   The ground stays opaque (see .hvug) — the climb-over depends on it. */
+.hvug--flow {
+  min-height: 0;
+  padding: 152px 0;
+}
+
+@media (max-width: 600px) {
+  .hvug--flow {
+    padding: 96px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hvug__headline-word {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    transition: none;
+  }
+
+  .hvug__sub {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .hvug-sentence--raw .hvug-word,
+  .hvug-sentence--understood .hvug-word,
+  .hvug-underline,
+  .hvug-ctx__item,
+  .hvug-resolution {
+    transition: none;
+  }
+
+  .hvug__chevron svg,
+  .hvug.is-understood .hvug__chevron svg {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
+
+/* Fallback when backdrop-filter is unavailable */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .hvug__glass {
+    background: rgba(255, 255, 255, 0.88);
+  }
+
+  .hvug-ctx__item,
+  .hvug-resolution,
+  .hvug__chevron {
+    background: rgba(255, 255, 255, 0.92);
+  }
+}

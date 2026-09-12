@@ -1,0 +1,613 @@
+@import "tailwindcss";
+@source not "../inspo";
+@source not "../design-system";
+@import "../design-system/tokens.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Safe defaults for animation variables that are overridden inline by their
+   owning components. Keeping them defined prevents empty computed values when
+   a component is filtered out of the standalone workbench. */
+:root {
+  --i: 0;
+  --sync-delay: 0ms;
+  --fill-delay: 0ms;
+  --comet-from: 0;
+  --comet-to: 0;
+  --sync-index: 0;
+  --score-index: 0;
+  --plan-progress: 0;
+  --node-index: 0;
+  --row-index: 0;
+  --enrich-progress: 0;
+  --event-index: 0;
+  --bar-index: 0;
+  --forecast-height: 0;
+  --funnel-width: 0;
+  --rep-ratio: 0;
+  --turn-height: 0;
+  --turn-index: 0;
+  --question-width: 0;
+  --coach-score: 0;
+  --voice-delay: 0ms;
+  --score: 0;
+}
+
+/* Tailwind theme mapped 1:1 from design-system/tokens.css (fusion v0.1, dials locked).
+   Keep in sync with tokens.css — it is the source of truth. */
+@theme {
+  /* ink & surfaces (N) */
+  --color-ink: #161514;
+  --color-ink-secondary: #71706f;
+  --color-surface-100: #ffffff;
+  --color-surface-200: #fafafa;
+  --color-surface-300: #f6f6f6;
+  --color-surface-dark: #111400;
+  --color-hairline-1: #f6f6f6;
+  --color-hairline-2: #ececeb;
+
+  /* gray ramp (N, step = intent) */
+  --color-gray-100: #fafafa;
+  --color-gray-200: #f6f6f6;
+  --color-gray-300: #ececeb;
+  --color-gray-400: #d7d6d4;
+  --color-gray-500: #afafaf;
+  --color-gray-600: #8c8b8a;
+  --color-gray-700: #71706f;
+  --color-gray-800: #454545;
+  --color-gray-900: #262524;
+  --color-gray-1000: #161514;
+
+  /* lavender — interactive accent (N) */
+  --color-accent-100: #f0f2fd;
+  --color-accent-200: #dbe0fa;
+  --color-accent-300: #bec6f5;
+  --color-accent-400: #9ea8f0;
+  --color-accent-500: #7e8be9;
+  --color-accent-600: #6a77e5;
+  --color-accent-700: #5461cc;
+  --color-accent-800: #3f4baf;
+  --color-accent-900: #2c3587;
+  --color-accent-1000: #1a1f59;
+
+  /* signal blue — THE telemetry/live accent (A). Replaced olive page-wide
+     2026-07-27. 100/600/700 are measured from Attio (DESIGN.md:269/69/68), all
+     three on one H 219 ladder; the rest are `~`. Never saturated in the same
+     frame as accent — see design-system/tokens.css for the full rationale. */
+  --color-signal-100: #e8f0ff;
+  --color-signal-200: #c8dbfe;
+  --color-signal-300: #a2c1fb;
+  --color-signal-400: #73a1f7;
+  --color-signal-500: #4985f3;
+  --color-signal-600: #266df0;
+  --color-signal-700: #245bc2;
+  --color-signal-800: #1f4a98;
+  --color-signal-900: #193871;
+  --color-signal-1000: #122649;
+
+  /* olive — RETIRED 2026-07-27, superseded by signal. Defined only so the
+     decision is one revert away; no src/ file may reference these. (N) */
+  --color-olive-100: #f7f8f2;
+  --color-olive-200: #eef0e2;
+  --color-olive-300: #e2e5cb;
+  --color-olive-400: #d1d6a8;
+  --color-olive-500: #c3c993;
+  --color-olive-600: #b3b980;
+  --color-olive-700: #9da369;
+  --color-olive-800: #7e844f;
+  --color-olive-900: #5c6138;
+  --color-olive-1000: #393d20;
+
+  /* status — deal won / at risk ONLY (A) */
+  --color-won-100: #e0fced;
+  /* won-200 (2026-07-27 s12): Attio's exact status-pill border step #CBF7E1
+     (attio-canvas-measure.md) — canvas executed-path borders. Sync: tokens.css. */
+  --color-won-200: #cbf7e1;
+  --color-won-700: #0fc27b;
+  --color-won-900: #007d53;
+  --color-risk-100: #ffecec;
+  --color-risk-700: #ff5b59;
+  --color-risk-900: #c42422;
+
+  /* type (A families, fused scale) */
+  /* Display cut comes from the opsz axis of the loaded Inter Variable (see
+     main.tsx) — a literal "Inter Display" family is never registered. */
+  --font-display: "Inter Variable", Inter, sans-serif;
+  --font-sans: "Inter Variable", Inter, sans-serif;
+  /* mono retired 2026-07-25 — slot name kept, resolves to the body face.
+     Rationale + donor citations in design-system/tokens.css. */
+  --font-mono: "Inter Variable", Inter, sans-serif;
+  /* serif dial opened 2026-07-24 — italic flourish inside display headlines only */
+  --font-serif: "Newsreader Variable", Newsreader, Georgia, serif;
+
+  /* elevation — zero globally; product-frame exception opened 2026-07-24.
+     Frames/floating cards over frames ONLY; nothing else may cast. */
+  --shadow-frame: 0 1px 2px rgb(22 21 20 / 0.04), 0 4px 12px rgb(22 21 20 / 0.04);
+  --shadow-float: 0 1px 2px rgb(22 21 20 / 0.05), 0 12px 32px -8px rgb(22 21 20 / 0.12);
+  /* hover-lift for the chapter windows (2026-07-27 s12, v2 hover re-tinted to
+     warm ink — v2-physicality-measure.md §3). Sync: tokens.css --kz-shadow-hover. */
+  --shadow-hover: 0 2px 4px rgb(22 21 20 / 0.06), 0 18px 44px -10px rgb(22 21 20 / 0.16);
+  --shadow-card: 0 1px 2px rgb(22 21 20 / 0.04), 0 8px 24px -6px rgb(22 21 20 / 0.08), 0 20px 48px -16px rgb(22 21 20 / 0.10);
+  --shadow-stage: 0 1px 3px rgb(22 21 20 / 0.05), 0 16px 40px -8px rgb(22 21 20 / 0.09), 0 48px 96px -24px rgb(22 21 20 / 0.13);
+
+  /* radii */
+  --radius-card: 12px;
+  --radius-tile: 8px;
+  --radius-tag: 10px;
+  --radius-button: 20px;
+  --radius-input: 8px;
+  --radius-micro: 4px;
+
+  /* motion */
+  --ease-entrance: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-hover-out: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* ---------------------------------------------------------------------
+   Shared motion recipes — entrance, asymmetric hover, scrub plumbing.
+   ------------------------------------------------------------------- */
+
+body {
+  background: var(--color-surface-100);
+  color: var(--color-ink);
+}
+
+h1,
+h2,
+h3 {
+  font-optical-sizing: auto;
+}
+
+/* Entrance: fade + lift + de-blur, once, on mount. Stagger via --enter-delay. */
+@keyframes kz-enter-kf {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(1.5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.kz-enter {
+  animation: kz-enter-kf 420ms var(--ease-entrance) both;
+  animation-delay: var(--enter-delay, 0ms);
+}
+
+/* Signature asymmetric hover: 50ms in / 300ms out. Apply the transition
+   rule to whatever property(ies) each component needs (bg/color/border). */
+.kz-hover {
+  transition-duration: 300ms;
+  transition-timing-function: var(--ease-hover-out);
+}
+
+.kz-hover:hover {
+  transition-duration: 50ms;
+}
+
+/* Nav bottom hairline: opacity-only toggle driven by scroll listener. */
+.kz-nav-hairline {
+  opacity: 0;
+  transition: opacity 140ms ease-out;
+}
+
+.kz-nav-hairline.is-visible {
+  opacity: 1;
+}
+
+/* Hero product-frame scroll stage */
+.hero-stage {
+  position: relative;
+  height: calc(100vh + 900px);
+  margin-top: 48px;
+}
+
+.hero-stage__sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-frame {
+  --s: 1;
+  --is: 1;
+  width: min(1120px, calc(100vw - 80px));
+  aspect-ratio: 1120 / 600;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-hairline-2);
+  background: var(--color-surface-100);
+  overflow: hidden;
+  transform: scale(var(--s, 1));
+  transform-origin: center;
+  will-change: transform;
+}
+
+.hero-frame__content {
+  position: absolute;
+  inset: 0;
+  transform: scale(var(--is, 1));
+  transform-origin: center;
+  will-change: transform;
+}
+
+/* Reveal layer inside DealMap: hidden until parent frame gets .revealed */
+.dealmap-reveal {
+  opacity: 0;
+  filter: blur(1.5px);
+  transition:
+    opacity 380ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 380ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dealmap-route {
+  transition: stroke-dashoffset 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hero-frame.revealed .dealmap-reveal {
+  opacity: 1;
+  filter: blur(0);
+}
+
+.hero-frame.revealed .dealmap-route {
+  stroke-dashoffset: 0 !important;
+}
+
+/* Static fallback frame (mobile / reduced-motion): no stage, full flow */
+.hero-frame--static {
+  width: 100%;
+  margin-top: 48px;
+}
+
+/* ---------------------------------------------------------------------
+   In-view entrance recipes — gated on an ancestor .is-inview toggled by
+   the useInView hook. Base state hides the element until it enters view.
+   ------------------------------------------------------------------- */
+
+/* Feature graphic (Natural agent-graphic-in): 4px lift + .4→1 fade, 100ms
+   sibling stagger via --enter-delay, once on viewport entry. */
+@keyframes kz-graphic-in-kf {
+  from {
+    opacity: 0.4;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.kz-graphic {
+  opacity: 0;
+}
+
+.is-inview .kz-graphic {
+  animation: kz-graphic-in-kf 400ms cubic-bezier(0, 0, 0.2, 1) both;
+  animation-delay: var(--enter-delay, 0ms);
+}
+
+/* Telemetry bars (Natural benefit-bar-in): scaleY .92→1 + .4→1 fade, 8ms
+   per-bar stagger via --bar-delay, once on viewport entry. */
+@keyframes kz-bar-in-kf {
+  from {
+    opacity: 0.4;
+    transform: scaleY(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+.kz-bar {
+  opacity: 0;
+  transform-origin: bottom;
+}
+
+.is-inview .kz-bar {
+  animation: kz-bar-in-kf 350ms cubic-bezier(0, 0, 0.2, 1) both;
+  animation-delay: var(--bar-delay, 0ms);
+}
+
+/* ---------------------------------------------------------------------
+   Platform tour — tab swap + scroll-scrub panel entrance.
+   ------------------------------------------------------------------- */
+
+/* Tab content swap (Natural tab-enter): directional ±8px slide + .35→1 fade,
+   120ms ease-out. Direction set per-swap via --tab-from; replays on remount. */
+@keyframes kz-tab-enter-kf {
+  from {
+    opacity: 0.35;
+    transform: translateX(var(--tab-from, 8px));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.kz-tab-panel {
+  animation: kz-tab-enter-kf 120ms ease-out both;
+}
+
+/* Tour panel scroll entrance: scale .96→1 + opacity, scrubbed via --tp
+   (0→1) by a passive rAF scroll listener. Default 1 = static fallback. */
+.tour-panel {
+  --tp: 1;
+  transform: scale(calc(0.96 + 0.04 * var(--tp)));
+  opacity: calc(0.55 + 0.45 * var(--tp));
+  will-change: transform, opacity;
+}
+
+/* ---------------------------------------------------------------------
+   Closing CTA chevron nudge (Natural chevron-nudge): ping-pong 0→2px→0,
+   900ms infinite, only while the button is hovered.
+   ------------------------------------------------------------------- */
+@keyframes kz-chevron-nudge-kf {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(2px);
+  }
+}
+
+.kz-chevron {
+  display: inline-block;
+}
+
+.kz-cta-btn:hover .kz-chevron {
+  animation: kz-chevron-nudge-kf 900ms cubic-bezier(0.645, 0.045, 0.355, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kz-enter {
+    animation: kz-fade-kf 200ms ease-out both;
+    animation-delay: var(--enter-delay, 0ms);
+  }
+  /* Entrances collapse to a plain 200ms fade */
+  .is-inview .kz-graphic,
+  .is-inview .kz-bar,
+  .kz-tab-panel {
+    animation: kz-fade-kf 200ms ease-out both;
+    animation-delay: var(--enter-delay, 0ms);
+  }
+  /* Kill the chevron loop and freeze the tour scrub at rest */
+  .kz-cta-btn:hover .kz-chevron {
+    animation: none;
+  }
+  .tour-panel {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes kz-fade-kf {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Label / readout face (mono retired 2026-07-25).
+
+   `--font-mono` now resolves to Inter, so every former-mono site keeps working
+   without a rename. Two things a monospace was doing for free have to be
+   restored explicitly:
+
+   1. DIGIT ALIGNMENT. Clocks, latency read-outs, scores and count-ups were
+      column-stable because every mono glyph shares one advance. Inter's
+      proportional figures jitter as they animate, so anything wearing
+      `font-mono` gets tabular figures back. Unlayered on purpose — it must beat
+      Tailwind's `@layer utilities` without fighting any other property.
+
+   2. SMALL-SIZE PRESENCE. Uppercase sans at 9-11px under heavy tracking reads
+      thinner than the mono it replaced, because mono carried visual weight in
+      its wide advance. `.kz-eyebrow` is the one place that treatment is
+      declared — Attio's grammar (uppercase, tracked, 550-600), replacing the 18
+      ad-hoc `tracking-[…]` values the type audit found.
+   --------------------------------------------------------------------------- */
+.font-mono,
+.kz-readout {
+  font-variant-numeric: tabular-nums;
+}
+
+.kz-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Flat focus ring — besides --shadow-frame/--shadow-float on product frames,
+   the ONLY box-shadow allowed anywhere in this build */
+.kz-focus-ring:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 4px var(--color-accent-300);
+}
+
+@theme inline {
+  /* shadcn scaffold defaulted these to Geist — repointed to the locked
+     Knowzilla type system (Inter). Registry components must inherit it. */
+  --font-heading: var(--font-display);
+  --font-sans: "Inter Variable", Inter, sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/* Registry primitives are welcome in this project, but their semantic
+   variables must resolve to the locked Knowzilla palette. */
+:root {
+  --default-font-feature-settings: normal;
+  --default-font-variation-settings: normal;
+  --default-mono-font-feature-settings: normal;
+  --default-mono-font-variation-settings: normal;
+  --tw-ease: ease;
+  --tw-duration: 0s;
+  --enter-delay: 0ms;
+  --bar-delay: 0ms;
+  --tab-from: 0px;
+  --w: 0;
+  --background: var(--kz-surface-100);
+  --foreground: var(--kz-ink);
+  --card: var(--kz-surface-100);
+  --card-foreground: var(--kz-ink);
+  --popover: var(--kz-surface-100);
+  --popover-foreground: var(--kz-ink);
+  --primary: var(--kz-ink);
+  --primary-foreground: var(--kz-surface-100);
+  --secondary: var(--kz-surface-300);
+  --secondary-foreground: var(--kz-ink);
+  --muted: var(--kz-surface-300);
+  --muted-foreground: var(--kz-ink-secondary);
+  --accent: var(--kz-accent-100);
+  --accent-foreground: var(--kz-accent-900);
+  --destructive: var(--kz-red-700);
+  --border: var(--kz-hairline-2);
+  --input: var(--kz-gray-400);
+  --ring: var(--kz-accent-300);
+  --chart-1: var(--kz-accent-600);
+  --chart-2: var(--kz-signal-600);
+  --chart-3: var(--kz-green-700);
+  --chart-4: var(--kz-red-700);
+  --chart-5: var(--kz-gray-600);
+  --sidebar: var(--kz-surface-200);
+  --sidebar-foreground: var(--kz-ink);
+  --sidebar-primary: var(--kz-ink);
+  --sidebar-primary-foreground: var(--kz-surface-100);
+  --sidebar-accent: var(--kz-accent-100);
+  --sidebar-accent-foreground: var(--kz-accent-900);
+  --sidebar-border: var(--kz-hairline-2);
+  --sidebar-ring: var(--kz-accent-300);
+}

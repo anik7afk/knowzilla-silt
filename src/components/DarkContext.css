@@ -1,0 +1,70 @@
+/* DarkContext schematic motion — ported from v2 ContextFlow's comet/hub-blip
+   grammar. transform/opacity/stroke-dashoffset only. Traces draw in once
+   (gated by the section's .is-inview, same convention as kz-bar/kz-graphic
+   in index.css); one comet then travels the active trace at a time while the
+   corresponding pill lifts to lavender; the hub blips when a transfer lands. */
+
+.ctx-trace-draw {
+  stroke-dashoffset: 100;
+  transition:
+    stroke-dashoffset 700ms ease-out,
+    stroke 300ms ease;
+}
+
+.is-inview .ctx-trace-draw {
+  stroke-dashoffset: 0;
+}
+
+.ctx-pill-rect {
+  transition:
+    fill 300ms ease,
+    stroke 300ms ease;
+}
+
+@keyframes ctx-comet-kf {
+  from {
+    stroke-dashoffset: calc(var(--comet-from) * 1px);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  to {
+    stroke-dashoffset: calc(var(--comet-to) * 1px);
+    opacity: 0;
+  }
+}
+
+.ctx-comet {
+  animation: ctx-comet-kf linear both;
+}
+
+@keyframes ctx-hub-blip-kf {
+  from {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.3);
+  }
+}
+
+.ctx-hub-blip {
+  transform-origin: 560px 240px;
+  animation: ctx-hub-blip-kf 480ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ctx-trace-draw {
+    transition: none;
+  }
+  .ctx-comet,
+  .ctx-hub-blip {
+    animation: none;
+    display: none;
+  }
+}

@@ -1,0 +1,50 @@
+/* Attio quote grammar: each word reveals in place, color animating
+   gray-400 -> ink, on first viewport entry only (gated by .is-inview on the
+   section, same convention as the kz-graphic/kz-bar recipes in index.css).
+   Never reverses. Stagger is per-word via --w (index), ~40ms apart. */
+@keyframes kz-quote-word-kf {
+  from {
+    color: var(--color-gray-400);
+  }
+  to {
+    color: var(--color-ink);
+  }
+}
+
+.kz-quote-word {
+  color: var(--color-gray-400);
+}
+
+.is-inview .kz-quote-word {
+  animation: kz-quote-word-kf 260ms linear both;
+  animation-delay: calc(var(--w, 0) * 40ms);
+}
+
+/* The de-emphasised trailing clause resolves to ink-secondary, not full ink —
+   same two-tone treatment the quote already used before the word reveal. */
+.kz-quote-word--muted.is-inview,
+.is-inview .kz-quote-word--muted {
+  animation-name: kz-quote-word-muted-kf;
+}
+
+@keyframes kz-quote-word-muted-kf {
+  from {
+    color: var(--color-gray-400);
+  }
+  to {
+    color: var(--color-ink-secondary);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kz-quote-word,
+  .is-inview .kz-quote-word {
+    animation: none;
+    color: var(--color-ink);
+  }
+  .kz-quote-word--muted,
+  .is-inview .kz-quote-word--muted {
+    animation: none;
+    color: var(--color-ink-secondary);
+  }
+}

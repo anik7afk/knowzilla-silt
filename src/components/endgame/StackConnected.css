@@ -1,0 +1,137 @@
+/* StackConnected — Attio ecosystem rail (horizontal marquee + tiles). */
+
+.stk-rail {
+  position: relative;
+  margin: 8px 0 48px;
+  padding: 28px 0;
+  border-radius: 16px;
+  border: 1px solid var(--color-hairline-2);
+  background: var(--color-surface-100);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.stk-rail__track {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  padding-inline: 28px;
+}
+
+.stk-rail.is-in .stk-rail__track {
+  animation: stk-marquee 28s linear infinite;
+}
+
+@keyframes stk-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.stk-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 112px;
+  height: 112px;
+  flex-shrink: 0;
+  border-radius: 20px;
+  border: 1px solid var(--color-hairline-2);
+  background: var(--color-surface-200);
+  opacity: 0;
+  filter: blur(2px);
+}
+
+.stk-rail.is-in .stk-tile {
+  animation: stk-tile 520ms var(--ease-entrance) var(--tile-delay) both;
+}
+
+@keyframes stk-tile {
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.stk-tile__mark {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+}
+
+.stk-tile__mark svg,
+.stk-tile__mark > span {
+  transform: scale(1.35);
+  transform-origin: center;
+}
+
+.stk-tile__name {
+  font-size: 12px;
+  font-weight: 550;
+  color: var(--color-ink);
+  text-align: center;
+  padding-inline: 6px;
+  line-height: 1.25;
+}
+
+.stk-rail__fade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 72px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.stk-rail__fade--l {
+  left: 0;
+  background: linear-gradient(to right, var(--color-surface-100), transparent);
+}
+
+.stk-rail__fade--r {
+  right: 0;
+  background: linear-gradient(to left, var(--color-surface-100), transparent);
+}
+
+.stk-callouts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px 32px;
+}
+
+.stk-callouts h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 550;
+  line-height: 1.35;
+  color: var(--color-ink);
+}
+
+.stk-callouts p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--color-gray-700);
+}
+
+@media (max-width: 900px) {
+  .stk-callouts {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stk-rail.is-in .stk-rail__track {
+    animation: none;
+  }
+
+  .stk-tile,
+  .stk-rail.is-in .stk-tile {
+    animation: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+}

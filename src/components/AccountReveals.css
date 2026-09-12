@@ -1,0 +1,588 @@
+/* Account reveals — faithful clone of design-assets/refs/account-reveals.png.
+   Four zones bounded by full-height hairline rules: intro | rail | transcript |
+   RESOLVED NOW. The single permitted divergence from the image is zero drop
+   shadows — the reference's elevated RESOLVED panel is rendered flat (tint +
+   hairline). Everything else matches the image's geometry, colour and type. */
+
+.ar {
+  position: relative;
+  background: var(--color-surface-100);
+  padding: 152px 0 96px;
+  overflow: hidden;
+}
+
+.ar__grid {
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 40px;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 31fr)
+    minmax(0, 11fr)
+    minmax(0, 37fr)
+    minmax(0, 21fr);
+  gap: 0;
+  align-items: stretch;
+}
+
+/* ── (a) intro ─────────────────────────────────────────────────────────── */
+
+.ar__intro {
+  padding: 40px 44px 40px 0;
+}
+
+.ar__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.11em;
+  color: var(--color-gray-700);
+}
+
+.ar__live {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  /* telemetry: the live dot. 8px mark, well inside the ≤24px allowance. */
+  background: var(--color-signal-600);
+}
+
+.ar__on {
+  /* telemetry word beside the dot; 13px, -700 for contrast on the tint */
+  color: var(--color-signal-700);
+}
+
+.ar__sep {
+  color: var(--color-gray-400);
+  margin: 0 1px;
+}
+
+.ar__clock {
+  color: var(--color-gray-600);
+}
+
+.ar__title {
+  margin: 30px 0 0;
+  font-family: var(--font-serif);
+  font-optical-sizing: auto;
+  font-size: clamp(34px, 4.2vw, 62px);
+  line-height: 1.06;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+
+.ar__copy {
+  margin: 28px 0 0;
+  max-width: 21ch;
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.55;
+  font-weight: 440;
+  letter-spacing: -0.005em;
+  color: var(--color-gray-800);
+}
+
+/* primary CTA — page convention (Nav/Hero/ClosingCta): ink pill, surface-100
+   label, gray-800 hover, --radius-button */
+.ar__cta {
+  margin-top: 34px;
+  height: 40px;
+  padding: 0 20px;
+  border: none;
+  border-radius: var(--radius-button);
+  background: var(--color-ink);
+  color: var(--color-surface-100);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
+  cursor: pointer;
+  transition-property: background-color;
+}
+
+.ar__cta:hover {
+  background: var(--color-gray-800);
+}
+
+/* ── (b) source rail ───────────────────────────────────────────────────── */
+
+.ar__rail {
+  border-left: 1px solid var(--color-hairline-2); /* V1 : intro | rail */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 48px 24px 48px 0;
+}
+
+.ar-src {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+}
+
+.ar-src__label {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--color-gray-600);
+  white-space: nowrap;
+}
+
+/* dotted vertical stem */
+.ar-src__stem {
+  align-self: stretch;
+  min-height: 92px;
+  width: 0;
+  border-left: 1px dotted var(--color-gray-500);
+}
+
+/* short horizontal dashes branching right from the stem */
+.ar-src__ticks {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.ar-src__tick {
+  width: 14px;
+  height: 0;
+  border-top: 1px solid var(--color-gray-400);
+}
+
+/* the one accent dash + a matching accent dot back on the stem */
+.ar-src__tick--key {
+  position: relative;
+  width: 20px;
+  border-top-color: var(--color-accent-600);
+}
+
+.ar-src__tick--key::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: -2px;
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: var(--color-accent-600);
+}
+
+/* ── (c) transcript ────────────────────────────────────────────────────── */
+
+.ar__list {
+  position: relative;
+  border-left: 1px solid var(--color-hairline-2); /* V2 : rail | transcript */
+  padding: 0 56px 0 40px;
+  transition: opacity 500ms var(--ease-entrance);
+}
+
+.ar__list.is-resetting {
+  opacity: 0;
+}
+
+/* dotted playhead line + hollow node + arrow terminal, at the transcript's
+   right edge (its right bound in the reference) */
+.ar__playline {
+  position: absolute;
+  top: 30px;
+  bottom: 42px;
+  right: 14px;
+  width: 0;
+  border-left: 1px dotted var(--color-gray-500);
+}
+
+.ar__playhead {
+  position: absolute;
+  top: 0;
+  right: 9px;
+  will-change: transform;
+}
+
+.ar__node {
+  display: block;
+  width: 11px;
+  height: 11px;
+  border-radius: 9999px;
+  background: var(--color-surface-100);
+  border: 1.5px solid var(--color-gray-500);
+  transform: translateY(-50%);
+}
+
+.ar__playarrow {
+  position: absolute;
+  right: 10px;
+  bottom: 20px;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--color-gray-500);
+}
+
+.ar-turn {
+  position: relative;
+  /* trap the negative-z band pseudo inside the turn — without a stacking
+     context it paints behind the section's opaque background and vanishes */
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: 60px minmax(0, 1fr);
+  gap: 24px;
+  padding: 26px 0;
+}
+
+/* per-turn horizontal rule — spans from V2 across to the dotted playhead line */
+.ar-turn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -40px;
+  right: -42px;
+  height: 1px;
+  background: var(--color-hairline-2);
+}
+
+.ar-turn:first-child::before {
+  display: none;
+}
+
+.ar-turn__time {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--color-gray-500);
+}
+
+.ar-turn__body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.ar-turn__who {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--color-gray-500);
+}
+
+.ar-turn__line {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 15px;
+  line-height: 22px;
+  letter-spacing: -0.01em;
+  white-space: normal;
+  overflow-wrap: normal;
+  color: var(--color-gray-500);
+}
+
+/* the 11:52 turn: the emphasis is carried by ink — the speaker and the timecode
+   step up the gray ladder, the line goes full ink at 600 — over a neutral
+   surface-300 well and a 2px accent-600 left rule (an allowed 1–2px line).
+   No tinted band: colour never carries emphasis inside the transcript. */
+.ar-turn--focus.is-hot .ar-turn__line {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.ar-turn--focus.is-hot .ar-turn__who {
+  color: var(--color-gray-800);
+}
+
+.ar-turn--focus.is-hot .ar-turn__time {
+  color: var(--color-gray-700);
+}
+
+.ar-turn__time,
+.ar-turn__who,
+.ar-turn__line {
+  transition: color 520ms var(--ease-entrance);
+}
+
+.ar-turn--focus::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: -40px;
+  right: -42px;
+  background: var(--color-surface-300);
+  border-left: 2px solid var(--color-accent-600);
+  opacity: 0;
+  transition: opacity 520ms var(--ease-entrance);
+}
+
+.ar-turn--focus.is-hot::after {
+  opacity: 1;
+}
+
+.ar-turn__pill {
+  position: absolute;
+  z-index: 2;
+  top: -15px;
+  left: 128px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 30px;
+  padding: 0 15px;
+  border-radius: 9999px;
+  background: var(--color-surface-100);
+  border: 1px solid var(--color-accent-300);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--color-accent-700);
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 460ms var(--ease-entrance),
+    transform 460ms var(--ease-entrance);
+}
+
+.ar-turn__pill-mark {
+  color: var(--color-accent-600);
+  font-size: 14px;
+}
+
+.ar-turn--focus.is-hot .ar-turn__pill {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── (d) resolved now ──────────────────────────────────────────────────── */
+
+.ar__resolved {
+  border-left: 1px solid var(--color-hairline-2); /* V3 : transcript | resolved */
+  padding: 44px 0 0 40px;
+}
+
+.ar__resolved-label {
+  margin: 0 0 22px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--color-accent-600);
+}
+
+/* tonal panel on the white ground: surface-200 fill + hairline-2 edge.
+   Depth comes from the value step, never from an accent tint. */
+.ar__cards {
+  border: 1px solid var(--color-hairline-2);
+  border-radius: 10px;
+  background: var(--color-surface-200);
+  overflow: hidden;
+}
+
+.ar-card {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 20px;
+  border-top: 1px solid var(--color-gray-300);
+  opacity: 0;
+  transform: translateY(10px);
+  filter: blur(1.5px);
+  transition:
+    opacity 460ms var(--ease-entrance),
+    transform 460ms var(--ease-entrance),
+    filter 460ms var(--ease-entrance);
+}
+
+.ar-card:first-child {
+  border-top: none;
+}
+
+.ar-card.is-in {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.ar-card__badge {
+  display: flex;
+  color: var(--color-accent-600);
+}
+
+.ar-card__icon {
+  width: 42px;
+  height: 42px;
+}
+
+.ar-card__title {
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.3;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  color: var(--color-accent-700);
+}
+
+.ar-card__time {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  color: var(--color-gray-500);
+}
+
+/* ── quiet variant (landing-page motion ration) ────────────────────────── */
+
+/* The settled frame, entering once with Attio's QUIET grammar: blur(2px)→0 +
+   opacity, 520ms, ease-entrance, 160ms stagger across four groups. The scene's
+   own transitions (playhead travel, focus-row emphasis, per-card landing) are
+   neutralised — everything is already in its end state before the group enters,
+   so nothing moves after the entrance settles. */
+
+.ar--quiet .ar__intro,
+.ar--quiet .ar__rail,
+.ar--quiet .ar__list,
+.ar--quiet .ar__resolved {
+  opacity: 0;
+  filter: blur(2px);
+  transition:
+    opacity 520ms var(--ease-entrance),
+    filter 520ms var(--ease-entrance);
+}
+
+.ar--quiet .ar__rail {
+  transition-delay: 160ms;
+}
+.ar--quiet .ar__list {
+  transition-delay: 320ms;
+}
+.ar--quiet .ar__resolved {
+  transition-delay: 480ms;
+}
+
+.ar--quiet.is-entered .ar__intro,
+.ar--quiet.is-entered .ar__rail,
+.ar--quiet.is-entered .ar__list,
+.ar--quiet.is-entered .ar__resolved {
+  opacity: 1;
+  filter: blur(0);
+}
+
+/* no per-element scene motion inside the groups */
+.ar--quiet .ar-turn__time,
+.ar--quiet .ar-turn__who,
+.ar--quiet .ar-turn__line,
+.ar--quiet .ar-turn--focus::after,
+.ar--quiet .ar-turn__pill,
+.ar--quiet .ar-card {
+  transition: none;
+}
+
+.ar--quiet .ar-card {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+.ar--quiet .ar__playhead {
+  will-change: auto;
+}
+
+/* ── responsive ────────────────────────────────────────────────────────── */
+
+/* below 1180 the four-column measure gets tight — intro spans the top, then
+   rail | transcript | resolved sit in a row beneath it */
+@media (max-width: 1180px) {
+  .ar__grid {
+    grid-template-columns:
+      minmax(0, 13fr)
+      minmax(0, 40fr)
+      minmax(0, 29fr);
+  }
+  .ar__intro {
+    grid-column: 1 / -1;
+    padding: 0 0 8px;
+  }
+  .ar__rail {
+    border-left: none;
+  }
+}
+
+/* below 960 drop the rail — the transcript takes the left two tracks */
+@media (max-width: 960px) {
+  .ar__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(248px, 300px);
+  }
+  .ar__rail {
+    display: none;
+  }
+  .ar__list {
+    border-left: none;
+    padding-left: 0;
+  }
+  .ar-turn::before {
+    left: 0;
+  }
+  .ar-turn--focus::after {
+    left: 0;
+  }
+  .ar-turn__pill {
+    left: 84px;
+  }
+}
+
+@media (max-width: 760px) {
+  .ar {
+    padding: 80px 0 64px;
+  }
+  .ar__grid {
+    grid-template-columns: 1fr;
+    padding-inline: 24px;
+  }
+  .ar__resolved {
+    border-left: none;
+    padding: 40px 0 0;
+    margin-top: 40px;
+    border-top: 1px solid var(--color-gray-400);
+  }
+  .ar__title {
+    font-size: clamp(30px, 9vw, 40px);
+  }
+  .ar-turn__time,
+  .ar-turn__who,
+  .ar-turn__line {
+    font-size: 13.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ar__list,
+  .ar-turn--focus::after,
+  .ar-turn__time,
+  .ar-turn__who,
+  .ar-turn__line,
+  .ar-turn__pill,
+  .ar-card {
+    transition: none;
+  }
+
+  /* quiet variant renders the settled frame immediately — no entrance */
+  .ar--quiet .ar__intro,
+  .ar--quiet .ar__rail,
+  .ar--quiet .ar__list,
+  .ar--quiet .ar__resolved {
+    opacity: 1;
+    filter: none;
+    transition: none;
+    transition-delay: 0s;
+  }
+}

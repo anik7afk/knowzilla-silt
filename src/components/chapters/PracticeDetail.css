@@ -1,0 +1,222 @@
+/* Chapter 02 — Practice: the scorecard app card + persona overlay.
+   REWRITTEN 2026-07-27 session 12 (owner pivot): the three-region rehearsal
+   stage (persona / move cards on a spine / floating scorecard) was ruled
+   "too much info, messy" and is replaced by the section's standard anatomy —
+   one focal app card + one overlay. All spacing on v2's 20px body-pad
+   standard (v2-physicality-measure.md §2). */
+
+/* NOTE: the .pc-card--score geometry override lives in PlatformChapters.css
+   (beside .pc-card--live) — chapter CSS is imported BEFORE the section CSS,
+   so an equal-specificity override here would lose the cascade to .pc-card. */
+
+.pc2-body {
+  padding: 20px; /* v2 mock body-pad standard */
+}
+
+/* shared key label */
+.pc2-key {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 16px;
+  color: var(--color-gray-600);
+}
+
+/* ── overall score row ─────────────────────────────────────────────────── */
+
+.pc2-overall {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--color-hairline-2);
+}
+
+.pc2-overall .pc2-key {
+  flex: none;
+}
+
+.pc2-big {
+  display: inline-flex;
+}
+
+/* v2's big stat: 28px / 650 / −0.02em tabular-nums (v2-physicality §1) */
+.pc2-big__n {
+  font-size: 28px;
+  font-weight: 650;
+  line-height: 34px;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+}
+
+.pc2-big__n i {
+  font-style: normal;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-gray-600);
+}
+
+.pc2-big__n--none {
+  color: var(--color-gray-500);
+}
+
+.pc2-overall > :last-child {
+  margin-left: auto;
+}
+
+/* ── rubric: five axes as rows — label | bar | value ───────────────────
+   (a 5-up horizontal strip in a 50%-wide card ran its right columns under
+   the persona overlay; rows keep every bar and value in clear air) */
+
+.pc2-rubric {
+  display: grid;
+  row-gap: 13px;
+  padding: 18px 0 20px;
+}
+
+.pc2-axis {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr) 22px;
+  align-items: center;
+  column-gap: 12px;
+}
+
+.pc2-axis__k {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: var(--color-gray-600);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pc2-axis__v {
+  order: 3;
+  font-size: 12px;
+  font-weight: 550;
+  line-height: 16px;
+  text-align: right;
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.pc2-axis .pc-track {
+  order: 2;
+}
+
+/* ── feedback foot ─────────────────────────────────────────────────────── */
+
+.pc2-foot {
+  display: grid;
+  gap: 5px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-hairline-2);
+}
+
+.pc2-verdict {
+  font-size: 13px;
+  line-height: 20px;
+  letter-spacing: -0.05px;
+  color: var(--color-gray-800);
+  max-width: 52ch;
+}
+
+.pc2-verdict strong {
+  font-weight: 550;
+  color: var(--color-ink);
+}
+
+/* ── persona overlay internals ─────────────────────────────────────────── */
+
+.pc2-quote {
+  margin: 5px 0 0;
+  font-size: 13px;
+  line-height: 20px;
+  letter-spacing: -0.05px;
+  color: var(--color-gray-800);
+}
+
+.pc2-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.pc2-meta .pc2-key {
+  display: inline;
+}
+
+.pc2-meta__v {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  line-height: 18px;
+  color: var(--color-gray-800);
+}
+
+/* three-step difficulty meter — ink, difficulty is not good-or-bad */
+.pc2-meter {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.pc2-meter i {
+  width: 10px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-gray-300);
+}
+
+.pc2-meter i.is-on {
+  background: var(--color-gray-800);
+}
+
+.pc2-inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  margin-top: 12px;
+}
+
+/* ── ≤900px: static flow (the shared stage unstack handles placement) ───── */
+
+@media (max-width: 900px) {
+  .pc-card--score {
+    width: auto;
+  }
+
+  .pc2-rubric {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 22px;
+    row-gap: 14px;
+  }
+
+  /* The desktop axis has a FIXED 104px label column; inside a half-width cell
+     its three tracks (104 + bar + 22 + gaps = 150px min) overran the cell and
+     the value printed on top of the next column's label. Let the label absorb
+     the slack instead — it already truncates. */
+  .pc2-axis {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.7fr) 22px;
+    column-gap: 10px;
+  }
+}
+
+/* ── ≤620px: one axis per row — a half-width cell on a phone leaves no room
+   for a readable bar, so the rubric returns to its desktop rhythm ────────── */
+
+@media (max-width: 620px) {
+  .pc2-rubric {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 12px;
+  }
+
+  .pc2-axis {
+    grid-template-columns: 104px minmax(0, 1fr) 22px;
+    column-gap: 12px;
+  }
+}

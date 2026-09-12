@@ -1,0 +1,879 @@
+/* ===========================================================================
+ * §02 Design system — scoped styles.
+ *
+ * SCOPE. Everything is `.pch-ds-` prefixed and belongs to
+ * `DesignSystemChapter.tsx` alone. The shell owns the page ground, the sidebar
+ * and the column measure; nothing here sets a page background.
+ *
+ * VISUAL LANGUAGE. Rebuilt natively from `design-system/showcase.html`'s idioms
+ * (that rendered file is the agreed target look): warm paper grounds, 1px
+ * hairlines as the only separator, labels BELOW their swatch never inside it,
+ * a two-column spec row for type, 1:1 spacing bars, and framed specimens.
+ *
+ * Two departures from the donor showcase, both forced by standing rules rather
+ * than taste:
+ *   · NO MONOSPACE — the showcase sets every label, hex and readout in JetBrains
+ *     Mono. Mono was retired page-wide 2026-07-25; here the same job is done by
+ *     Inter 500-600, tracked, with tabular figures.
+ *   · NO OLIVE — `--kz-olive-*` was superseded page-wide by `--kz-signal-*`.
+ *     The showcase still presents olive as the telemetry ramp; this chapter does
+ *     not, and says so.
+ * ======================================================================== */
+
+/* ---------------------------------------------------------------------------
+ * SHARED
+ * ------------------------------------------------------------------------- */
+
+.pch-ds-lede {
+  font: var(--kz-type-body-15);
+  letter-spacing: var(--kz-ls-body-15);
+  color: var(--kz-ink-secondary);
+  max-width: 660px;
+  margin: 0 0 20px;
+}
+
+.pch-ds-lede:last-child {
+  margin-bottom: 0;
+}
+
+.pch-ds-lede strong {
+  color: var(--kz-ink);
+  font-weight: 500;
+}
+
+.pch-ds-code {
+  font-family: var(--kz-font-body);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  color: var(--kz-ink);
+}
+
+/* Sub-group label inside a section. */
+.pch-ds-grp {
+  font: 600 12px/16px var(--kz-font-body);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-600);
+  margin: 56px 0 20px;
+}
+
+.pch-ds-grp:first-of-type {
+  margin-top: 0;
+}
+
+/* A small scoping chip — "status only", "telemetry", "retired". */
+.pch-ds-tag {
+  display: inline-block;
+  font: 600 10px/16px var(--kz-font-body);
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  padding: 1px 8px;
+  border-radius: var(--kz-radius-tag);
+  background: var(--kz-surface-300);
+  color: var(--kz-ink-secondary);
+  white-space: nowrap;
+}
+
+.pch-ds-tag--off {
+  background: var(--kz-surface-200);
+  color: var(--kz-gray-600);
+  text-decoration: line-through;
+  text-decoration-color: var(--kz-gray-500);
+}
+
+/* A SMALL NOTE — one load-bearing fact, one sentence.
+ *
+ * These were bordered, tinted, 14px panels running three sentences each, and the
+ * owner's read (2026-07-29) was that a paragraph in a box is a paragraph you skip.
+ * A 2px left rule and 13px of muted type carries the same information without
+ * asking to be read as a section. `--rule` marks the ones that state a RULE
+ * rather than a finding, and it is the only place accent appears here. */
+.pch-ds-note {
+  margin: 24px 0 0;
+  padding: 0 0 0 12px;
+  border-left: 2px solid var(--kz-gray-400);
+  font: 450 13px/19px var(--kz-font-body);
+  letter-spacing: -0.05px;
+  color: var(--kz-gray-700);
+  max-width: 620px;
+}
+
+.pch-ds-note b {
+  color: var(--kz-ink);
+  font-weight: 500;
+}
+
+.pch-ds-note--rule {
+  border-left-color: var(--kz-accent-600);
+}
+
+/* "These values were read out of the live stylesheet" caption. */
+.pch-ds-live {
+  margin: 0 0 28px;
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.4px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-600);
+}
+
+/* ---------------------------------------------------------------------------
+ * COLOUR — intent contract, role swatches, ramps.
+ * ------------------------------------------------------------------------- */
+
+.pch-ds-contract {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin: 0 0 44px;
+  font: 450 12px/18px var(--kz-font-body);
+  color: var(--kz-gray-700);
+  max-width: 860px;
+}
+
+.pch-ds-contract b {
+  color: var(--kz-ink);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.pch-ds-roles {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.pch-ds-role__sw {
+  height: 72px;
+  border-radius: var(--kz-radius-tile);
+  border: 1px solid var(--kz-hairline-2);
+}
+
+.pch-ds-role__nm {
+  margin-top: 12px;
+  font: 500 13px/16px var(--kz-font-body);
+  letter-spacing: -0.13px;
+  color: var(--kz-ink);
+}
+
+.pch-ds-role__hx {
+  margin-top: 2px;
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.3px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-700);
+}
+
+.pch-ds-role__rl {
+  margin-top: 2px;
+  font: 450 11px/16px var(--kz-font-body);
+  color: var(--kz-gray-600);
+}
+
+/* Ramp header, then a 10-column scrolling chip row. */
+.pch-ds-ramp {
+  margin-top: 40px;
+}
+
+.pch-ds-ramp__head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin-bottom: 16px;
+}
+
+.pch-ds-ramp__nm {
+  font: 500 17px/24px var(--kz-font-body);
+  letter-spacing: -0.17px;
+  color: var(--kz-ink);
+}
+
+.pch-ds-ramp__use {
+  font: 450 11px/16px var(--kz-font-body);
+  color: var(--kz-gray-600);
+}
+
+.pch-ds-scroll {
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.pch-ds-chips {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 8px;
+  min-width: 720px;
+}
+
+.pch-ds-chip__sw {
+  height: 56px;
+  border-radius: var(--kz-radius-tile);
+  border: 1px solid var(--kz-hairline-2);
+}
+
+.pch-ds-chip__st {
+  margin-top: 8px;
+  font: 500 11px/16px var(--kz-font-body);
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-ink);
+}
+
+.pch-ds-chip__hx {
+  font: 450 11px/16px var(--kz-font-body);
+  letter-spacing: 0.2px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-700);
+}
+
+/* Tonal grounds — the three surfaces, stacked so the steps are visible. */
+.pch-ds-grounds {
+  border: 1px solid var(--kz-hairline-2);
+  border-radius: var(--kz-radius-card);
+  overflow: hidden;
+}
+
+.pch-ds-ground {
+  padding: 22px 24px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  font: 500 13px/16px var(--kz-font-body);
+  letter-spacing: -0.13px;
+  color: var(--kz-ink);
+}
+
+.pch-ds-ground + .pch-ds-ground {
+  border-top: 1px solid var(--kz-hairline-2);
+}
+
+.pch-ds-ground__m {
+  font: 450 11px/16px var(--kz-font-body);
+  letter-spacing: 0.2px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-600);
+  text-align: right;
+}
+
+/* The accent-is-a-mark demonstration: allowed vs struck. */
+.pch-ds-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
+  margin-top: 24px;
+}
+
+.pch-ds-pair__c {
+  border: 1px solid var(--kz-hairline-2);
+  border-radius: var(--kz-radius-card);
+  background: var(--kz-surface-100);
+  padding: 22px;
+}
+
+.pch-ds-pair__lbl {
+  font: 600 10px/16px var(--kz-font-body);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--kz-gray-600);
+  margin-bottom: 14px;
+}
+
+.pch-ds-pair__lbl--no {
+  color: var(--kz-red-900);
+}
+
+.pch-ds-pair__cap {
+  margin-top: 14px;
+  font: 450 11px/16px var(--kz-font-body);
+  color: var(--kz-gray-600);
+}
+
+/* Sanctioned accent marks, at their permitted sizes. */
+.pch-ds-marks {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.pch-ds-marks__t {
+  font: 500 14px/20px var(--kz-font-body);
+  letter-spacing: -0.14px;
+  color: var(--kz-accent-600);
+}
+
+.pch-ds-marks__rule {
+  width: 64px;
+  height: 2px;
+  background: var(--kz-accent-600);
+  border-radius: 1px;
+}
+
+.pch-ds-marks__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--kz-accent-600);
+}
+
+.pch-ds-marks__glyph {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--kz-radius-micro);
+  border: 1.5px solid var(--kz-accent-600);
+}
+
+/* The struck example — a big accent area fill. */
+.pch-ds-fill {
+  position: relative;
+  height: 64px;
+  border-radius: var(--kz-radius-tile);
+  background: var(--kz-accent-600);
+}
+
+.pch-ds-fill::after {
+  content: '';
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 50%;
+  height: 2px;
+  background: var(--kz-red-700);
+  transform: rotate(-4deg);
+}
+
+/* ---------------------------------------------------------------------------
+ * TYPE — spec on the left, live sample on the right.
+ * ------------------------------------------------------------------------- */
+
+.pch-ds-spec {
+  display: grid;
+  grid-template-columns: 216px minmax(0, 1fr);
+  gap: 24px;
+  align-items: baseline;
+  padding: 22px 0;
+}
+
+.pch-ds-spec + .pch-ds-spec {
+  border-top: 1px solid var(--kz-hairline-1);
+}
+
+.pch-ds-spec__k {
+  font: 500 12px/16px var(--kz-font-body);
+  letter-spacing: -0.12px;
+  color: var(--kz-ink);
+}
+
+.pch-ds-spec__m {
+  margin-top: 4px;
+  font: 450 11px/16px var(--kz-font-body);
+  letter-spacing: 0.2px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-600);
+  overflow-wrap: anywhere;
+}
+
+.pch-ds-spec__src {
+  margin-top: 4px;
+  font: 450 11px/16px var(--kz-font-body);
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-500);
+  overflow-wrap: anywhere;
+}
+
+.pch-ds-spec__s {
+  color: var(--kz-ink);
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+  min-width: 0;
+}
+
+/* Two rungs are authored in tsx with a Tailwind `md:` pair rather than a clamp,
+   so the specimen reproduces the breakpoint instead of interpolating across it —
+   an interpolated sample would be a value the page never renders. */
+.pch-ds-t--h1 {
+  font-size: 44px;
+  line-height: 1.02;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.pch-ds-t--cta {
+  font-family: var(--kz-font-display);
+  font-size: 36px;
+  line-height: 40px;
+  font-weight: 500;
+  letter-spacing: -0.4px;
+}
+
+@media (min-width: 768px) {
+  .pch-ds-t--h1 {
+    font-size: 76px;
+  }
+
+  .pch-ds-t--cta {
+    font-size: 48px;
+    line-height: 52px;
+    letter-spacing: -0.48px;
+  }
+}
+
+/* Faces actually loaded. */
+.pch-ds-faces {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.pch-ds-face {
+  border: 1px solid var(--kz-hairline-2);
+  border-radius: var(--kz-radius-card);
+  background: var(--kz-surface-100);
+  padding: 22px;
+}
+
+.pch-ds-face__g {
+  font-size: 40px;
+  line-height: 44px;
+  font-weight: 500;
+  letter-spacing: -0.4px;
+  color: var(--kz-ink);
+}
+
+.pch-ds-face__nm {
+  margin-top: 12px;
+  font: 500 13px/16px var(--kz-font-body);
+  letter-spacing: -0.13px;
+  color: var(--kz-ink);
+}
+
+.pch-ds-face__m {
+  margin-top: 3px;
+  font: 450 11px/16px var(--kz-font-body);
+  color: var(--kz-gray-600);
+}
+
+/* Weight ramp of the one variable face. */
+.pch-ds-wts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  align-items: baseline;
+}
+
+.pch-ds-wt {
+  min-width: 92px;
+}
+
+.pch-ds-wt__s {
+  font-size: 24px;
+  line-height: 30px;
+  letter-spacing: -0.24px;
+  color: var(--kz-ink);
+}
+
+.pch-ds-wt__k {
+  margin-top: 2px;
+  font: 450 11px/16px var(--kz-font-body);
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-600);
+}
+
+/* ---------------------------------------------------------------------------
+ * SPACE — 1:1 bars, then the rhythm diagram.
+ * ------------------------------------------------------------------------- */
+
+.pch-ds-sp {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 6px 0;
+}
+
+.pch-ds-sp__v {
+  width: 48px;
+  text-align: right;
+  flex: none;
+  font: 500 12px/16px var(--kz-font-body);
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-700);
+}
+
+.pch-ds-sp__bar {
+  height: 12px;
+  border-radius: var(--kz-radius-micro);
+  background: var(--kz-accent-200);
+  flex: none;
+  max-width: 100%;
+}
+
+.pch-ds-sp__bar--land {
+  background: var(--kz-accent-300);
+}
+
+.pch-ds-sp__k {
+  font: 450 11px/16px var(--kz-font-body);
+  color: var(--kz-gray-600);
+  min-width: 0;
+}
+
+.pch-ds-rhythm {
+  margin-top: 40px;
+  border: 1px solid var(--kz-hairline-2);
+  border-radius: var(--kz-radius-card);
+  background: var(--kz-surface-200);
+  padding: 32px 36px;
+}
+
+.pch-ds-lump {
+  background: var(--kz-surface-100);
+  border: 1px solid var(--kz-hairline-2);
+  border-radius: var(--kz-radius-tile);
+  padding: 12px 16px;
+  margin-left: 8px;
+  font: 500 13px/16px var(--kz-font-body);
+  letter-spacing: -0.13px;
+  color: var(--kz-ink);
+}
+
+.pch-ds-gap {
+  border-left: 1px dashed var(--kz-gray-400);
+  margin-left: 8px;
+  padding-left: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.pch-ds-gap__t {
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.2px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-accent-700);
+}
+
+/* Lines — hairline ladder + the R1 structural stroke device. */
+.pch-ds-lines {
+  border: 1px solid var(--kz-hairline-2);
+  border-radius: var(--kz-radius-card);
+  overflow: hidden;
+}
+
+.pch-ds-line {
+  padding: 18px 22px;
+  background: var(--kz-surface-100);
+}
+
+.pch-ds-line + .pch-ds-line {
+  border-top: 1px solid var(--kz-hairline-2);
+}
+
+.pch-ds-line--tinted {
+  background: var(--kz-surface-200);
+}
+
+.pch-ds-line__r {
+  height: 0;
+  margin-bottom: 12px;
+}
+
+.pch-ds-line__k {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  font: 500 12px/16px var(--kz-font-body);
+  letter-spacing: -0.12px;
+  color: var(--kz-ink);
+}
+
+.pch-ds-line__m {
+  font: 450 11px/16px var(--kz-font-body);
+  letter-spacing: 0.2px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-600);
+  text-align: right;
+}
+
+/* The 1.5px / 2px drawn line, painted as an inset ring (Chromium floors
+   fractional border-width to whole device px — session 9 R2). */
+.pch-ds-strokes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.pch-ds-stroke {
+  width: 140px;
+  height: 64px;
+  border-radius: var(--kz-radius-tile);
+  background: var(--kz-surface-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.2px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-700);
+}
+
+.pch-ds-stroke--quiet {
+  box-shadow: inset 0 0 0 1.5px var(--kz-gray-400);
+}
+
+.pch-ds-stroke--device {
+  box-shadow: inset 0 0 0 2px var(--kz-gray-500);
+}
+
+.pch-ds-stroke--thin {
+  border: 1px solid var(--kz-hairline-2);
+}
+
+/* ---------------------------------------------------------------------------
+ * ELEVATION + RADIUS
+ * ------------------------------------------------------------------------- */
+
+.pch-ds-elev {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 40px 32px;
+}
+
+/* Each shadow sits on the ground its rule requires. */
+.pch-ds-elev__bed {
+  padding: 32px;
+  border-radius: var(--kz-radius-card);
+  background: var(--kz-surface-200);
+  border: 1px solid var(--kz-hairline-1);
+}
+
+.pch-ds-elev__bed--white {
+  background: var(--kz-surface-100);
+}
+
+.pch-ds-elev__win {
+  position: relative;
+  border-radius: var(--kz-radius-card);
+  background: var(--kz-surface-100);
+  border: 1px solid var(--kz-hairline-2);
+  min-height: 86px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--kz-gray-600);
+}
+
+.pch-ds-elev--frame .pch-ds-elev__win {
+  box-shadow: var(--kz-shadow-frame);
+}
+
+.pch-ds-elev--card .pch-ds-elev__win {
+  box-shadow: var(--kz-shadow-card);
+}
+
+.pch-ds-elev--stage .pch-ds-elev__win {
+  box-shadow: var(--kz-shadow-stage);
+}
+
+/* The floating chip that only exists over a frame. */
+.pch-ds-elev__chip {
+  position: absolute;
+  right: -10px;
+  bottom: -14px;
+  padding: 7px 12px;
+  border-radius: var(--kz-radius-tag);
+  background: var(--kz-surface-100);
+  border: 1px solid var(--kz-hairline-2);
+  box-shadow: var(--kz-shadow-float);
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: -0.11px;
+  text-transform: none;
+  color: var(--kz-ink);
+}
+
+/* The one interactive elevation: hover lift on a chapter plate. */
+.pch-ds-plate {
+  box-shadow: var(--kz-shadow-float);
+  transition:
+    transform 200ms ease-out,
+    box-shadow 200ms ease-out;
+}
+
+.pch-ds-plate:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--kz-shadow-hover);
+}
+
+.pch-ds-elev__cap {
+  margin-top: 16px;
+  font: 500 12px/18px var(--kz-font-body);
+  letter-spacing: -0.12px;
+  color: var(--kz-ink);
+}
+
+.pch-ds-elev__val {
+  margin-top: 4px;
+  font: 450 11px/16px var(--kz-font-body);
+  letter-spacing: 0.2px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-600);
+  overflow-wrap: anywhere;
+}
+
+.pch-ds-radii {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.pch-ds-radius__b {
+  width: 76px;
+  height: 56px;
+  background: var(--kz-surface-300);
+  border: 1px solid var(--kz-hairline-2);
+}
+
+.pch-ds-radius__k {
+  margin-top: 8px;
+  font: 450 11px/16px var(--kz-font-body);
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-700);
+}
+
+/* Focus ring — besides the frame shadows, the only other sanctioned box-shadow. */
+.pch-ds-focus {
+  appearance: none;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: var(--kz-radius-button);
+  border: 1px solid var(--kz-gray-400);
+  background: var(--kz-surface-100);
+  color: var(--kz-ink);
+  font: 500 14px/1 var(--kz-font-body);
+  letter-spacing: -0.14px;
+  cursor: pointer;
+  transition-property: background-color, border-color;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+.pch-ds-focus:hover {
+  transition-duration: 50ms;
+  background: var(--kz-surface-200);
+  border-color: var(--kz-gray-500);
+}
+
+.pch-ds-focus:focus-visible {
+  outline: none;
+  /* The inner ring is the page ground, so it comes from the token rather than a
+     white literal — the specimen has to keep matching index.css:434. */
+  box-shadow:
+    0 0 0 2px var(--kz-surface-100),
+    0 0 0 4px var(--kz-accent-300);
+}
+
+/* ---------------------------------------------------------------------------
+ * TABLES — section rhythm, divergence ledger.
+ * ------------------------------------------------------------------------- */
+
+.pch-ds-tbl {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--kz-hairline-2);
+  border-radius: var(--kz-radius-tile);
+  overflow: hidden;
+  text-align: left;
+}
+
+.pch-ds-tbl th {
+  font: 600 10px/16px var(--kz-font-body);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--kz-gray-600);
+  background: var(--kz-surface-200);
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--kz-hairline-2);
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
+.pch-ds-tbl td {
+  font: 450 12px/18px var(--kz-font-body);
+  color: var(--kz-ink-secondary);
+  padding: 11px 14px;
+  border-top: 1px solid var(--kz-hairline-1);
+  vertical-align: top;
+}
+
+.pch-ds-tbl tbody tr:first-child td {
+  border-top: 0;
+}
+
+.pch-ds-tbl td:first-child {
+  font-weight: 500;
+  color: var(--kz-ink);
+  white-space: nowrap;
+}
+
+.pch-ds-tbl__n {
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-700);
+  white-space: nowrap;
+}
+
+.pch-ds-tbl__wrap {
+  overflow-x: auto;
+}
+
+.pch-ds-tbl__wrap > .pch-ds-tbl {
+  min-width: 640px;
+}
+
+/* ---------------------------------------------------------------------------
+ * RESPONSIVE
+ * ------------------------------------------------------------------------- */
+
+@media (max-width: 1000px) {
+  .pch-ds-roles {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .pch-ds-faces {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .pch-ds-roles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pch-ds-elev,
+  .pch-ds-pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pch-ds-spec {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * REDUCED MOTION — the only motion here is the hover lift and two hover
+ * colour changes. Colour survives; the lift does not.
+ * ------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .pch-ds-plate,
+  .pch-ds-plate:hover {
+    transform: none;
+    transition: none;
+  }
+}

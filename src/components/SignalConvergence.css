@@ -1,0 +1,186 @@
+/* Signal Convergence — scattered sources → one direction.
+   Skin: Natural (white surface, 1px hairlines, zero shadows). Type: Inter
+   Display headline, Inter (label face; mono retired 2026-07-25) labels/read-outs. Graphite =
+   the raw un-resolved crackle (the noise is deliberately ACHROMATIC — NOT the
+   signal-blue ramp; see .sc-spike); lavender = the converged signal,
+   waveform and read. All scene motion lives on the gsap timeline in the .tsx;
+   the rules below are static styling + the hidden base states the timeline
+   animates FROM. prefers-reduced-motion paints the settled poster with no loop. */
+
+.sc {
+  position: relative;
+  background: var(--color-surface-100);
+  color: var(--color-ink);
+  padding: 120px 0;
+  overflow: hidden;
+}
+
+.sc__container {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 40px;
+}
+
+/* ── headline ─────────────────────────────────────────────────────────── */
+
+.sc__headline {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(34px, 5.4vw, 66px);
+  line-height: 1.03;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+.sc__ink {
+  color: var(--color-ink);
+}
+
+.sc__accent {
+  color: var(--color-accent-600);
+}
+
+/* headline halves are revealed by the timeline; hide until then */
+.sc__ink,
+.sc__accent {
+  opacity: 0;
+}
+
+/* ── diagram ──────────────────────────────────────────────────────────── */
+
+.sc__diagram {
+  margin-top: clamp(56px, 8vw, 104px);
+}
+
+.sc__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* baselines + convergence curves — gray telemetry rails */
+.sc-base,
+.sc-curve {
+  fill: none;
+  stroke: var(--color-gray-400);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  /* hidden: drawn in by the timeline (pathLength=1) */
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+/* output lines — the converged lavender signal path */
+.sc-line {
+  fill: none;
+  stroke: var(--color-accent-600);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+/* graphite telemetry spikes — scattered, restless energy. The scene's argument is
+   a COUNTERPOINT: this side must not read as signal, so it is achromatic (a second
+   blue at 17° from accent-600 would collapse the two sides into one hue). gray-500
+   is luminance-matched to the retired telemetry step (~175 vs ~180 on Rec.709), so the
+   crackle keeps exactly the weight it had against the lavender bloom. Rects (not
+   zero-width lines) so gsap gets a real bbox; gsap owns the transform-origin in
+   view-box space (native SVG mode — do NOT set transform-box: fill-box, it makes
+   gsap's baked origin translate land in the wrong coordinate space). */
+.sc-spike {
+  fill: var(--color-gray-500);
+  transform: scaleY(0); /* grown + crackled by the timeline */
+}
+
+/* lavender waveform bars — the reconstituted single signal */
+.sc-bar {
+  fill: var(--color-accent-600);
+  transform: scale(0); /* bloomed from the ring by the timeline */
+}
+
+/* ring nodes — open circles on the white surface */
+.sc-ring1,
+.sc-ring2 {
+  fill: var(--color-surface-100);
+  stroke-width: 1.6;
+  opacity: 0;
+}
+
+.sc-ring1 {
+  stroke: var(--color-gray-600); /* neutral join — signals meet here */
+}
+
+.sc-ring2 {
+  stroke: var(--color-accent-600); /* the resolved endpoint */
+}
+
+/* ── labels ───────────────────────────────────────────────────────────── */
+
+.sc-label {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  opacity: 0;
+}
+
+.sc-label--row {
+  fill: var(--color-ink);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+}
+
+.sc-label--intent {
+  fill: var(--color-accent-600);
+  font-weight: 500;
+  letter-spacing: 0.11em;
+}
+
+.sc-rising {
+  fill: var(--color-accent-600);
+  font-weight: 600;
+}
+
+.sc-label--sub {
+  fill: var(--color-gray-600);
+  letter-spacing: 0.04em;
+}
+
+/* ── responsive ───────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .sc {
+    padding: 80px 0;
+  }
+
+  .sc__container {
+    padding-inline: 24px;
+  }
+}
+
+/* ── reduced motion → settled poster, no timeline (CSS-only reveal) ──────
+   Matches the reference frame: spikes present, waveform present, everything
+   drawn and legible. The gsap effect returns early under reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .sc__ink,
+  .sc__accent,
+  .sc-label,
+  .sc-ring1,
+  .sc-ring2 {
+    opacity: 1;
+  }
+
+  .sc-base,
+  .sc-curve,
+  .sc-line {
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+  }
+
+  .sc-spike {
+    transform: scaleY(1);
+  }
+
+  .sc-bar {
+    transform: scale(1);
+  }
+}

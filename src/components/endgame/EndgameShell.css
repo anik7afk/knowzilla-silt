@@ -1,0 +1,74 @@
+/* Endgame review shell — standalone routes only. */
+
+.eg-shell {
+  --eg-pad-y: 96px;
+  --eg-pad-x: 40px;
+  position: relative;
+  padding: var(--eg-pad-y) 0;
+  overflow: clip;
+}
+
+.eg-shell--g100 {
+  background: var(--color-surface-100);
+}
+.eg-shell--g200 {
+  background: var(--color-surface-200);
+}
+.eg-shell--g300 {
+  background: var(--color-surface-300);
+}
+
+.eg-shell__inner {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: var(--eg-pad-x);
+}
+
+.eg-head {
+  max-width: 640px;
+  margin-bottom: 48px;
+}
+
+.eg-head__h {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.2vw, 40px);
+  line-height: 1.15;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  text-wrap: balance;
+}
+
+.eg-head__h span {
+  color: var(--color-gray-600);
+}
+
+.eg-head__sub {
+  margin: 16px 0 0;
+  max-width: 46ch;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--color-gray-700);
+}
+
+@media (max-width: 768px) {
+  .eg-shell {
+    --eg-pad-y: 64px;
+    --eg-pad-x: 24px;
+  }
+
+  .eg-head {
+    margin-bottom: 32px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eg-shell .kz-enter {
+    animation: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+  }
+}

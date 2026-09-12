@@ -1,0 +1,411 @@
+{
+  "source": "design-assets/generated/mascot-pose-sets",
+  "poses": [
+    {
+      "id": "pose-01-1-wave",
+      "name": "wave",
+      "src": "/mascot/poses/transparent/01-1-wave.png",
+      "width": 562,
+      "height": 818
+    },
+    {
+      "id": "pose-01-2-welcome",
+      "name": "welcome",
+      "src": "/mascot/poses/transparent/01-2-welcome.png",
+      "width": 618,
+      "height": 818
+    },
+    {
+      "id": "pose-01-3-listening",
+      "name": "listening",
+      "src": "/mascot/poses/transparent/01-3-listening.png",
+      "width": 545,
+      "height": 760
+    },
+    {
+      "id": "pose-02-1-head-tilt",
+      "name": "head tilt",
+      "src": "/mascot/poses/transparent/02-1-head-tilt.png",
+      "width": 558,
+      "height": 820
+    },
+    {
+      "id": "pose-02-2-thinking",
+      "name": "thinking",
+      "src": "/mascot/poses/transparent/02-2-thinking.png",
+      "width": 559,
+      "height": 817
+    },
+    {
+      "id": "pose-02-3-looking-up",
+      "name": "looking up",
+      "src": "/mascot/poses/transparent/02-3-looking-up.png",
+      "width": 556,
+      "height": 804
+    },
+    {
+      "id": "pose-03-1-present-left",
+      "name": "present left",
+      "src": "/mascot/poses/transparent/03-1-present-left.png",
+      "width": 568,
+      "height": 769
+    },
+    {
+      "id": "pose-03-2-present-right",
+      "name": "present right",
+      "src": "/mascot/poses/transparent/03-2-present-right.png",
+      "width": 571,
+      "height": 771
+    },
+    {
+      "id": "pose-03-3-gesture-down",
+      "name": "gesture down",
+      "src": "/mascot/poses/transparent/03-3-gesture-down.png",
+      "width": 521,
+      "height": 758
+    },
+    {
+      "id": "pose-04-1-walking",
+      "name": "walking",
+      "src": "/mascot/poses/transparent/04-1-walking.png",
+      "width": 563,
+      "height": 743
+    },
+    {
+      "id": "pose-04-2-running",
+      "name": "running",
+      "src": "/mascot/poses/transparent/04-2-running.png",
+      "width": 611,
+      "height": 729
+    },
+    {
+      "id": "pose-04-3-hopping",
+      "name": "hopping",
+      "src": "/mascot/poses/transparent/04-3-hopping.png",
+      "width": 575,
+      "height": 714
+    },
+    {
+      "id": "pose-05-1-sitting",
+      "name": "sitting",
+      "src": "/mascot/poses/transparent/05-1-sitting.png",
+      "width": 582,
+      "height": 724
+    },
+    {
+      "id": "pose-05-2-lying-side",
+      "name": "lying side",
+      "src": "/mascot/poses/transparent/05-2-lying-side.png",
+      "width": 697,
+      "height": 532
+    },
+    {
+      "id": "pose-05-3-curled-rest",
+      "name": "curled rest",
+      "src": "/mascot/poses/transparent/05-3-curled-rest.png",
+      "width": 518,
+      "height": 574
+    },
+    {
+      "id": "pose-06-1-excited-jump",
+      "name": "excited jump",
+      "src": "/mascot/poses/transparent/06-1-excited-jump.png",
+      "width": 606,
+      "height": 773
+    },
+    {
+      "id": "pose-06-2-bashful",
+      "name": "bashful",
+      "src": "/mascot/poses/transparent/06-2-bashful.png",
+      "width": 541,
+      "height": 764
+    },
+    {
+      "id": "pose-06-3-surprised-lean",
+      "name": "surprised lean",
+      "src": "/mascot/poses/transparent/06-3-surprised-lean.png",
+      "width": 583,
+      "height": 752
+    },
+    {
+      "id": "pose-07-1-peek-over",
+      "name": "peek over",
+      "src": "/mascot/poses/transparent/07-1-peek-over.png",
+      "width": 542,
+      "height": 407
+    },
+    {
+      "id": "pose-07-2-peek-side",
+      "name": "peek side",
+      "src": "/mascot/poses/transparent/07-2-peek-side.png",
+      "width": 422,
+      "height": 716
+    },
+    {
+      "id": "pose-07-3-hanging",
+      "name": "hanging",
+      "src": "/mascot/poses/transparent/07-3-hanging.png",
+      "width": 556,
+      "height": 683
+    },
+    {
+      "id": "pose-08-1-ready-crouch",
+      "name": "ready crouch",
+      "src": "/mascot/poses/transparent/08-1-ready-crouch.png",
+      "width": 569,
+      "height": 552
+    },
+    {
+      "id": "pose-08-2-one-foot-balance",
+      "name": "one foot balance",
+      "src": "/mascot/poses/transparent/08-2-one-foot-balance.png",
+      "width": 557,
+      "height": 785
+    },
+    {
+      "id": "pose-08-3-overhead-stretch",
+      "name": "overhead stretch",
+      "src": "/mascot/poses/transparent/08-3-overhead-stretch.png",
+      "width": 587,
+      "height": 822
+    },
+    {
+      "id": "pose-09-1-inspecting-ground",
+      "name": "inspecting ground",
+      "src": "/mascot/poses/transparent/09-1-inspecting-ground.png",
+      "width": 597,
+      "height": 492
+    },
+    {
+      "id": "pose-09-2-reaching-up",
+      "name": "reaching up",
+      "src": "/mascot/poses/transparent/09-2-reaching-up.png",
+      "width": 532,
+      "height": 712
+    },
+    {
+      "id": "pose-09-3-hands-on-hips",
+      "name": "hands on hips",
+      "src": "/mascot/poses/transparent/09-3-hands-on-hips.png",
+      "width": 534,
+      "height": 717
+    },
+    {
+      "id": "pose-10-1-bowing",
+      "name": "bowing",
+      "src": "/mascot/poses/transparent/10-1-bowing.png",
+      "width": 586,
+      "height": 678
+    },
+    {
+      "id": "pose-10-2-tiptoe",
+      "name": "tiptoe",
+      "src": "/mascot/poses/transparent/10-2-tiptoe.png",
+      "width": 582,
+      "height": 746
+    },
+    {
+      "id": "pose-10-3-looking-back",
+      "name": "looking back",
+      "src": "/mascot/poses/transparent/10-3-looking-back.png",
+      "width": 531,
+      "height": 737
+    },
+    {
+      "id": "pose-11-1-cross-legged-attentive",
+      "name": "cross legged attentive",
+      "src": "/mascot/poses/transparent/11-1-cross-legged-attentive.png",
+      "width": 558,
+      "height": 748
+    },
+    {
+      "id": "pose-11-2-side-glance-headshot",
+      "name": "side glance headshot",
+      "src": "/mascot/poses/transparent/11-2-side-glance-headshot.png",
+      "width": 570,
+      "height": 716
+    },
+    {
+      "id": "pose-11-3-headphones-notes",
+      "name": "headphones notes",
+      "src": "/mascot/poses/transparent/11-3-headphones-notes.png",
+      "width": 559,
+      "height": 700
+    },
+    {
+      "id": "pose-12-1-paws-behind-back",
+      "name": "paws behind back",
+      "src": "/mascot/poses/transparent/12-1-paws-behind-back.png",
+      "width": 564,
+      "height": 795
+    },
+    {
+      "id": "pose-12-2-upward-gaze-headshot",
+      "name": "upward gaze headshot",
+      "src": "/mascot/poses/transparent/12-2-upward-gaze-headshot.png",
+      "width": 618,
+      "height": 703
+    },
+    {
+      "id": "pose-12-3-glasses-reading",
+      "name": "glasses reading",
+      "src": "/mascot/poses/transparent/12-3-glasses-reading.png",
+      "width": 642,
+      "height": 724
+    },
+    {
+      "id": "pose-13-2-alert-headshot",
+      "name": "alert headshot",
+      "src": "/mascot/poses/transparent/13-2-alert-headshot.png",
+      "width": 562,
+      "height": 659
+    },
+    {
+      "id": "pose-13-3-clipboard-notes",
+      "name": "clipboard notes",
+      "src": "/mascot/poses/transparent/13-3-clipboard-notes.png",
+      "width": 522,
+      "height": 670
+    },
+    {
+      "id": "pose-14-1-belly-rest",
+      "name": "belly rest",
+      "src": "/mascot/poses/transparent/14-1-belly-rest.png",
+      "width": 588,
+      "height": 460
+    },
+    {
+      "id": "pose-14-2-profile-headshot",
+      "name": "profile headshot",
+      "src": "/mascot/poses/transparent/14-2-profile-headshot.png",
+      "width": 510,
+      "height": 611
+    },
+    {
+      "id": "pose-14-3-cozy-winter",
+      "name": "cozy winter",
+      "src": "/mascot/poses/transparent/14-3-cozy-winter.png",
+      "width": 470,
+      "height": 640
+    },
+    {
+      "id": "pose-15-1-kneeling-upright",
+      "name": "kneeling upright",
+      "src": "/mascot/poses/transparent/15-1-kneeling-upright.png",
+      "width": 560,
+      "height": 738
+    },
+    {
+      "id": "pose-15-2-downward-focus-headshot",
+      "name": "downward focus headshot",
+      "src": "/mascot/poses/transparent/15-2-downward-focus-headshot.png",
+      "width": 611,
+      "height": 679
+    },
+    {
+      "id": "pose-15-3-magnifying-map",
+      "name": "magnifying map",
+      "src": "/mascot/poses/transparent/15-3-magnifying-map.png",
+      "width": 651,
+      "height": 645
+    },
+    {
+      "id": "pose-16-1-paw-over-heart",
+      "name": "paw over heart",
+      "src": "/mascot/poses/transparent/16-1-paw-over-heart.png",
+      "width": 592,
+      "height": 842
+    },
+    {
+      "id": "pose-16-2-lean-in-headshot",
+      "name": "lean in headshot",
+      "src": "/mascot/poses/transparent/16-2-lean-in-headshot.png",
+      "width": 757,
+      "height": 815
+    },
+    {
+      "id": "pose-16-3-support-headset",
+      "name": "support headset",
+      "src": "/mascot/poses/transparent/16-3-support-headset.png",
+      "width": 626,
+      "height": 788
+    },
+    {
+      "id": "pose-17-2-amazed-headshot",
+      "name": "amazed headshot",
+      "src": "/mascot/poses/transparent/17-2-amazed-headshot.png",
+      "width": 632,
+      "height": 706
+    },
+    {
+      "id": "pose-17-3-tablet-notes",
+      "name": "tablet notes",
+      "src": "/mascot/poses/transparent/17-3-tablet-notes.png",
+      "width": 550,
+      "height": 682
+    },
+    {
+      "id": "pose-18-1-tail-wrap",
+      "name": "tail wrap",
+      "src": "/mascot/poses/transparent/18-1-tail-wrap.png",
+      "width": 479,
+      "height": 788
+    },
+    {
+      "id": "pose-18-2-relaxed-headshot",
+      "name": "relaxed headshot",
+      "src": "/mascot/poses/transparent/18-2-relaxed-headshot.png",
+      "width": 579,
+      "height": 800
+    },
+    {
+      "id": "pose-18-3-holding-letter",
+      "name": "holding letter",
+      "src": "/mascot/poses/transparent/18-3-holding-letter.png",
+      "width": 502,
+      "height": 764
+    },
+    {
+      "id": "pose-19-1-side-sit",
+      "name": "side sit",
+      "src": "/mascot/poses/transparent/19-1-side-sit.png",
+      "width": 535,
+      "height": 636
+    },
+    {
+      "id": "pose-19-2-right-profile-headshot",
+      "name": "right profile headshot",
+      "src": "/mascot/poses/transparent/19-2-right-profile-headshot.png",
+      "width": 602,
+      "height": 715
+    },
+    {
+      "id": "pose-19-3-travel-ready",
+      "name": "travel ready",
+      "src": "/mascot/poses/transparent/19-3-travel-ready.png",
+      "width": 578,
+      "height": 742
+    },
+    {
+      "id": "pose-20-1-gentle-dance",
+      "name": "gentle dance",
+      "src": "/mascot/poses/transparent/20-1-gentle-dance.png",
+      "width": 605,
+      "height": 731
+    },
+    {
+      "id": "pose-20-2-center-avatar-headshot",
+      "name": "center avatar headshot",
+      "src": "/mascot/poses/transparent/20-2-center-avatar-headshot.png",
+      "width": 590,
+      "height": 663
+    },
+    {
+      "id": "pose-20-3-music-headphones",
+      "name": "music headphones",
+      "src": "/mascot/poses/transparent/20-3-music-headphones.png",
+      "width": 520,
+      "height": 699
+    }
+  ]
+}

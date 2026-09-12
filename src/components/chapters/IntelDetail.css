@@ -1,0 +1,515 @@
+/* Chapter 04 — Deal intelligence: the V2 WORKFLOW CANVAS band.
+   REWRITTEN 2026-07-27 session 12 (owner pivot). Port of v2's "[05] After
+   the call" panel — copy column | 720×584 canvas | coaching-triggers rail —
+   per design-assets/v2-measure/v2-physicality-measure.md §6. Provenance,
+   the full timeline and every deliberate translation are documented in
+   IntelDetail.tsx's header. GREENS: Attio grammar on the owned won ramp
+   (owner directive) — won-100 fills / won-200 borders / won-900 text /
+   won-700 strokes+ticks. No v2 forest greens anywhere in this file. */
+
+/* ── the band. V2 runs 32px hatch / 236 copy / fluid canvas / 232 rail in a
+   1152px panel (§6); our window is 860px, so the tri-column would starve the
+   canvas to a 0.54 scale (v2 renders ~0.9). MEASURED DEVIATION (flagged):
+   the copy runs as a full-width strip on top, and the canvas + rail split
+   the row below — the canvas lands at ~626px → scale 0.87, v2's own
+   neighbourhood. The hatch gutter is dropped (the window frame already
+   supplies that edge). */
+
+.pc4-band {
+  display: block;
+}
+
+.pc4-lower {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 232px;
+}
+
+/* ── copy strip (v2 PostCall copy, re-laid: heading left, body right) ───── */
+
+.pc4-copy {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  column-gap: 40px;
+  align-items: start;
+  padding: 28px 32px;
+  border-bottom: 1px solid var(--color-hairline-2);
+}
+
+/* v2's band headline family (27px/1.15/600/−0.02em — §1), one step down to
+   22px because the chapter's own 27px h3 sits directly above the window */
+.pc4-copy__h {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  text-wrap: balance;
+  max-width: 20ch;
+}
+
+.pc4-copy__side {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pc4-copy__p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.625;
+  color: var(--color-gray-700);
+}
+
+.pc4-copy__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 550;
+  color: var(--color-ink);
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.pc4-copy__link:hover {
+  color: var(--color-signal-700);
+}
+
+.pc4-copy__link svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* ── canvas region ─────────────────────────────────────────────────────── */
+
+.pc4-mid {
+  position: relative;
+  border-right: 1px solid var(--color-hairline-2);
+  overflow: hidden;
+}
+
+/* authored 720×584, scaled uniformly to the column width (v2 §6) */
+.pc4-canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 720 / 584;
+  display: block;
+}
+
+.pc4-space {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+}
+
+/* dot-grid bed: 10×10, 1px dot at 4.5/4.5, opacity .7 — v2 ink-300 →
+   gray-500 (#afafaf ≈ #b4b6bb, luminance match) */
+.pc4-dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(var(--color-gray-500) 1px, transparent 0);
+  background-size: 10px 10px;
+  background-position: 4.5px 4.5px;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.pc4-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* executed path = the bright Attio stroke-green; stubs = neutral */
+.pc4-edge--won {
+  color: var(--color-won-700);
+}
+
+.pc4-edge--gray {
+  color: var(--color-gray-400);
+}
+
+/* node anchor: centre-translated % placement in the authored space */
+.pc4-at {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.pc4-w246 {
+  width: 246px;
+}
+
+.pc4-w240 {
+  width: 240px;
+}
+
+/* ── node card (v2 anatomy: 12px radius, 14×12 pad, shadow-card) ───────── */
+
+.pc4-node {
+  position: relative;
+  border-radius: 12px;
+  border: 1px solid var(--color-gray-400);
+  background: var(--color-surface-100);
+  padding: 12px 14px;
+  text-align: left;
+  /* v2 shadow-card == our --shadow-frame (same values, re-tinted) */
+  box-shadow: var(--shadow-frame);
+}
+
+.pc4-node.is-active {
+  /* Attio's green border step (won-200), not v2's #8fcda4 */
+  border-color: var(--color-won-200);
+}
+
+.pc4-node.is-ghost {
+  box-shadow: none;
+  opacity: 0.45;
+}
+
+/* corner Trigger tab: tucks behind the card top (v2 verbatim geometry) */
+.pc4-tab {
+  position: absolute;
+  bottom: 100%;
+  left: 12px;
+  margin-bottom: -1px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--color-gray-400);
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+  background: var(--color-surface-200);
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 550;
+  color: var(--color-gray-800);
+}
+
+.pc4-tab svg {
+  color: var(--color-gray-500);
+}
+
+.pc4-node.is-active .pc4-tab {
+  border-color: var(--color-won-200);
+  border-bottom: 0;
+}
+
+.pc4-node__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pc4-node__title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.pc4-node__pill {
+  margin-left: auto;
+  flex: none;
+  border: 1px solid var(--color-hairline-2);
+  border-radius: 6px;
+  background: var(--color-surface-200);
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 15px;
+  color: var(--color-gray-600);
+}
+
+.pc4-node__rule {
+  margin-top: 10px;
+  border-top: 1px solid var(--color-hairline-2);
+}
+
+.pc4-node__sub {
+  margin: 0;
+  padding-top: 8px;
+  font-size: 12px;
+  line-height: 1.375;
+  color: var(--color-gray-600);
+}
+
+/* icon tiles: 24px, radius 6, icon 13px @1.75 (v2 §5) — owned tints only,
+   v2's amber/violet families translated (flagged in the TSX header) */
+.pc4-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+}
+
+.pc4-tile--sm {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+}
+
+.pc4-tile--signal {
+  background: var(--color-signal-100);
+  color: var(--color-signal-700);
+}
+
+.pc4-tile--accent {
+  background: var(--color-accent-100);
+  color: var(--color-accent-700);
+}
+
+.pc4-tile--won {
+  background: var(--color-won-100);
+  color: var(--color-won-900);
+}
+
+.pc4-tile--risk {
+  background: var(--color-risk-100);
+  color: var(--color-risk-900);
+}
+
+.pc4-tile--gray {
+  background: var(--color-gray-200);
+  color: var(--color-gray-700);
+}
+
+/* ── status pill: Attio's exact grammar (won-100 / won-200 / won-900) ───── */
+
+.pc4-pillslot {
+  position: absolute;
+  top: -12px;
+  right: 8px;
+}
+
+.pc4-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--color-won-200);
+  border-radius: 6px;
+  background: var(--color-won-100);
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: 550;
+  line-height: 15px;
+  color: var(--color-won-900);
+  white-space: nowrap;
+}
+
+/* ── ports: 9px, 1.5px ring, white core (v2 §6) ────────────────────────── */
+
+.pc4-port {
+  position: absolute;
+  z-index: 10;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-gray-400);
+  background: var(--color-surface-100);
+  transform: translate(-50%, -50%);
+}
+
+.pc4-port.is-active {
+  border-color: var(--color-won-700);
+}
+
+/* ── branch labels ─────────────────────────────────────────────────────── */
+
+.pc4-branch {
+  position: absolute;
+  z-index: 10;
+  transform: translate(-50%, -50%);
+  border: 1px solid var(--color-won-200);
+  border-radius: 999px;
+  background: var(--color-surface-100);
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 550;
+  color: var(--color-won-900);
+  white-space: nowrap;
+}
+
+/* ── the "+" disc: v2 brand-400 → owned signal; halos at v2's alphas ────── */
+
+.pc4-plus {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--color-signal-500);
+  color: var(--color-surface-100);
+  box-shadow:
+    0 0 0 8px color-mix(in srgb, var(--color-signal-600) 8%, transparent),
+    0 0 0 18px color-mix(in srgb, var(--color-signal-600) 4%, transparent);
+}
+
+/* ── mobile vertical timeline (v2 §6: spine x=38, ports at 15, <lg) ─────── */
+
+.pc4-mobile {
+  display: none;
+}
+
+/* ── coaching-triggers rail (v2 TriggerRail: p-20, gap-16) ─────────────── */
+
+.pc4-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+}
+
+/* house label face (Inter 600 / 1.2px tracking / tabular-nums) — v2's
+   10px mono header translated, mono retired */
+.pc4-rail__head {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-gray-600);
+}
+
+.pc4-rail__foot {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--color-gray-600);
+}
+
+/* FocusStack chips (v2: rounded-xl, px-12 py-10, roving focus ladder) */
+.pc4-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pc4-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--color-hairline-2);
+  border-radius: 12px;
+  background: var(--color-surface-100);
+  padding: 10px 12px;
+  box-shadow: var(--shadow-frame);
+  transform-origin: left center;
+  will-change: transform, opacity;
+}
+
+.pc4-chip.is-focus {
+  border-color: var(--color-gray-400);
+  box-shadow: var(--shadow-float);
+}
+
+.pc4-chip__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 550;
+  color: var(--color-gray-500);
+}
+
+.pc4-chip__meta {
+  margin-left: auto;
+  flex: none;
+  font-size: 11px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-gray-600);
+}
+
+.pc4-chip.is-focus .pc4-chip__label {
+  color: var(--color-ink);
+}
+
+/* ── reduced motion: the global clamp (v2 index.css:395-401 equivalent) ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .pc4-band *,
+  .pc4-band *::before,
+  .pc4-band *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── ≤1024px: the band stacks (v2 goes single-column below lg) ─────────── */
+
+@media (max-width: 1024px) {
+  .pc4-lower {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pc4-copy {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 12px;
+    padding: 24px;
+  }
+
+  .pc4-mid {
+    border-right: 0;
+    border-bottom: 1px solid var(--color-hairline-2);
+  }
+}
+
+/* ── ≤900px: authored canvas swaps for the vertical timeline ───────────── */
+
+@media (max-width: 900px) {
+  .pc4-canvas {
+    display: none;
+  }
+
+  .pc4-mobile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 32px 20px;
+  }
+
+  .pc4-spine {
+    position: absolute;
+    top: 40px;
+    bottom: 40px;
+    left: 38px;
+    width: 1px;
+    background: var(--color-gray-400);
+  }
+
+  .pc4-step {
+    position: relative;
+    padding-left: 36px;
+  }
+
+  .pc4-step .pc4-port {
+    transform: translate(0, -50%);
+  }
+
+  .pc4-pillslot--step {
+    top: -8px;
+  }
+
+  /* the band lives inside the ≤900 stage reflow (padding 20, cap 660):
+     flatten the copy/rail padding a step so the window stays tight */
+  .pc4-copy {
+    padding: 20px;
+  }
+}

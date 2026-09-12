@@ -1,0 +1,587 @@
+{
+  "source": "design-assets/generated/mascot-pose-sets",
+  "count": 58,
+  "resampled": false,
+  "poses": [
+    {
+      "sheet": 1,
+      "pose": 1,
+      "name": "wave",
+      "width": 562,
+      "height": 818,
+      "white_path": "public/mascot/poses/white/01-1-wave.png",
+      "transparent_path": "public/mascot/poses/transparent/01-1-wave.png",
+      "alpha_coverage": 0.5352
+    },
+    {
+      "sheet": 1,
+      "pose": 2,
+      "name": "welcome",
+      "width": 618,
+      "height": 818,
+      "white_path": "public/mascot/poses/white/01-2-welcome.png",
+      "transparent_path": "public/mascot/poses/transparent/01-2-welcome.png",
+      "alpha_coverage": 0.5132
+    },
+    {
+      "sheet": 1,
+      "pose": 3,
+      "name": "listening",
+      "width": 545,
+      "height": 760,
+      "white_path": "public/mascot/poses/white/01-3-listening.png",
+      "transparent_path": "public/mascot/poses/transparent/01-3-listening.png",
+      "alpha_coverage": 0.5472
+    },
+    {
+      "sheet": 2,
+      "pose": 1,
+      "name": "head-tilt",
+      "width": 558,
+      "height": 820,
+      "white_path": "public/mascot/poses/white/02-1-head-tilt.png",
+      "transparent_path": "public/mascot/poses/transparent/02-1-head-tilt.png",
+      "alpha_coverage": 0.5441
+    },
+    {
+      "sheet": 2,
+      "pose": 2,
+      "name": "thinking",
+      "width": 559,
+      "height": 817,
+      "white_path": "public/mascot/poses/white/02-2-thinking.png",
+      "transparent_path": "public/mascot/poses/transparent/02-2-thinking.png",
+      "alpha_coverage": 0.5172
+    },
+    {
+      "sheet": 2,
+      "pose": 3,
+      "name": "looking-up",
+      "width": 556,
+      "height": 804,
+      "white_path": "public/mascot/poses/white/02-3-looking-up.png",
+      "transparent_path": "public/mascot/poses/transparent/02-3-looking-up.png",
+      "alpha_coverage": 0.5091
+    },
+    {
+      "sheet": 3,
+      "pose": 1,
+      "name": "present-left",
+      "width": 568,
+      "height": 769,
+      "white_path": "public/mascot/poses/white/03-1-present-left.png",
+      "transparent_path": "public/mascot/poses/transparent/03-1-present-left.png",
+      "alpha_coverage": 0.4985
+    },
+    {
+      "sheet": 3,
+      "pose": 2,
+      "name": "present-right",
+      "width": 571,
+      "height": 771,
+      "white_path": "public/mascot/poses/white/03-2-present-right.png",
+      "transparent_path": "public/mascot/poses/transparent/03-2-present-right.png",
+      "alpha_coverage": 0.4845
+    },
+    {
+      "sheet": 3,
+      "pose": 3,
+      "name": "gesture-down",
+      "width": 521,
+      "height": 758,
+      "white_path": "public/mascot/poses/white/03-3-gesture-down.png",
+      "transparent_path": "public/mascot/poses/transparent/03-3-gesture-down.png",
+      "alpha_coverage": 0.5011
+    },
+    {
+      "sheet": 4,
+      "pose": 1,
+      "name": "walking",
+      "width": 563,
+      "height": 743,
+      "white_path": "public/mascot/poses/white/04-1-walking.png",
+      "transparent_path": "public/mascot/poses/transparent/04-1-walking.png",
+      "alpha_coverage": 0.4697
+    },
+    {
+      "sheet": 4,
+      "pose": 2,
+      "name": "running",
+      "width": 611,
+      "height": 729,
+      "white_path": "public/mascot/poses/white/04-2-running.png",
+      "transparent_path": "public/mascot/poses/transparent/04-2-running.png",
+      "alpha_coverage": 0.4359
+    },
+    {
+      "sheet": 4,
+      "pose": 3,
+      "name": "hopping",
+      "width": 575,
+      "height": 714,
+      "white_path": "public/mascot/poses/white/04-3-hopping.png",
+      "transparent_path": "public/mascot/poses/transparent/04-3-hopping.png",
+      "alpha_coverage": 0.4461
+    },
+    {
+      "sheet": 5,
+      "pose": 1,
+      "name": "sitting",
+      "width": 582,
+      "height": 724,
+      "white_path": "public/mascot/poses/white/05-1-sitting.png",
+      "transparent_path": "public/mascot/poses/transparent/05-1-sitting.png",
+      "alpha_coverage": 0.5171
+    },
+    {
+      "sheet": 5,
+      "pose": 2,
+      "name": "lying-side",
+      "width": 697,
+      "height": 532,
+      "white_path": "public/mascot/poses/white/05-2-lying-side.png",
+      "transparent_path": "public/mascot/poses/transparent/05-2-lying-side.png",
+      "alpha_coverage": 0.4671
+    },
+    {
+      "sheet": 5,
+      "pose": 3,
+      "name": "curled-rest",
+      "width": 518,
+      "height": 574,
+      "white_path": "public/mascot/poses/white/05-3-curled-rest.png",
+      "transparent_path": "public/mascot/poses/transparent/05-3-curled-rest.png",
+      "alpha_coverage": 0.5545
+    },
+    {
+      "sheet": 6,
+      "pose": 1,
+      "name": "excited-jump",
+      "width": 606,
+      "height": 773,
+      "white_path": "public/mascot/poses/white/06-1-excited-jump.png",
+      "transparent_path": "public/mascot/poses/transparent/06-1-excited-jump.png",
+      "alpha_coverage": 0.4799
+    },
+    {
+      "sheet": 6,
+      "pose": 2,
+      "name": "bashful",
+      "width": 541,
+      "height": 764,
+      "white_path": "public/mascot/poses/white/06-2-bashful.png",
+      "transparent_path": "public/mascot/poses/transparent/06-2-bashful.png",
+      "alpha_coverage": 0.5079
+    },
+    {
+      "sheet": 6,
+      "pose": 3,
+      "name": "surprised-lean",
+      "width": 583,
+      "height": 752,
+      "white_path": "public/mascot/poses/white/06-3-surprised-lean.png",
+      "transparent_path": "public/mascot/poses/transparent/06-3-surprised-lean.png",
+      "alpha_coverage": 0.495
+    },
+    {
+      "sheet": 7,
+      "pose": 1,
+      "name": "peek-over",
+      "width": 542,
+      "height": 407,
+      "white_path": "public/mascot/poses/white/07-1-peek-over.png",
+      "transparent_path": "public/mascot/poses/transparent/07-1-peek-over.png",
+      "alpha_coverage": 0.4456
+    },
+    {
+      "sheet": 7,
+      "pose": 2,
+      "name": "peek-side",
+      "width": 422,
+      "height": 716,
+      "white_path": "public/mascot/poses/white/07-2-peek-side.png",
+      "transparent_path": "public/mascot/poses/transparent/07-2-peek-side.png",
+      "alpha_coverage": 0.4541
+    },
+    {
+      "sheet": 7,
+      "pose": 3,
+      "name": "hanging",
+      "width": 556,
+      "height": 683,
+      "white_path": "public/mascot/poses/white/07-3-hanging.png",
+      "transparent_path": "public/mascot/poses/transparent/07-3-hanging.png",
+      "alpha_coverage": 0.4515
+    },
+    {
+      "sheet": 8,
+      "pose": 1,
+      "name": "ready-crouch",
+      "width": 569,
+      "height": 552,
+      "white_path": "public/mascot/poses/white/08-1-ready-crouch.png",
+      "transparent_path": "public/mascot/poses/transparent/08-1-ready-crouch.png",
+      "alpha_coverage": 0.5141
+    },
+    {
+      "sheet": 8,
+      "pose": 2,
+      "name": "one-foot-balance",
+      "width": 557,
+      "height": 785,
+      "white_path": "public/mascot/poses/white/08-2-one-foot-balance.png",
+      "transparent_path": "public/mascot/poses/transparent/08-2-one-foot-balance.png",
+      "alpha_coverage": 0.5015
+    },
+    {
+      "sheet": 8,
+      "pose": 3,
+      "name": "overhead-stretch",
+      "width": 587,
+      "height": 822,
+      "white_path": "public/mascot/poses/white/08-3-overhead-stretch.png",
+      "transparent_path": "public/mascot/poses/transparent/08-3-overhead-stretch.png",
+      "alpha_coverage": 0.4775
+    },
+    {
+      "sheet": 9,
+      "pose": 1,
+      "name": "inspecting-ground",
+      "width": 597,
+      "height": 492,
+      "white_path": "public/mascot/poses/white/09-1-inspecting-ground.png",
+      "transparent_path": "public/mascot/poses/transparent/09-1-inspecting-ground.png",
+      "alpha_coverage": 0.4969
+    },
+    {
+      "sheet": 9,
+      "pose": 2,
+      "name": "reaching-up",
+      "width": 532,
+      "height": 712,
+      "white_path": "public/mascot/poses/white/09-2-reaching-up.png",
+      "transparent_path": "public/mascot/poses/transparent/09-2-reaching-up.png",
+      "alpha_coverage": 0.5439
+    },
+    {
+      "sheet": 9,
+      "pose": 3,
+      "name": "hands-on-hips",
+      "width": 534,
+      "height": 717,
+      "white_path": "public/mascot/poses/white/09-3-hands-on-hips.png",
+      "transparent_path": "public/mascot/poses/transparent/09-3-hands-on-hips.png",
+      "alpha_coverage": 0.5168
+    },
+    {
+      "sheet": 10,
+      "pose": 1,
+      "name": "bowing",
+      "width": 586,
+      "height": 678,
+      "white_path": "public/mascot/poses/white/10-1-bowing.png",
+      "transparent_path": "public/mascot/poses/transparent/10-1-bowing.png",
+      "alpha_coverage": 0.475
+    },
+    {
+      "sheet": 10,
+      "pose": 2,
+      "name": "tiptoe",
+      "width": 582,
+      "height": 746,
+      "white_path": "public/mascot/poses/white/10-2-tiptoe.png",
+      "transparent_path": "public/mascot/poses/transparent/10-2-tiptoe.png",
+      "alpha_coverage": 0.485
+    },
+    {
+      "sheet": 10,
+      "pose": 3,
+      "name": "looking-back",
+      "width": 531,
+      "height": 737,
+      "white_path": "public/mascot/poses/white/10-3-looking-back.png",
+      "transparent_path": "public/mascot/poses/transparent/10-3-looking-back.png",
+      "alpha_coverage": 0.4908
+    },
+    {
+      "sheet": 11,
+      "pose": 1,
+      "name": "cross-legged-attentive",
+      "width": 558,
+      "height": 748,
+      "white_path": "public/mascot/poses/white/11-1-cross-legged-attentive.png",
+      "transparent_path": "public/mascot/poses/transparent/11-1-cross-legged-attentive.png",
+      "alpha_coverage": 0.5483
+    },
+    {
+      "sheet": 11,
+      "pose": 2,
+      "name": "side-glance-headshot",
+      "width": 570,
+      "height": 716,
+      "white_path": "public/mascot/poses/white/11-2-side-glance-headshot.png",
+      "transparent_path": "public/mascot/poses/transparent/11-2-side-glance-headshot.png",
+      "alpha_coverage": 0.5632
+    },
+    {
+      "sheet": 11,
+      "pose": 3,
+      "name": "headphones-notes",
+      "width": 559,
+      "height": 700,
+      "white_path": "public/mascot/poses/white/11-3-headphones-notes.png",
+      "transparent_path": "public/mascot/poses/transparent/11-3-headphones-notes.png",
+      "alpha_coverage": 0.566
+    },
+    {
+      "sheet": 12,
+      "pose": 1,
+      "name": "paws-behind-back",
+      "width": 564,
+      "height": 795,
+      "white_path": "public/mascot/poses/white/12-1-paws-behind-back.png",
+      "transparent_path": "public/mascot/poses/transparent/12-1-paws-behind-back.png",
+      "alpha_coverage": 0.5141
+    },
+    {
+      "sheet": 12,
+      "pose": 2,
+      "name": "upward-gaze-headshot",
+      "width": 618,
+      "height": 703,
+      "white_path": "public/mascot/poses/white/12-2-upward-gaze-headshot.png",
+      "transparent_path": "public/mascot/poses/transparent/12-2-upward-gaze-headshot.png",
+      "alpha_coverage": 0.5873
+    },
+    {
+      "sheet": 12,
+      "pose": 3,
+      "name": "glasses-reading",
+      "width": 642,
+      "height": 724,
+      "white_path": "public/mascot/poses/white/12-3-glasses-reading.png",
+      "transparent_path": "public/mascot/poses/transparent/12-3-glasses-reading.png",
+      "alpha_coverage": 0.5462
+    },
+    {
+      "sheet": 13,
+      "pose": 2,
+      "name": "alert-headshot",
+      "width": 562,
+      "height": 659,
+      "white_path": "public/mascot/poses/white/13-2-alert-headshot.png",
+      "transparent_path": "public/mascot/poses/transparent/13-2-alert-headshot.png",
+      "alpha_coverage": 0.5762
+    },
+    {
+      "sheet": 13,
+      "pose": 3,
+      "name": "clipboard-notes",
+      "width": 522,
+      "height": 670,
+      "white_path": "public/mascot/poses/white/13-3-clipboard-notes.png",
+      "transparent_path": "public/mascot/poses/transparent/13-3-clipboard-notes.png",
+      "alpha_coverage": 0.5456
+    },
+    {
+      "sheet": 14,
+      "pose": 1,
+      "name": "belly-rest",
+      "width": 588,
+      "height": 460,
+      "white_path": "public/mascot/poses/white/14-1-belly-rest.png",
+      "transparent_path": "public/mascot/poses/transparent/14-1-belly-rest.png",
+      "alpha_coverage": 0.4916
+    },
+    {
+      "sheet": 14,
+      "pose": 2,
+      "name": "profile-headshot",
+      "width": 510,
+      "height": 611,
+      "white_path": "public/mascot/poses/white/14-2-profile-headshot.png",
+      "transparent_path": "public/mascot/poses/transparent/14-2-profile-headshot.png",
+      "alpha_coverage": 0.5531
+    },
+    {
+      "sheet": 14,
+      "pose": 3,
+      "name": "cozy-winter",
+      "width": 470,
+      "height": 640,
+      "white_path": "public/mascot/poses/white/14-3-cozy-winter.png",
+      "transparent_path": "public/mascot/poses/transparent/14-3-cozy-winter.png",
+      "alpha_coverage": 0.5351
+    },
+    {
+      "sheet": 15,
+      "pose": 1,
+      "name": "kneeling-upright",
+      "width": 560,
+      "height": 738,
+      "white_path": "public/mascot/poses/white/15-1-kneeling-upright.png",
+      "transparent_path": "public/mascot/poses/transparent/15-1-kneeling-upright.png",
+      "alpha_coverage": 0.5322
+    },
+    {
+      "sheet": 15,
+      "pose": 2,
+      "name": "downward-focus-headshot",
+      "width": 611,
+      "height": 679,
+      "white_path": "public/mascot/poses/white/15-2-downward-focus-headshot.png",
+      "transparent_path": "public/mascot/poses/transparent/15-2-downward-focus-headshot.png",
+      "alpha_coverage": 0.5652
+    },
+    {
+      "sheet": 15,
+      "pose": 3,
+      "name": "magnifying-map",
+      "width": 651,
+      "height": 645,
+      "white_path": "public/mascot/poses/white/15-3-magnifying-map.png",
+      "transparent_path": "public/mascot/poses/transparent/15-3-magnifying-map.png",
+      "alpha_coverage": 0.5087
+    },
+    {
+      "sheet": 16,
+      "pose": 1,
+      "name": "paw-over-heart",
+      "width": 592,
+      "height": 842,
+      "white_path": "public/mascot/poses/white/16-1-paw-over-heart.png",
+      "transparent_path": "public/mascot/poses/transparent/16-1-paw-over-heart.png",
+      "alpha_coverage": 0.5356
+    },
+    {
+      "sheet": 16,
+      "pose": 2,
+      "name": "lean-in-headshot",
+      "width": 757,
+      "height": 815,
+      "white_path": "public/mascot/poses/white/16-2-lean-in-headshot.png",
+      "transparent_path": "public/mascot/poses/transparent/16-2-lean-in-headshot.png",
+      "alpha_coverage": 0.6172
+    },
+    {
+      "sheet": 16,
+      "pose": 3,
+      "name": "support-headset",
+      "width": 626,
+      "height": 788,
+      "white_path": "public/mascot/poses/white/16-3-support-headset.png",
+      "transparent_path": "public/mascot/poses/transparent/16-3-support-headset.png",
+      "alpha_coverage": 0.5533
+    },
+    {
+      "sheet": 17,
+      "pose": 2,
+      "name": "amazed-headshot",
+      "width": 632,
+      "height": 706,
+      "white_path": "public/mascot/poses/white/17-2-amazed-headshot.png",
+      "transparent_path": "public/mascot/poses/transparent/17-2-amazed-headshot.png",
+      "alpha_coverage": 0.5915
+    },
+    {
+      "sheet": 17,
+      "pose": 3,
+      "name": "tablet-notes",
+      "width": 550,
+      "height": 682,
+      "white_path": "public/mascot/poses/white/17-3-tablet-notes.png",
+      "transparent_path": "public/mascot/poses/transparent/17-3-tablet-notes.png",
+      "alpha_coverage": 0.5059
+    },
+    {
+      "sheet": 18,
+      "pose": 1,
+      "name": "tail-wrap",
+      "width": 479,
+      "height": 788,
+      "white_path": "public/mascot/poses/white/18-1-tail-wrap.png",
+      "transparent_path": "public/mascot/poses/transparent/18-1-tail-wrap.png",
+      "alpha_coverage": 0.5828
+    },
+    {
+      "sheet": 18,
+      "pose": 2,
+      "name": "relaxed-headshot",
+      "width": 579,
+      "height": 800,
+      "white_path": "public/mascot/poses/white/18-2-relaxed-headshot.png",
+      "transparent_path": "public/mascot/poses/transparent/18-2-relaxed-headshot.png",
+      "alpha_coverage": 0.5875
+    },
+    {
+      "sheet": 18,
+      "pose": 3,
+      "name": "holding-letter",
+      "width": 502,
+      "height": 764,
+      "white_path": "public/mascot/poses/white/18-3-holding-letter.png",
+      "transparent_path": "public/mascot/poses/transparent/18-3-holding-letter.png",
+      "alpha_coverage": 0.5554
+    },
+    {
+      "sheet": 19,
+      "pose": 1,
+      "name": "side-sit",
+      "width": 535,
+      "height": 636,
+      "white_path": "public/mascot/poses/white/19-1-side-sit.png",
+      "transparent_path": "public/mascot/poses/transparent/19-1-side-sit.png",
+      "alpha_coverage": 0.5082
+    },
+    {
+      "sheet": 19,
+      "pose": 2,
+      "name": "right-profile-headshot",
+      "width": 602,
+      "height": 715,
+      "white_path": "public/mascot/poses/white/19-2-right-profile-headshot.png",
+      "transparent_path": "public/mascot/poses/transparent/19-2-right-profile-headshot.png",
+      "alpha_coverage": 0.5871
+    },
+    {
+      "sheet": 19,
+      "pose": 3,
+      "name": "travel-ready",
+      "width": 578,
+      "height": 742,
+      "white_path": "public/mascot/poses/white/19-3-travel-ready.png",
+      "transparent_path": "public/mascot/poses/transparent/19-3-travel-ready.png",
+      "alpha_coverage": 0.5105
+    },
+    {
+      "sheet": 20,
+      "pose": 1,
+      "name": "gentle-dance",
+      "width": 605,
+      "height": 731,
+      "white_path": "public/mascot/poses/white/20-1-gentle-dance.png",
+      "transparent_path": "public/mascot/poses/transparent/20-1-gentle-dance.png",
+      "alpha_coverage": 0.4639
+    },
+    {
+      "sheet": 20,
+      "pose": 2,
+      "name": "center-avatar-headshot",
+      "width": 590,
+      "height": 663,
+      "white_path": "public/mascot/poses/white/20-2-center-avatar-headshot.png",
+      "transparent_path": "public/mascot/poses/transparent/20-2-center-avatar-headshot.png",
+      "alpha_coverage": 0.5729
+    },
+    {
+      "sheet": 20,
+      "pose": 3,
+      "name": "music-headphones",
+      "width": 520,
+      "height": 699,
+      "white_path": "public/mascot/poses/white/20-3-music-headphones.png",
+      "transparent_path": "public/mascot/poses/transparent/20-3-music-headphones.png",
+      "alpha_coverage": 0.5501
+    }
+  ]
+}

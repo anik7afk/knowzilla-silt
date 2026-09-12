@@ -1,0 +1,721 @@
+/* ObjectionLibrary — Natural's tabbed card (§s04 apiExplorer) on a textured
+   ground, carrying the four intel lists of Knowzilla's post-call Session Review
+   (design-assets/refs/session7/knowzilla-app/PRODUCT-NOTES.md §3.6). Natural
+   skin (tonal steps, 1px hairlines), Attio type discipline, Knowzilla accent
+   used strictly as a mark.
+
+   MEASURED (N, inspo/natural/DESIGN.md §apiExplorer):
+     tab row height 38px · tab padding 9px 10px · tabs→card gap 20px
+     card radius 8px (radii table) · hairline 1px #ECECEB (hairline-2)
+   FITTED (~), marked at each site: grain frequency/tile/opacity, wash opacity,
+     header-strip height (donor 60px, spec asks ~44px), body padding, tab gap,
+     section rhythm, sheet padding, row rhythms.
+
+   SESSION 9 (contract R1/R2): the accent left rule that drew the list block is
+   GONE — structure is carried by the lifted sheet's own edge, and the category
+   colour moved onto ≤14px glyph marks. The card interior is now a tinted bed
+   with the extracted intel lifting off it. See §depth below.
+
+   Zero raw colour literals: every value resolves through a token. The one
+   unavoidable exception is documented at .ol__grain. */
+
+.ol {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: var(--color-surface-300);
+  color: var(--color-ink);
+  /* standard height class per design.md §Chapter map + height classes */
+  padding: 152px 0 96px;
+}
+
+.ol__container {
+  position: relative;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 40px;
+}
+
+/* ── textured ground ────────────────────────────────────────────────────────
+   Donor s04 sits its card on a hazy lavender-grey photographic plate. We have
+   no photograph, so the ground is built: surface-300 + a very faint lavender
+   wash off the pale end of the accent ramp + a static grain tile. Net colour
+   lands ~4 units of blue away from surface-300 — a cool paper, not an accent
+   fill. Both layers are static forever and never hit-tested; a lift
+   (--shadow-card) is only licensed over a tinted ground like this. */
+
+.ol__wash,
+.ol__grain {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.ol__wash {
+  background-color: var(--color-accent-100);
+  opacity: 0.6; /* ~ fitted */
+}
+
+/* The grain tile is an inline feTurbulence, desaturated to a neutral so the hue
+   comes entirely from the wash above. A data URI cannot read a CSS custom
+   property, but it needs no colour either: feTurbulence replaces the source
+   graphic outright, so the <rect> only supplies the filter region — hence no
+   colour literal here despite the inline SVG. baseFrequency / tile size /
+   opacity are all fitted by eye (~); stitchTiles keeps the repeat seamless. */
+.ol__grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='olGrain' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23olGrain)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px 180px; /* ~ fitted */
+  /* ~ fitted, but measured rather than eyeballed: sampled over the tile, this
+     opacity puts the ground's luminance sd at 1.5/255 (0.6%) and drops its mean
+     from 244.0 to 239.7 — i.e. tooth you can see but not noise. At 0.09 the sd
+     was 0.9, below the just-noticeable threshold on a flat light ground; at 0.32
+     it hit 3.2 and started reading as dirt. `overlay`/`soft-light` blending was
+     tried first (it would keep the mean exactly on the token) and rejected: on a
+     ground this light both compress to sd ≤0.85 even at opacity 1. */
+  opacity: 0.16;
+}
+
+/* ── heading ────────────────────────────────────────────────────────────────
+   2026-07-25: the serif ITALIC flourish is gone. The user read italic display
+   type as generic ("ai slop") and had it removed from the hero; the same
+   judgment applies here, so line 2 is now plain sans and the whole lockup is
+   one Inter headline over two lines. Newsreader remains the page serif
+   elsewhere — it is italic that is barred, not the serif face. Restoring the
+   flourish is two declarations in .ol-heading__line2. */
+
+.ol__head {
+  max-width: 640px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.ol-heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(32px, 3.4vw, 40px);
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  color: var(--color-ink);
+  text-wrap: balance;
+}
+
+/* Line 2 is a plain block in the parent's sans face — it only needs to break
+   the line. Add font-family: var(--font-serif) + font-style: italic here to put
+   the flourish back. */
+.ol-heading__line2 {
+  display: block;
+}
+
+.ol-sub {
+  max-width: 520px;
+  margin: 20px auto 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 450;
+  color: var(--color-gray-700);
+}
+
+/* ── tab row (N: 38px tall, 9px/10px padding, active tab radius ~6px) ──────
+      2026-07-25: reverted from the house 20px pill to the donor's measured
+      rounded rect. The floating shadowed pill read as generic (user call), and
+      the donor was never a pill — --radius-input (8px) is the nearest token to
+      N's ~6px, so this is now MORE donor-faithful, not a compromise.
+
+      SESSION 9: the selected state is no longer painted ON the active tab. It
+      is one persistent element (.ol-pill) that TRAVELS — a per-tab background
+      toggle is what made the switch read as a jump-cut. */
+
+.ol__tabs {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 6px; /* ~ fitted */
+  margin-top: 48px; /* ~ fitted */
+}
+
+/* the one travelling indicator. Position/size are written from JS off the
+   active tab's measured box; nothing here hard-codes a tab width, so it is
+   correct through wrap, the 2×2 narrow grid and any font swap. Out of flow +
+   contained, so its width/height change cannot reach page layout. */
+.ol-pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 0;
+  height: 38px;
+  border-radius: var(--radius-input);
+  background-color: var(--color-surface-100);
+  box-shadow: var(--shadow-frame);
+  opacity: 0;
+  overflow: hidden;
+  contain: layout paint;
+  pointer-events: none;
+}
+
+/* Armed one frame after the first measured paint, so the pill never travels in
+   from 0,0 on mount. One ease, one duration, no bounce — 420ms is the house
+   entrance duration (animation-system/motion.md §3.2 --mo-dur-enter). */
+.ol--armed .ol-pill {
+  transition:
+    transform 420ms var(--ease-entrance),
+    width 420ms var(--ease-entrance),
+    height 420ms var(--ease-entrance);
+}
+
+/* The dwell clock made visible (contract R1: neutral, never lavender). Its
+   WAAPI animation IS the auto-advance timer, so the hint and the behaviour
+   cannot drift apart. Cancelled — i.e. invisible — the moment a human takes
+   over, which is how you can tell the section has stopped driving itself. */
+.ol-pill__progress {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 2px;
+  background-color: var(--color-gray-400);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.ol-tab {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 38px;
+  padding: 9px 14px;
+  border: 0;
+  border-radius: var(--radius-input);
+  background-color: transparent;
+  box-shadow: none;
+  /* Session 9: was gray-500, which measured 2.3:1 on this ground — under AA for
+     a 14px control label. gray-700 is 4.9:1. The selection no longer needs the
+     unselected tabs to be faint to be legible: the travelling pill carries it. */
+  color: var(--color-gray-700);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 550;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  /* asymmetric hover grammar: .kz-hover supplies 300ms out / 50ms in */
+  transition-property: color;
+}
+
+.ol-tab:hover {
+  color: var(--color-ink);
+}
+
+.ol-tab.is-active {
+  color: var(--color-ink);
+}
+
+/* Category tint arrives with the selection: the glyph of the tab you are on
+   takes its category colour, so the travelling pill also announces WHICH list
+   you have landed in. Inactive glyphs stay gray — four tinted glyphs at once
+   would turn the tab row into a colour row. Marks only, 15px. */
+.ol-tab.is-active svg {
+  color: var(--ol-tone);
+  transition: color 420ms var(--ease-entrance);
+}
+
+.ol-tab.is-active:hover {
+  color: var(--color-ink);
+}
+
+/* The focus ring lands on the same element as the tab's own colour swap —
+   restate the shared ring one class higher so keyboard focus always wins.
+   Accent survives here because a focus ring is an INTERACTIVE state, which
+   contract R1 explicitly sanctions; it is the only lavender left in the file. */
+.ol-tab.kz-focus-ring:focus-visible {
+  box-shadow:
+    0 0 0 2px var(--color-surface-100),
+    0 0 0 4px var(--color-accent-300);
+}
+
+/* per-category tone, read by the tab glyph and by the panel below */
+.ol-tab--complaint,
+.ol-panel--complaint {
+  --ol-tone: var(--color-risk-900);
+}
+
+.ol-tab--agenda,
+.ol-panel--agenda {
+  --ol-tone: var(--color-accent-600);
+}
+
+.ol-tab--gate,
+.ol-panel--gate {
+  --ol-tone: var(--color-gray-900);
+}
+
+.ol-tab--criterion,
+.ol-panel--criterion {
+  --ol-tone: var(--color-won-900);
+}
+
+/* ── the card (N: 20px below the tabs, 8px radius, 1px hairline) ─────────── */
+
+.ol__card {
+  max-width: 900px;
+  margin: 20px auto 0;
+  background-color: var(--color-surface-100);
+  border: 1px solid var(--color-hairline-2);
+  border-radius: var(--radius-tile);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.ol-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 44px; /* ~ donor 60px; tightened per spec */
+  padding-inline: 16px;
+  background-color: var(--color-surface-300);
+  border-bottom: 1px solid var(--color-hairline-2);
+}
+
+/* Replaced the donor's three terminal dots (2026-07-25 — see the note in the
+   TSX). A card that holds a saved record is labelled, not chromed. House micro-
+   label styling, reused verbatim — no new eyebrow idiom. */
+.ol-card__label {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  /* sans label needs the weight mono carried in its advance (2026-07-25) */
+  font-weight: 550;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-gray-600);
+}
+
+.ol-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  margin-right: -6px;
+  border: 0;
+  border-radius: var(--radius-micro);
+  background-color: transparent;
+  color: var(--color-gray-600);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition-property: color;
+}
+
+.ol-copy:hover {
+  color: var(--color-ink);
+}
+
+/* ── depth (contract R2) ────────────────────────────────────────────────────
+   The card interior is a TINTED BED carrying the session's own flat metadata —
+   the room it belongs to, the "Review before saving →" status, how long the
+   call ran. None of that is the product's work; it is stationery. What the
+   product actually produced — the extracted intel — LIFTS off that bed as a
+   surface-100 sheet. Ground → bed → sheet is washed-f6f6f6 → f6f6f6 → ffffff,
+   so the depth is colour first; the shadows only confirm what the tone already
+   says. (A #fafafa bed was tried and rejected — see the note on
+   .ol-card__body.)
+
+   Two lifts, deliberately unequal: the CARD carries --shadow-card (the broad,
+   seated float the token reserves for this component), the SHEET inside it
+   carries --shadow-frame (1px + 4px/12px — a close, small lift). If both took
+   --shadow-card its 48px spread would fight the card's own and neither would
+   read as raised.
+
+   Literal glassmorphism was BUILT AND REJECTED here (screenshots in
+   design-assets/ours/session9/objection-library/glass-vs-tonal-*.png): a
+   translucent sheet + backdrop-filter over this bed has nothing to blur — the
+   bed is a flat tone — so it degrades to a milky panel with a bright edge,
+   which is exactly the 2021 dribbble tell on a skin whose whole thesis is warm
+   ink and hairlines. The tonal lift says the same thing ("this layer is above
+   that one") in the system's own vocabulary. */
+
+.ol-card__body {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  /* surface-300, not surface-200: measured side by side (glass-vs-tonal-*.png)
+     a #fafafa bed left the white sheet all but invisible — one tonal step is
+     not a lift. The bed is the card's own tone now; the sheet is the only white
+     inside it. */
+  background-color: var(--color-surface-300);
+}
+
+/* card identity: the deal room + the product's own "Review before saving →"
+   status chip. One session's review, four lists — so both are the same on every
+   tab, and only the sheet below them changes. */
+.ol-room {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding-inline: 2px;
+}
+
+.ol-room__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 20px;
+  line-height: 1.3;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--color-ink);
+}
+
+/* on a surface-200 bed the chip's old surface-200 fill vanished — it now takes
+   the sheet's white, a hairline and no shadow: a label, not a third layer */
+.ol-room__chip {
+  padding: 3px 8px;
+  border: 1px solid var(--color-hairline-2);
+  border-radius: var(--radius-micro);
+  background-color: var(--color-surface-100);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  line-height: 1.4;
+  font-weight: 450;
+  letter-spacing: 0.01em;
+  color: var(--color-gray-700);
+  white-space: nowrap;
+}
+
+.ol-intel {
+  margin-top: 18px; /* ~ fitted */
+  padding: 20px 22px; /* ~ fitted */
+  background-color: var(--color-surface-100);
+  border: 1px solid var(--color-hairline-2);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-frame);
+}
+
+/* The sheet measures the incoming panel and eases to it. This is the one
+   sanctioned non-transform animation in the file: a single, measured element,
+   whose children are absolutely positioned (so they do not re-lay-out) and
+   whose parent's height is reserved (so nothing above or below moves). */
+.ol-intel__stack {
+  position: relative;
+  overflow: hidden;
+}
+
+/* The sheet's complement: whatever the tallest panel needs that this one does
+   not. Same curve, same duration, opposite direction — so sheet + slack is a
+   constant in every frame and the card's box is provably still, mid-transition
+   included. */
+.ol-slack {
+  flex: none;
+}
+
+.ol--armed .ol-intel__stack,
+.ol--armed .ol-slack {
+  transition: height 420ms var(--ease-entrance);
+}
+
+/* ── the panels ───────────────────────────────────────────────────────────
+   All four are always in the DOM, absolutely stacked, so every panel's natural
+   height is measurable at any moment and the swap can overlap. The rest offset
+   --ol-off is signed by the panel's position relative to the active one, so
+   outgoing always leaves the way you came from and incoming always arrives
+   from the way you are going — in both directions, with no JS bookkeeping.
+
+   Outgoing runs at 240ms, incoming at 420ms: they overlap through the whole of
+   the shorter one (a fade-out-then-fade-in reads as a stall) and the arriving
+   panel is the one that owns the movement. */
+
+.ol-panel {
+  position: absolute;
+  inset: 0 0 auto 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(var(--ol-off, 8px));
+  filter: blur(2px);
+  transition:
+    opacity 240ms var(--ease-entrance),
+    transform 240ms var(--ease-entrance),
+    filter 240ms var(--ease-entrance),
+    visibility 0s linear 240ms;
+}
+
+.ol-panel.is-active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+  filter: blur(0);
+  transition:
+    opacity 420ms var(--ease-entrance),
+    transform 420ms var(--ease-entrance),
+    filter 420ms var(--ease-entrance),
+    visibility 0s linear 0s;
+}
+
+/* The active panel is focusable (APG: a tabpanel with nothing focusable inside
+   takes tabIndex 0), so it keeps a real focus indicator — the UA outline, offset
+   into the sheet's padding. Suppressing it would be a removed focus ring. */
+.ol-panel:focus-visible {
+  outline-offset: 6px;
+}
+
+/* the panel's own header: the product's per-panel glyph, in the category's
+   colour (PRODUCT-NOTES §3.6 — "each with its own icon and colour"), beside the
+   label the product's UI writes */
+.ol-micro {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-gray-600);
+}
+
+.ol-micro__glyph {
+  flex: none;
+  color: var(--ol-tone);
+}
+
+/* ── the extracted rows — the substance of the sheet ──────────────────────
+   FOUR GRAMMARS, because these are four different kinds of statement. A pain
+   point is a complaint, a goal is an ordered agenda item, a blocker is a gate
+   you are stopped at, a criterion is a checklist item. They used to render as
+   one identical rectangle of gray sentences; now the marker, the rhythm and
+   the separators differ, and one phrase per row carries the meaning. */
+
+.ol-items {
+  --ol-row-size: 15px;
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+}
+
+.ol-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.ol-row__marker {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: calc(var(--ol-row-size) * 1.5);
+  color: var(--ol-tone);
+}
+
+.ol-row__text {
+  font-family: var(--font-sans);
+  font-size: var(--ol-row-size);
+  line-height: 1.5;
+  font-weight: 450;
+  letter-spacing: -0.005em;
+  /* the connective tissue steps back … */
+  color: var(--color-gray-700);
+  text-wrap: pretty;
+}
+
+/* … so the phrase that actually matters can carry the line. One span per row,
+   chosen for meaning: the cost, the constraint, the person, the date. */
+.ol-row__key {
+  font-weight: 550;
+  color: var(--color-ink);
+}
+
+/* complaint — bare glyph, tight rows: a list of things that hurt */
+.ol-panel--complaint .ol-row + .ol-row {
+  margin-top: 9px;
+}
+
+/* agenda — a mono ordinal gutter. Goals are the ordered plan for the call, and
+   the product renders them as an ordered list; the numeral is that order made
+   visible, not a priority we invented. */
+.ol-panel--agenda .ol-row + .ol-row {
+  margin-top: 9px;
+}
+
+.ol-panel--agenda .ol-row__marker {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-gray-500);
+}
+
+/* gate — hairline-separated bands with a heavier rhythm: each blocker is its
+   own wall, and you read them one at a time */
+.ol-panel--gate .ol-row {
+  padding-block: 9px;
+}
+
+.ol-panel--gate .ol-row:first-child {
+  padding-top: 0;
+}
+
+.ol-panel--gate .ol-row:last-child {
+  padding-bottom: 0;
+}
+
+.ol-panel--gate .ol-row + .ol-row {
+  border-top: 1px solid var(--color-hairline-2);
+}
+
+/* criterion — a ticked box per row: the only grammar here that is a checklist */
+.ol-panel--criterion .ol-row + .ol-row {
+  margin-top: 10px;
+}
+
+.ol-panel--criterion .ol-row__marker {
+  width: 18px;
+  height: 18px;
+  margin-top: calc((var(--ol-row-size) * 1.5 - 18px) / 2);
+  border: 1px solid var(--color-hairline-2);
+  border-radius: var(--radius-micro);
+  background-color: var(--color-surface-200);
+}
+
+/* "Session duration 04:44" (verbatim, §3.6) — the session's one number, held at
+   the bed's floor by the slack above it, so it sits in the same place on every
+   tab. Plain text, not a chip: the chip idiom belongs to "Review before
+   saving" alone. */
+.ol-duration {
+  align-self: flex-start;
+  margin: 0;
+  padding: 20px 2px 0;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  line-height: 1.4;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--color-gray-600);
+}
+
+/* ── QUIET entrance: three groups, once, latched (see the .tsx) ──────────── */
+
+.ol__head,
+.ol__tabs,
+.ol__card {
+  opacity: 0;
+  filter: blur(4px);
+  transition:
+    opacity 520ms var(--ease-entrance) var(--ol-delay, 0ms),
+    filter 520ms var(--ease-entrance) var(--ol-delay, 0ms);
+}
+
+.ol__tabs {
+  --ol-delay: 140ms;
+}
+
+.ol__card {
+  --ol-delay: 280ms;
+}
+
+.ol--in .ol__head,
+.ol--in .ol__tabs,
+.ol--in .ol__card {
+  opacity: 1;
+  filter: blur(0);
+}
+
+/* ── responsive ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .ol {
+    padding: 96px 0 64px;
+  }
+
+  .ol__container {
+    padding-inline: 24px;
+  }
+
+  .ol__tabs {
+    margin-top: 36px;
+  }
+
+  .ol-card__body {
+    padding: 16px;
+  }
+
+  .ol-intel {
+    padding: 16px;
+  }
+
+  .ol-room__name {
+    font-size: 18px;
+  }
+
+  .ol-items {
+    --ol-row-size: 14px;
+  }
+
+  .ol-row {
+    gap: 8px;
+  }
+
+  .ol-row__marker {
+    width: 16px;
+  }
+}
+
+/* Narrow: the four tabs cannot share one row without dropping their icons
+   (measured: 500px of tabs against 342px of viewport at 390), and a 3+1 wrap
+   reads like an accident — so they square up into a deliberate 2×2. The pill
+   is measured, not hard-coded, so it travels in two dimensions here without a
+   single extra rule. The heading steps to 28px (~ fitted) to hold the lockup
+   at two lines. */
+@media (max-width: 560px) {
+  .ol-heading {
+    font-size: 28px;
+  }
+
+  .ol__tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .ol-tab {
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ol__head,
+  .ol__tabs,
+  .ol__card {
+    opacity: 1;
+    filter: blur(0);
+    transition: none;
+  }
+
+  /* the pill snaps, the sheet snaps, the panels swap instantly — and the
+     auto-advance clock is never created at all (see the .tsx), so the dwell
+     hint has nothing to show */
+  .ol--armed .ol-pill,
+  .ol--armed .ol-intel__stack,
+  .ol-panel,
+  .ol-panel.is-active,
+  .ol-tab.is-active svg {
+    transition: none;
+  }
+
+  .ol-pill__progress {
+    display: none;
+  }
+}

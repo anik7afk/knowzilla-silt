@@ -1,0 +1,1050 @@
+/* ===========================================================================
+ * §03 Animation system — scoped styles.
+ *
+ * SCOPE. Everything here is `.pch-anim-` prefixed and may only be used by
+ * `AnimationSystemChapter.tsx`. Nothing in this file may reach the landing page
+ * or the /process shell.
+ *
+ * WHY THE VALUES ARE LITERALS, NOT TOKENS. Two of the page's curves were
+ * MEASURED off a live donor and stay component-scoped literals by standing rule
+ * (CLAUDE.md §Standing constraints 8) — a measured curve that becomes a token
+ * gets reused where it was never measured. This chapter documents motion, so it
+ * repeats those literals verbatim rather than aliasing them: a specimen that
+ * read `var(--ease-entrance)` would prove nothing about what the page runs.
+ * Every duration and bezier below is copied from the call site named in the
+ * adjacent comment.
+ *
+ * The two easings that ARE tokens (`--ease-entrance`, `--ease-hover-out`) are
+ * still written out here for the same reason.
+ * ======================================================================== */
+
+/* ---------------------------------------------------------------------------
+ * LAYOUT — spec-book rows, framed specimens.
+ * ------------------------------------------------------------------------- */
+
+.pch-anim-lede {
+  font: var(--kz-type-body-15);
+  letter-spacing: var(--kz-ls-body-15);
+  color: var(--kz-ink-secondary);
+  max-width: 660px;
+  margin: 0 0 20px;
+}
+
+.pch-anim-lede:last-child {
+  margin-bottom: 0;
+}
+
+.pch-anim-lede strong {
+  color: var(--kz-ink);
+  font-weight: 500;
+}
+
+.pch-anim-code {
+  font-family: var(--kz-font-body);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-ink);
+  letter-spacing: 0;
+}
+
+/* Legend under a section head. */
+.pch-anim-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin: 0 0 40px;
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.4px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-700);
+}
+
+.pch-anim-legend b {
+  color: var(--kz-ink);
+  font-weight: 500;
+}
+
+/* ---------------------------------------------------------------------------
+ * EASING GALLERY — bezier plots.
+ * ------------------------------------------------------------------------- */
+
+/* Row gap is deliberately larger than the column gap: the overshoot curve's
+   control point sits ~40 units ABOVE its own unit box, and at a 40px row gap it
+   read as if it belonged to the plot above. */
+.pch-anim-curves {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 72px 32px;
+}
+
+.pch-anim-curve__plot {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--kz-hairline-2);
+  border-radius: var(--kz-radius-tile);
+  background: var(--kz-surface-200);
+  padding: 14px;
+  /* The overshoot curve peaks only ~5.3% above the unit box, so the existing
+     inset preserves it. Clip the much farther control handle/point at the card
+     edge instead of letting that construction aid escape into the row above. */
+  overflow: hidden;
+}
+
+.pch-anim-curve__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* Curves may leave the unit box into the plot's 14px inset. The plot itself
+     clips at its rounded edge, keeping control handles inside the card while
+     every graph retains the same unit scale. */
+  overflow: visible;
+}
+
+.pch-anim-curve__grid {
+  stroke: var(--kz-gray-300);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.pch-anim-curve__linear {
+  stroke: var(--kz-gray-400);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  vector-effect: non-scaling-stroke;
+  fill: none;
+}
+
+.pch-anim-curve__path {
+  stroke: var(--kz-ink);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  fill: none;
+}
+
+.pch-anim-curve__handle {
+  stroke: var(--kz-gray-500);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  fill: none;
+}
+
+.pch-anim-curve__pt {
+  fill: var(--kz-signal-600);
+}
+
+.pch-anim-curve__nm {
+  margin-top: 12px;
+  font: 500 13px/16px var(--kz-font-body);
+  letter-spacing: -0.13px;
+  color: var(--kz-ink);
+}
+
+.pch-anim-curve__lit {
+  margin-top: 4px;
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.2px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-700);
+  overflow-wrap: anywhere;
+}
+
+.pch-anim-curve__where {
+  margin-top: 4px;
+  font: 450 11px/16px var(--kz-font-body);
+  color: var(--kz-gray-600);
+}
+
+/* ---------------------------------------------------------------------------
+ * DEMO TILES
+ * ------------------------------------------------------------------------- */
+
+.pch-anim-tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
+}
+
+.pch-anim-tile {
+  border: 1px solid var(--kz-hairline-2);
+  border-radius: var(--kz-radius-card);
+  background: var(--kz-surface-100);
+  padding: 20px 20px 18px;
+  min-width: 0;
+}
+
+.pch-anim-tile__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 4px;
+}
+
+.pch-anim-tile__nm {
+  font: 500 15px/20px var(--kz-font-body);
+  letter-spacing: -0.15px;
+  color: var(--kz-ink);
+}
+
+.pch-anim-tile__tier {
+  flex: none;
+  font: 600 10px/16px var(--kz-font-body);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--kz-gray-600);
+  border: 1px solid var(--kz-hairline-2);
+  border-radius: var(--kz-radius-tag);
+  padding: 1px 8px;
+  background: var(--kz-surface-200);
+}
+
+.pch-anim-tile__sub {
+  font: 450 12px/18px var(--kz-font-body);
+  color: var(--kz-ink-secondary);
+  margin: 0 0 14px;
+  max-width: 46ch;
+}
+
+/* The framed stage every specimen runs inside. */
+.pch-anim-stage {
+  position: relative;
+  border: 1px solid var(--kz-hairline-2);
+  border-radius: var(--kz-radius-tile);
+  background: var(--kz-surface-200);
+  padding: 24px;
+  min-height: 156px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.pch-anim-tile__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 14px;
+}
+
+.pch-anim-spec {
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.3px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-700);
+  min-width: 0;
+}
+
+.pch-anim-spec div {
+  overflow-wrap: anywhere;
+}
+
+.pch-anim-spec b {
+  color: var(--kz-ink);
+  font-weight: 500;
+}
+
+/* Replay control — carries the page's own 50ms-in / 300ms-out hover. */
+.pch-anim-replay {
+  flex: none;
+  appearance: none;
+  border: 1px solid var(--kz-gray-400);
+  background: var(--kz-surface-100);
+  color: var(--kz-ink);
+  /* Squircle: gallery chrome, not a specimen of the page's pill (owner,
+     2026-07-29). The pill survives two rules below, on the hover TILE, because
+     that one is documenting the landing page's own button. */
+  border-radius: var(--kz-radius-tile);
+  height: 28px;
+  padding: 0 14px;
+  font: 500 12px/1 var(--kz-font-body);
+  letter-spacing: -0.12px;
+  cursor: pointer;
+  transition-property: background-color, border-color, color;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+.pch-anim-replay:hover {
+  transition-duration: 50ms;
+  background: var(--kz-surface-200);
+  border-color: var(--kz-gray-500);
+}
+
+.pch-anim-replay:disabled {
+  cursor: default;
+  color: var(--kz-gray-600);
+  border-color: var(--kz-hairline-2);
+  background: var(--kz-surface-200);
+}
+
+.pch-anim-knob {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.pch-anim-knob__b {
+  appearance: none;
+  border: 1px solid var(--kz-hairline-2);
+  background: var(--kz-surface-100);
+  color: var(--kz-gray-700);
+  border-radius: var(--kz-radius-micro);
+  height: 24px;
+  padding: 0 9px;
+  font: 500 11px/1 var(--kz-font-body);
+  letter-spacing: 0.2px;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition-property: background-color, border-color, color;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+.pch-anim-knob__b:hover {
+  transition-duration: 50ms;
+  border-color: var(--kz-gray-400);
+}
+
+.pch-anim-knob__b[aria-pressed='true'] {
+  background: var(--kz-gray-1000);
+  border-color: var(--kz-gray-1000);
+  color: var(--kz-surface-100);
+}
+
+/* ---------------------------------------------------------------------------
+ * SPECIMEN PRIMITIVES — neutral schematic parts, shared by the tiles.
+ * Structural lines stay neutral gray (session 9 R1); nothing here fills with
+ * accent, because accent is a mark.
+ * ------------------------------------------------------------------------- */
+
+.pch-anim-col {
+  width: 100%;
+  max-width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.pch-anim-bar {
+  height: 10px;
+  border-radius: var(--kz-radius-micro);
+  background: var(--kz-gray-300);
+  width: 100%;
+}
+
+.pch-anim-bar--ink {
+  background: var(--kz-gray-900);
+  height: 12px;
+}
+
+.pch-anim-bar--short {
+  width: 62%;
+}
+
+.pch-anim-bar--mid {
+  width: 82%;
+}
+
+.pch-anim-card {
+  width: 100%;
+  height: 56px;
+  border-radius: var(--kz-radius-tile);
+  border: 1px solid var(--kz-gray-400);
+  background: var(--kz-surface-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 500 10px/16px var(--kz-font-body);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--kz-gray-600);
+}
+
+/* ---------------------------------------------------------------------------
+ * TILE 1 + 2 — the house entrance, and the hero ladder.
+ *
+ * `.kz-enter` (src/index.css:160-176): 420ms var(--ease-entrance) both,
+ * opacity 0→1 · translateY(12px)→0 · blur(1.5px)→0, stagger via --enter-delay.
+ * ------------------------------------------------------------------------- */
+
+@keyframes pch-anim-enter-kf {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(1.5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.pch-anim-enter {
+  animation: pch-anim-enter-kf 420ms cubic-bezier(0.33, 1, 0.68, 1) both;
+  animation-delay: calc(var(--pch-i, 0) * var(--pch-step, 120ms));
+}
+
+/* The hero product card is the only element on the page that runs the measured
+   900ms donor curve — src/components/Hero.css:215-230, delay 480ms from
+   src/components/Hero.tsx:289. No lift, no blur: the donor frame only fades and
+   settles out of a 0.98 scale. */
+@keyframes pch-anim-hero-card-kf {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.pch-anim-hero-card {
+  animation: pch-anim-hero-card-kf 900ms cubic-bezier(0, 0, 0.58, 1) 480ms both;
+}
+
+.pch-anim-hero {
+  width: 100%;
+  max-width: 268px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+}
+
+.pch-anim-hero__rails {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font: 500 10px/16px var(--kz-font-body);
+  letter-spacing: 0.6px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-600);
+}
+
+.pch-anim-hero__btns {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+  justify-content: center;
+}
+
+.pch-anim-hero__btn {
+  height: 16px;
+  width: 62px;
+  border-radius: var(--kz-radius-button);
+  background: var(--kz-gray-900);
+}
+
+.pch-anim-hero__btn--ghost {
+  background: var(--kz-surface-100);
+  border: 1px solid var(--kz-gray-400);
+}
+
+/* ---------------------------------------------------------------------------
+ * TILE 3 — hero step-back. src/components/Hero.css:162-170.
+ * Binary state flip at 6px of scroll, not a scrub.
+ * ------------------------------------------------------------------------- */
+
+.pch-anim-step__vp {
+  width: 100%;
+  max-width: 260px;
+  border: 1px solid var(--kz-hairline-2);
+  border-radius: var(--kz-radius-tile);
+  background: var(--kz-surface-300);
+  padding: 14px;
+}
+
+.pch-anim-step__card {
+  transform-origin: 50% 50%;
+  transition: transform 720ms cubic-bezier(0.2, 0.1, 0.1, 0.92);
+  will-change: transform;
+}
+
+.pch-anim-step__card[data-stepped='true'] {
+  transform: scale(0.95);
+}
+
+/* ---------------------------------------------------------------------------
+ * TILE 4 — curtain dissolve. No keyframe and no transition exists on the page:
+ * src/components/Hero.tsx:16-33 damps opacity per frame and quantizes blur.
+ * The specimen re-implements that loop; only its readout is styled here.
+ * ------------------------------------------------------------------------- */
+
+.pch-anim-curtain {
+  width: 100%;
+  max-width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.pch-anim-curtain__hl {
+  font: 500 20px/24px var(--kz-font-display);
+  letter-spacing: -0.2px;
+  color: var(--kz-ink);
+  text-align: center;
+  will-change: opacity, filter;
+}
+
+.pch-anim-curtain__read {
+  display: flex;
+  gap: 14px;
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.3px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-700);
+  border-top: 1px solid var(--kz-hairline-2);
+  padding-top: 10px;
+  width: 100%;
+  justify-content: center;
+}
+
+.pch-anim-curtain__read b {
+  color: var(--kz-ink);
+  font-weight: 500;
+}
+
+/* ---------------------------------------------------------------------------
+ * TILE 5 — hover asymmetry. src/index.css:180-187 (page) and
+ * src/components/mock/AppFrame.css:190-211 (product window, + a 40ms press).
+ * One easing both ways; only the duration is asymmetric.
+ * ------------------------------------------------------------------------- */
+
+.pch-anim-hover {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.pch-anim-hover__pill {
+  appearance: none;
+  height: 34px;
+  padding: 0 18px;
+  border-radius: var(--kz-radius-button);
+  border: 1px solid var(--kz-gray-400);
+  background: var(--kz-surface-100);
+  color: var(--kz-ink);
+  font: 500 13px/1 var(--kz-font-body);
+  letter-spacing: -0.13px;
+  cursor: pointer;
+  transition-property: background-color, border-color, color;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+.pch-anim-hover__pill:hover,
+.pch-anim-hover__pill.is-hover {
+  transition-duration: 50ms;
+  background: var(--kz-gray-1000);
+  border-color: var(--kz-gray-1000);
+  color: var(--kz-surface-100);
+}
+
+.pch-anim-hover__pill:active {
+  transition-duration: 40ms;
+  background: var(--kz-gray-800);
+  border-color: var(--kz-gray-800);
+}
+
+.pch-anim-hover__cap {
+  font: 450 11px/16px var(--kz-font-body);
+  color: var(--kz-gray-600);
+  text-align: center;
+  max-width: 30ch;
+}
+
+/* ---------------------------------------------------------------------------
+ * TILE 6 — stagger. `calc(var(--i) * 120ms)` is the house form; see
+ * src/components/Testimonials.css:398 and src/components/IntegrationsStrip.css:33.
+ * ------------------------------------------------------------------------- */
+
+.pch-anim-stag {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 84px;
+}
+
+.pch-anim-stag__b {
+  width: 16px;
+  border-radius: var(--kz-radius-micro) var(--kz-radius-micro) 2px 2px;
+  background: var(--kz-gray-400);
+  transform-origin: 50% 100%;
+  animation: pch-anim-colbar-kf 425ms cubic-bezier(0.33, 1, 0.68, 1) both;
+  animation-delay: calc(var(--pch-i, 0) * var(--pch-step, 120ms));
+}
+
+/* src/components/PlatformChapters.css:1654 — scaleY from the baseline. */
+@keyframes pch-anim-colbar-kf {
+  from {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * TILE 7 — the beat vocabulary. Eight keyframes in
+ * src/components/PlatformChapters.css:1619-1658, all fill-mode both, all on
+ * var(--ease-entrance), duration from a 5-step ladder (340/425/500/595/680ms).
+ * Three are shown; the other five are in the keyframe table.
+ * ------------------------------------------------------------------------- */
+
+.pch-anim-beats {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 250px;
+}
+
+.pch-anim-beat {
+  display: grid;
+  grid-template-columns: 66px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+
+.pch-anim-beat__k {
+  font: 500 10px/14px var(--kz-font-body);
+  letter-spacing: 0.4px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-600);
+  text-align: right;
+}
+
+.pch-anim-beat__s {
+  height: 26px;
+  border-radius: var(--kz-radius-micro);
+  border: 1px solid var(--kz-gray-400);
+  background: var(--kz-surface-100);
+}
+
+/* opacity + blur(2.25px) — the donor entrance (`pc-kf-soft`, :1629) */
+@keyframes pch-anim-soft-kf {
+  from {
+    opacity: 0;
+    filter: blur(2.25px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* opacity + translateY(6px) — table rows (`pc-kf-row`, :1634) */
+@keyframes pch-anim-row-kf {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* opacity + translateY(14px) scale(0.988) + blur(2.5px) — overlays
+   (`pc-kf-lift`, :1639) */
+@keyframes pch-anim-lift-kf {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.988);
+    filter: blur(2.5px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+.pch-anim-beat--soft .pch-anim-beat__s {
+  animation: pch-anim-soft-kf 425ms cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+.pch-anim-beat--row .pch-anim-beat__s {
+  animation: pch-anim-row-kf 340ms cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+.pch-anim-beat--lift .pch-anim-beat__s {
+  animation: pch-anim-lift-kf 595ms cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+/* ---------------------------------------------------------------------------
+ * TILE 8 — travelling emphasis. `stack-sweep`,
+ * src/components/IntegrationsStrip.css:31-58: one mark ghosts in, overshoots to
+ * scale(1.035) with full ink, holds, then settles to gray-900. 560ms, 120ms step.
+ * ------------------------------------------------------------------------- */
+
+.pch-anim-sweep {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  justify-content: center;
+  align-items: center;
+  max-width: 260px;
+}
+
+.pch-anim-sweep__m {
+  font: 500 14px/20px var(--kz-font-body);
+  letter-spacing: -0.14px;
+  color: var(--kz-gray-900);
+  animation: pch-anim-sweep-kf 560ms cubic-bezier(0.33, 1, 0.68, 1) both;
+  animation-delay: calc(var(--pch-i, 0) * 120ms);
+}
+
+@keyframes pch-anim-sweep-kf {
+  0% {
+    opacity: 0;
+    transform: scale(0.985);
+    filter: blur(2px);
+    color: var(--kz-gray-500);
+  }
+  38% {
+    opacity: 1;
+    transform: scale(1.035);
+    filter: blur(0);
+    color: var(--kz-ink);
+  }
+  52% {
+    transform: scale(1.035);
+    color: var(--kz-ink);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+    color: var(--kz-gray-900);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * TABLES — duration ladder, ration, keyframes.
+ * ------------------------------------------------------------------------- */
+
+.pch-anim-tbl {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--kz-hairline-2);
+  border-radius: var(--kz-radius-tile);
+  overflow: hidden;
+  text-align: left;
+}
+
+.pch-anim-tbl th {
+  font: 600 10px/16px var(--kz-font-body);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-600);
+  background: var(--kz-surface-200);
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--kz-hairline-2);
+  vertical-align: bottom;
+  white-space: nowrap;
+}
+
+.pch-anim-tbl td {
+  font: 450 12px/18px var(--kz-font-body);
+  color: var(--kz-ink-secondary);
+  padding: 11px 14px;
+  border-top: 1px solid var(--kz-hairline-1);
+  vertical-align: top;
+}
+
+.pch-anim-tbl tbody tr:first-child td {
+  border-top: 0;
+}
+
+.pch-anim-tbl td:first-child {
+  font-weight: 500;
+  color: var(--kz-ink);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.pch-anim-tbl .pch-anim-tbl__n {
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-700);
+  white-space: nowrap;
+}
+
+.pch-anim-tbl__band td {
+  background: var(--kz-surface-200);
+  font: 600 10px/16px var(--kz-font-body);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--kz-gray-600);
+  border-top: 1px solid var(--kz-hairline-2);
+}
+
+.pch-anim-tbl__band td:first-child {
+  color: var(--kz-gray-600);
+  font-weight: 600;
+}
+
+.pch-anim-scroll {
+  overflow-x: auto;
+}
+
+.pch-anim-scroll > .pch-anim-tbl {
+  min-width: 620px;
+}
+
+/* Ration cards. */
+.pch-anim-ration {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.pch-anim-ration__c {
+  border: 1px solid var(--kz-hairline-2);
+  border-radius: var(--kz-radius-card);
+  background: var(--kz-surface-100);
+  padding: 20px;
+}
+
+.pch-anim-ration__t {
+  font: 600 11px/16px var(--kz-font-body);
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  color: var(--kz-ink);
+}
+
+.pch-anim-ration__n {
+  margin-top: 2px;
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.4px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-600);
+}
+
+.pch-anim-ration__l {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pch-anim-ration__l li {
+  font: 450 12px/18px var(--kz-font-body);
+  color: var(--kz-ink-secondary);
+  padding-left: 12px;
+  position: relative;
+}
+
+.pch-anim-ration__l li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 4px;
+  height: 1px;
+  background: var(--kz-gray-500);
+}
+
+.pch-anim-ration__l li b {
+  color: var(--kz-ink);
+  font-weight: 500;
+}
+
+.pch-anim-ration__v {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--kz-hairline-1);
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.2px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-700);
+  overflow-wrap: anywhere;
+}
+
+/* A SMALL NOTE — one load-bearing fact, one sentence.
+ *
+ * Was a bordered, tinted 14px panel; the owner's read (2026-07-29) is that a
+ * paragraph in a box is a paragraph you skip. Matches `.pch-ds-note` and
+ * `.pp-note` exactly, so a note looks the same in every chapter. */
+.pch-anim-flag {
+  margin: 24px 0 0;
+  padding: 0 0 0 12px;
+  border-left: 2px solid var(--kz-gray-400);
+  font: 450 13px/19px var(--kz-font-body);
+  letter-spacing: -0.05px;
+  color: var(--kz-gray-700);
+  max-width: 620px;
+}
+
+.pch-anim-flag b {
+  color: var(--kz-ink);
+  font-weight: 500;
+}
+
+/* Reduced-motion shape list. */
+.pch-anim-shapes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.pch-anim-shape {
+  border: 1px solid var(--kz-hairline-2);
+  border-radius: var(--kz-radius-card);
+  background: var(--kz-surface-100);
+  padding: 20px;
+}
+
+.pch-anim-shape__n {
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.4px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kz-gray-600);
+}
+
+.pch-anim-shape__t {
+  margin-top: 4px;
+  font: 500 15px/22px var(--kz-font-body);
+  letter-spacing: -0.15px;
+  color: var(--kz-ink);
+}
+
+.pch-anim-shape__p {
+  margin: 10px 0 0;
+  font: 450 12px/18px var(--kz-font-body);
+  color: var(--kz-ink-secondary);
+}
+
+.pch-anim-shape__f {
+  margin-top: 12px;
+  font: 500 11px/16px var(--kz-font-body);
+  letter-spacing: 0.2px;
+  color: var(--kz-gray-700);
+  overflow-wrap: anywhere;
+}
+
+/* Live state banner for the chapter's own reduced-motion handling. */
+.pch-anim-rm {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 32px;
+  padding: 12px 16px;
+  border: 1px solid var(--kz-hairline-2);
+  border-radius: var(--kz-radius-tile);
+  background: var(--kz-surface-200);
+  font: var(--kz-type-body-14);
+  letter-spacing: var(--kz-ls-body-14);
+  color: var(--kz-ink-secondary);
+  max-width: 720px;
+}
+
+.pch-anim-rm__k {
+  flex: none;
+  font: 600 10px/16px var(--kz-font-body);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--kz-gray-600);
+}
+
+.pch-anim-rm__k b {
+  color: var(--kz-ink);
+  font-weight: 600;
+}
+
+/* ---------------------------------------------------------------------------
+ * RESPONSIVE
+ * ------------------------------------------------------------------------- */
+
+@media (max-width: 1000px) {
+  .pch-anim-curves {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .pch-anim-ration,
+  .pch-anim-shapes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .pch-anim-curves {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px 20px;
+  }
+
+  .pch-anim-tiles {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .pch-anim-tile__foot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * REDUCED MOTION.
+ *
+ * The page's own answer is never "freeze mid-scene": every landing section
+ * authors its resolved state (src/index.css:367-387 swaps `.kz-enter` for a
+ * 200ms opacity fade and keeps the delay ladder). This chapter does the same —
+ * specimens render settled, and replay crossfades instead of moving. The JS
+ * specimens (curtain, step-back) check the media query and paint their end
+ * state without ever starting a rAF loop.
+ * ------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes pch-anim-fade-kf {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .pch-anim-enter,
+  .pch-anim-hero-card,
+  .pch-anim-stag__b,
+  .pch-anim-sweep__m,
+  .pch-anim-beat--soft .pch-anim-beat__s,
+  .pch-anim-beat--row .pch-anim-beat__s,
+  .pch-anim-beat--lift .pch-anim-beat__s {
+    animation: pch-anim-fade-kf 200ms ease-out both;
+    transform: none;
+    filter: none;
+  }
+
+  .pch-anim-sweep__m {
+    color: var(--kz-gray-900);
+  }
+
+  .pch-anim-step__card,
+  .pch-anim-step__card[data-stepped='true'] {
+    transform: none;
+    transition: none;
+    will-change: auto;
+  }
+
+  .pch-anim-curtain__hl {
+    will-change: auto;
+  }
+}

@@ -1,0 +1,452 @@
+/* ObjectionAnatomy — "live annotation" poster. Natural skin (near-white
+   surface, 1px hairlines), Attio type discipline. The default (no-JS /
+   reduced-motion) state is the FULLY-COMPOSED poster; gsap .from tweens supply
+   the entrance, so nothing here needs a hidden initial state. Brackets are
+   positioned entirely from measured word rects (left/width set inline,
+   bar-y/auth-y as stage CSS vars).
+
+   SESSION 9. R1 — every drawn line here is NEUTRAL. The brackets are the
+   section's deliberate device line (gray-500, 2px, matte); the leaders that
+   hang off them are the quiet rule (gray-400, 1.5px, dotted); the mono part
+   labels are structural metadata (gray-700); the verdict node ring is
+   gray-400 1.5px with an ink glyph. Zero accent-600 remains in this section —
+   the buyer's sentence and the machine's read are ink and graphite; signal
+   blue is kept for the one telemetry word ("high"). R2 — the section already sits on
+   the tinted surface-200 chapter ground, so the machine's CONCLUSION is the
+   one thing that lifts off it: `.oa__panel` is a raised surface-100 card
+   (hairline-2 + radius-card + shadow-card) while the human's sentence stays
+   flat on the paper, which is the only surface an annotation can be drawn on.
+   The old vertical `.oa__rule` divider is gone — the card's own edge separates
+   stage from readout, and two parallel vertical edges 56px apart fought. */
+
+.oa {
+  position: relative;
+  background: var(--color-surface-200);
+  color: var(--color-ink);
+  padding: 152px 0 96px;
+  border-top: 1px solid var(--color-hairline-2);
+  overflow: hidden;
+}
+
+.oa__container {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 40px;
+}
+
+.oa-mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── header ─────────────────────────────────────────────────────────────── */
+
+.oa__head {
+  max-width: 640px;
+}
+
+.oa-heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(30px, 4vw, 46px);
+  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  color: var(--color-ink);
+  filter: blur(0);
+}
+
+.oa-body {
+  margin: 16px 0 0;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 450;
+  color: var(--color-gray-600);
+  filter: blur(0);
+}
+
+/* ── composition: flat stage | raised verdict card ──────────────────────── */
+
+.oa__composition {
+  display: flex;
+  align-items: center;
+  gap: 56px;
+  margin-top: 64px;
+}
+
+.oa__stage {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+}
+
+/* R2: the machine's conclusion is the ONE thing that comes off the page.
+   Sanctioned lift — surface-100 card + hairline-2 + radius-card + shadow-card,
+   and it only has cause because the section ground is tinted (surface-200). */
+.oa__panel {
+  flex: 0 0 288px;
+  width: 288px;
+  padding: 24px;
+  background: var(--color-surface-100);
+  border: 1px solid var(--color-hairline-2);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  filter: blur(0);
+}
+
+/* ── the sentence (auto-fit to one line by JS; wraps only in narrow mode) ── */
+
+.oa-sentence {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(30px, 8vw, 56px);
+  line-height: 1.05;
+  font-weight: 500;
+  letter-spacing: -0.022em;
+  color: var(--color-ink);
+}
+
+.oa-word {
+  color: var(--color-ink);
+}
+
+/* ── measured brackets ──────────────────────────────────────────────────── */
+
+.oa-part {
+  position: absolute;
+  height: 52px;
+  /* left / width are set inline from measured word rects */
+}
+
+.oa-part__matrix-anchor {
+  position: absolute;
+  z-index: 2;
+  width: 10px;
+  height: 10px;
+  display: grid;
+  place-items: center;
+  transform: translate(-50%, -50%);
+}
+
+.oa-part--top {
+  top: calc(var(--oa-bar-y, 0px) - 52px);
+}
+
+.oa-part--bottom {
+  top: var(--oa-auth-y, 0px);
+}
+
+/* R1 device line — gray-500 at 2px, matte. The bar is a filled box pinned
+   left:0/right:0 inside the measured `.oa-part`, so its horizontal edges ARE
+   the phrase's word-span edges: thickening it is a vertical change only and
+   the anchor delta stays 0.00px (no half-stroke inset needed, unlike an SVG
+   stroke). The caps sit flush at the span edges for the same reason. */
+.oa-part__bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--color-gray-500);
+}
+
+.oa-part__cap {
+  position: absolute;
+  width: 2px;
+  height: 10px;
+  background: var(--color-gray-500);
+}
+
+.oa-part__cap--l {
+  left: 0;
+}
+
+.oa-part__cap--r {
+  right: 0;
+}
+
+/* R1 quiet leader — gray-400, 1.5px, still dotted. Painted as a repeating
+   gradient rather than `border-left: 1.5px dotted`, because Chromium floors a
+   fractional border width to 1px (measured: computed borderLeftWidth read
+   "1px" for a declared 1.5px) and 1px is the scratch the user objected to. */
+.oa-part__conn {
+  position: absolute;
+  left: calc(50% - 0.75px);
+  width: 1.5px;
+  height: 24px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--color-gray-400) 0 1.5px,
+    transparent 1.5px 4.5px
+  );
+}
+
+/* R1 structural metadata */
+.oa-part__label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-gray-700);
+  white-space: nowrap;
+  filter: blur(0);
+}
+
+/* top brackets: bar at the bottom edge, caps hang DOWN toward the words,
+   connector rises to the label above */
+.oa-part--top .oa-part__bar {
+  bottom: 0;
+}
+.oa-part--top .oa-part__cap {
+  bottom: -9px;
+}
+.oa-part--top .oa-part__conn {
+  bottom: 3px;
+}
+.oa-part--top .oa-part__label {
+  top: 0;
+}
+
+/* bottom bracket: bar at the top edge, caps rise UP toward the words,
+   connector drops to the label below */
+.oa-part--bottom .oa-part__bar {
+  top: 0;
+}
+.oa-part--bottom .oa-part__cap {
+  top: -9px;
+}
+.oa-part--bottom .oa-part__conn {
+  top: 3px;
+}
+.oa-part--bottom .oa-part__label {
+  bottom: 0;
+}
+
+/* ── narrow legend fallback (shown only via .oa--narrow) ────────────────── */
+
+.oa-legend {
+  display: none;
+  list-style: none;
+  margin: 28px 0 0;
+  padding: 0;
+}
+
+.oa-legend__row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 9px 0;
+  border-top: 1px solid var(--color-hairline-2);
+}
+
+.oa-legend__label {
+  flex: 0 0 82px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: var(--color-gray-700);
+}
+
+.oa-legend__phrase {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  color: var(--color-gray-700);
+}
+
+/* ── verdict panel (raised card) ────────────────────────────────────────── */
+
+.oa-panel__row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* R1 node ring — gray-400 1.5px, ink glyph inside. Painted as an INSET ring
+   rather than `border: 1.5px`, for the same reason as the dotted leader above:
+   Chromium floors a fractional border width to 1px, and 1px is the scratch the
+   user objected to. The inset spread honours 1.5px exactly. Not a lift — no
+   blur, no offset, no colour outside the gray ramp. */
+.oa-arrow {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  box-shadow: inset 0 0 0 1.5px var(--color-gray-400);
+  color: var(--color-ink);
+  filter: blur(0);
+}
+
+.oa-verdict {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--color-ink);
+  filter: blur(0);
+}
+
+.oa-verdict strong {
+  font-weight: 600;
+}
+
+.oa-panel__hr {
+  display: block;
+  height: 1px;
+  margin: 20px 0;
+  background: var(--color-gray-300);
+}
+
+.oa-conf {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 0.01em;
+  color: var(--color-gray-700);
+  filter: blur(0);
+}
+
+.oa-conf__high {
+  /* telemetry: the machine's confidence readout, and the section's ONE colour.
+     13px ≤ 16px so it stays a mark; signal-700 not -600 for contrast (6.27:1).
+     No lavender exists anywhere in this section, so there is no adjacency. */
+  color: var(--color-signal-700);
+  font-weight: 500;
+}
+
+.oa--matrix-state-only .oa-conf,
+.oa--matrix-full-ref .oa-conf {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.oa-conf__matrix {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 6px;
+  height: 6px;
+}
+
+/* ── responsive ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 960px) {
+  .oa__composition {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 40px;
+    margin-top: 48px;
+  }
+
+  /* the card keeps its own chrome when it restacks — no extra top divider */
+  .oa__panel {
+    flex: none;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .oa {
+    padding: 80px 0 64px;
+  }
+
+  .oa__container {
+    padding-inline: 24px;
+  }
+
+  .oa__stage {
+    min-height: 340px;
+  }
+}
+
+/* narrow: geometric brackets give way to a stacked legend, sentence wraps */
+.oa--narrow .oa-part {
+  display: none;
+}
+
+.oa--narrow .oa-part__matrix-anchor {
+  display: none;
+}
+
+.oa--narrow .oa__stage {
+  display: block;
+  min-height: 0;
+  padding: 8px 0;
+}
+
+.oa--narrow .oa-legend {
+  display: block;
+}
+
+.oa--narrow .oa-sentence {
+  white-space: normal;
+}
+
+/* ── quiet variant (landing flow, Session 5 motion ration) ──────────────────
+   No timeline: the settled poster enters once with the house QUIET grammar —
+   blur(2px)→0 + opacity, 520ms on --ease-entrance, 140ms stagger across four
+   groups (header → sentence → brackets → verdict). `.oa--in` is latched by the
+   component on viewport entry and never removed, so there is no exit, no loop
+   and no ambient motion. Settled values are identical to the full scene's end
+   state. */
+
+.oa--quiet .oa__head,
+.oa--quiet .oa-sentence,
+.oa--quiet .oa-legend,
+.oa--quiet .oa-part,
+.oa--quiet .oa-part__matrix-anchor,
+.oa--quiet .oa__panel {
+  opacity: 0;
+  filter: blur(2px);
+  transition:
+    opacity 520ms var(--ease-entrance) var(--oa-q-delay, 0ms),
+    filter 520ms var(--ease-entrance) var(--oa-q-delay, 0ms);
+}
+
+.oa--quiet .oa-sentence,
+.oa--quiet .oa-legend {
+  --oa-q-delay: 140ms;
+}
+
+.oa--quiet .oa-part {
+  --oa-q-delay: 280ms;
+}
+
+.oa--quiet .oa-part__matrix-anchor {
+  --oa-q-delay: 280ms;
+}
+
+.oa--quiet .oa__panel {
+  --oa-q-delay: 420ms;
+}
+
+.oa--quiet.oa--in .oa__head,
+.oa--quiet.oa--in .oa-sentence,
+.oa--quiet.oa--in .oa-legend,
+.oa--quiet.oa--in .oa-part,
+.oa--quiet.oa--in .oa__panel {
+  opacity: 1;
+  filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oa--quiet .oa__head,
+  .oa--quiet .oa-sentence,
+  .oa--quiet .oa-legend,
+  .oa--quiet .oa-part,
+  .oa--quiet .oa-part__matrix-anchor,
+  .oa--quiet .oa__panel {
+    opacity: 1;
+    filter: blur(0);
+    transition: none;
+  }
+}

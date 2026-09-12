@@ -1,0 +1,938 @@
+{
+  "mascot": {
+    "items": [
+      {
+        "id": "mascot-base-v-sitting",
+        "src": "/process/mascot-base-v-sitting.jpg",
+        "role": "selected",
+        "title": "Sitting",
+        "round": "Base V",
+        "sourceDir": "design-assets/refs/session12/mascot/owner-poses"
+      },
+      {
+        "id": "mascot-base-v-walking",
+        "src": "/process/mascot-base-v-walking.jpg",
+        "role": "selected",
+        "title": "Walking",
+        "round": "Base V",
+        "sourceDir": "design-assets/refs/session12/mascot/owner-poses"
+      },
+      {
+        "id": "mascot-base-v-waving",
+        "src": "/process/mascot-base-v-waving.jpg",
+        "role": "selected",
+        "title": "Waving",
+        "round": "Base V",
+        "sourceDir": "design-assets/refs/session12/mascot/owner-poses"
+      },
+      {
+        "id": "mascot-base-v-peek",
+        "src": "/process/mascot-base-v-peek.jpg",
+        "role": "selected",
+        "title": "Peek",
+        "round": "Base V",
+        "sourceDir": "design-assets/refs/session12/mascot/owner-poses"
+      },
+      {
+        "id": "mascot-base-v-lying",
+        "src": "/process/mascot-base-v-lying.jpg",
+        "role": "selected",
+        "title": "Lying",
+        "round": "Base V",
+        "sourceDir": "design-assets/refs/session12/mascot/owner-poses"
+      },
+      {
+        "id": "mascot-base-v-lean",
+        "src": "/process/mascot-base-v-lean.jpg",
+        "role": "selected",
+        "title": "Lean",
+        "round": "Base V",
+        "sourceDir": "design-assets/refs/session12/mascot/owner-poses"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r1-05-knowledge-empty-graphite",
+        "src": "/process/mascot-refs-session12-mascot-r1-05-knowledge-empty-graphite.jpg",
+        "role": "variant",
+        "title": "knowledge empty graphite",
+        "round": "Round 1",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r1-06-crm-disconnected-full-render",
+        "src": "/process/mascot-refs-session12-mascot-r1-06-crm-disconnected-full-render.jpg",
+        "role": "variant",
+        "title": "crm disconnected full render",
+        "round": "Round 1",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r2-04-closing-cta-graphite",
+        "src": "/process/mascot-refs-session12-mascot-r2-04-closing-cta-graphite.jpg",
+        "role": "variant",
+        "title": "closing cta graphite",
+        "round": "Round 2",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r4-01-cta-perched-capline",
+        "src": "/process/mascot-refs-session12-mascot-r4-01-cta-perched-capline.jpg",
+        "role": "variant",
+        "title": "cta perched capline",
+        "round": "Round 4",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r4-02-cta-peeking-over-type",
+        "src": "/process/mascot-refs-session12-mascot-r4-02-cta-peeking-over-type.jpg",
+        "role": "variant",
+        "title": "cta peeking over type",
+        "round": "Round 4",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r4-03-cta-behind-type-occlusion",
+        "src": "/process/mascot-refs-session12-mascot-r4-03-cta-behind-type-occlusion.jpg",
+        "role": "variant",
+        "title": "cta behind type occlusion",
+        "round": "Round 4",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r4-05-cta-leaning-on-period",
+        "src": "/process/mascot-refs-session12-mascot-r4-05-cta-leaning-on-period.jpg",
+        "role": "variant",
+        "title": "cta leaning on period",
+        "round": "Round 4",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r4-06-cta-tiny-diacritic",
+        "src": "/process/mascot-refs-session12-mascot-r4-06-cta-tiny-diacritic.jpg",
+        "role": "variant",
+        "title": "cta tiny diacritic",
+        "round": "Round 4",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r4-07-cta-scale-extreme-large",
+        "src": "/process/mascot-refs-session12-mascot-r4-07-cta-scale-extreme-large.jpg",
+        "role": "variant",
+        "title": "cta scale extreme large",
+        "round": "Round 4",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r4-08-cta-typographic-bridge",
+        "src": "/process/mascot-refs-session12-mascot-r4-08-cta-typographic-bridge.jpg",
+        "role": "variant",
+        "title": "cta typographic bridge",
+        "round": "Round 4",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r4-09-lizzie-suggestion-nocard",
+        "src": "/process/mascot-refs-session12-mascot-r4-09-lizzie-suggestion-nocard.jpg",
+        "role": "variant",
+        "title": "lizzie suggestion nocard",
+        "round": "Round 4",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r4-10-assistant-chat-nocard",
+        "src": "/process/mascot-refs-session12-mascot-r4-10-assistant-chat-nocard.jpg",
+        "role": "variant",
+        "title": "assistant chat nocard",
+        "round": "Round 4",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r4-11-knowledge-empty-refined",
+        "src": "/process/mascot-refs-session12-mascot-r4-11-knowledge-empty-refined.jpg",
+        "role": "variant",
+        "title": "knowledge empty refined",
+        "round": "Round 4",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r5-03-empty-state-lizzie",
+        "src": "/process/mascot-refs-session12-mascot-r5-03-empty-state-lizzie.jpg",
+        "role": "variant",
+        "title": "empty state lizzie",
+        "round": "Round 5",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r5-06-peek-shared-truth",
+        "src": "/process/mascot-refs-session12-mascot-r5-06-peek-shared-truth.jpg",
+        "role": "variant",
+        "title": "peek shared truth",
+        "round": "Round 5",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r5-07-peek-product-window",
+        "src": "/process/mascot-refs-session12-mascot-r5-07-peek-product-window.jpg",
+        "role": "variant",
+        "title": "peek product window",
+        "round": "Round 5",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r5-12-crm-not-connected",
+        "src": "/process/mascot-refs-session12-mascot-r5-12-crm-not-connected.jpg",
+        "role": "variant",
+        "title": "crm not connected",
+        "round": "Round 5",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r5-13-404",
+        "src": "/process/mascot-refs-session12-mascot-r5-13-404.jpg",
+        "role": "variant",
+        "title": "404",
+        "round": "Round 5",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r5-15-sidebar-perched",
+        "src": "/process/mascot-refs-session12-mascot-r5-15-sidebar-perched.jpg",
+        "role": "variant",
+        "title": "sidebar perched",
+        "round": "Round 5",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r5-16-sidebar-leaning",
+        "src": "/process/mascot-refs-session12-mascot-r5-16-sidebar-leaning.jpg",
+        "role": "variant",
+        "title": "sidebar leaning",
+        "round": "Round 5",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r5-17-sidebar-curled",
+        "src": "/process/mascot-refs-session12-mascot-r5-17-sidebar-curled.jpg",
+        "role": "variant",
+        "title": "sidebar curled",
+        "round": "Round 5",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r11-01-eyes-only",
+        "src": "/process/mascot-refs-session12-mascot-r11-01-eyes-only.jpg",
+        "role": "variant",
+        "title": "eyes only",
+        "round": "Round 11",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r11-03-corner-tilt-truecut",
+        "src": "/process/mascot-refs-session12-mascot-r11-03-corner-tilt-truecut.jpg",
+        "role": "variant",
+        "title": "corner tilt truecut",
+        "round": "Round 11",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r12-codex-truecut",
+        "src": "/process/mascot-refs-session12-mascot-r12-codex-truecut.jpg",
+        "role": "variant",
+        "title": "truecut 1",
+        "round": "Round 12",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-r12-owner-truecut",
+        "src": "/process/mascot-refs-session12-mascot-r12-owner-truecut.jpg",
+        "role": "variant",
+        "title": "truecut 2",
+        "round": "Round 12",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      },
+      {
+        "id": "mascot-refs-session12-mascot-treatment-sheet",
+        "src": "/process/mascot-refs-session12-mascot-treatment-sheet.jpg",
+        "role": "variant",
+        "title": "treatment sheet",
+        "round": "Treatment sheet",
+        "sourceDir": "design-assets/refs/session12/mascot"
+      }
+    ]
+  },
+  "iterations": {
+    "items": [
+      {
+        "id": "iterations-ours-hero-imagegen-hero-i01",
+        "src": "/process/iterations-ours-hero-imagegen-hero-i01.jpg",
+        "role": "variant",
+        "title": "hero i01",
+        "round": "Hero image studies",
+        "sourceDir": "design-assets/ours/hero-imagegen"
+      },
+      {
+        "id": "iterations-ours-hero-imagegen-hero-i02",
+        "src": "/process/iterations-ours-hero-imagegen-hero-i02.jpg",
+        "role": "variant",
+        "title": "hero i02",
+        "round": "Hero image studies",
+        "sourceDir": "design-assets/ours/hero-imagegen"
+      },
+      {
+        "id": "iterations-ours-hero-imagegen-hero-i03",
+        "src": "/process/iterations-ours-hero-imagegen-hero-i03.jpg",
+        "role": "variant",
+        "title": "hero i03",
+        "round": "Hero image studies",
+        "sourceDir": "design-assets/ours/hero-imagegen"
+      },
+      {
+        "id": "iterations-ours-hero-imagegen-hero-i04",
+        "src": "/process/iterations-ours-hero-imagegen-hero-i04.jpg",
+        "role": "variant",
+        "title": "hero i04",
+        "round": "Hero image studies",
+        "sourceDir": "design-assets/ours/hero-imagegen"
+      },
+      {
+        "id": "iterations-ours-hero-imagegen-hero-i05",
+        "src": "/process/iterations-ours-hero-imagegen-hero-i05.jpg",
+        "role": "variant",
+        "title": "hero i05",
+        "round": "Hero image studies",
+        "sourceDir": "design-assets/ours/hero-imagegen"
+      },
+      {
+        "id": "iterations-ours-hero-imagegen-hero-i06",
+        "src": "/process/iterations-ours-hero-imagegen-hero-i06.jpg",
+        "role": "variant",
+        "title": "hero i06",
+        "round": "Hero image studies",
+        "sourceDir": "design-assets/ours/hero-imagegen"
+      },
+      {
+        "id": "iterations-ours-hero-imagegen-hero-i07",
+        "src": "/process/iterations-ours-hero-imagegen-hero-i07.jpg",
+        "role": "variant",
+        "title": "hero i07",
+        "round": "Hero image studies",
+        "sourceDir": "design-assets/ours/hero-imagegen"
+      },
+      {
+        "id": "iterations-ours-hero-imagegen-hero-i08",
+        "src": "/process/iterations-ours-hero-imagegen-hero-i08.jpg",
+        "role": "variant",
+        "title": "hero i08",
+        "round": "Hero image studies",
+        "sourceDir": "design-assets/ours/hero-imagegen"
+      },
+      {
+        "id": "iterations-ours-hero-imagegen-hero-i09",
+        "src": "/process/iterations-ours-hero-imagegen-hero-i09.jpg",
+        "role": "variant",
+        "title": "hero i09",
+        "round": "Hero image studies",
+        "sourceDir": "design-assets/ours/hero-imagegen"
+      },
+      {
+        "id": "iterations-ours-hero-imagegen-hero-i10",
+        "src": "/process/iterations-ours-hero-imagegen-hero-i10.jpg",
+        "role": "variant",
+        "title": "hero i10",
+        "round": "Hero image studies",
+        "sourceDir": "design-assets/ours/hero-imagegen"
+      },
+      {
+        "id": "iterations-ours-hero-imagegen-hero-i11",
+        "src": "/process/iterations-ours-hero-imagegen-hero-i11.jpg",
+        "role": "variant",
+        "title": "hero i11",
+        "round": "Hero image studies",
+        "sourceDir": "design-assets/ours/hero-imagegen"
+      },
+      {
+        "id": "iterations-ours-hero-imagegen-hero-i12",
+        "src": "/process/iterations-ours-hero-imagegen-hero-i12.jpg",
+        "role": "variant",
+        "title": "hero i12",
+        "round": "Hero image studies",
+        "sourceDir": "design-assets/ours/hero-imagegen"
+      },
+      {
+        "id": "iterations-ours-hero-imagegen-hero-i13",
+        "src": "/process/iterations-ours-hero-imagegen-hero-i13.jpg",
+        "role": "variant",
+        "title": "hero i13",
+        "round": "Hero image studies",
+        "sourceDir": "design-assets/ours/hero-imagegen"
+      },
+      {
+        "id": "iterations-ours-hero-imagegen-hero-i14",
+        "src": "/process/iterations-ours-hero-imagegen-hero-i14.jpg",
+        "role": "variant",
+        "title": "hero i14",
+        "round": "Hero image studies",
+        "sourceDir": "design-assets/ours/hero-imagegen"
+      },
+      {
+        "id": "iterations-ours-hero-imagegen-hero-i15",
+        "src": "/process/iterations-ours-hero-imagegen-hero-i15.jpg",
+        "role": "variant",
+        "title": "hero i15",
+        "round": "Hero image studies",
+        "sourceDir": "design-assets/ours/hero-imagegen"
+      },
+      {
+        "id": "iterations-ours-hero-imagegen-hero-i16",
+        "src": "/process/iterations-ours-hero-imagegen-hero-i16.jpg",
+        "role": "variant",
+        "title": "hero i16",
+        "round": "Hero image studies",
+        "sourceDir": "design-assets/ours/hero-imagegen"
+      },
+      {
+        "id": "iterations-ours-hero-imagegen-hero-i17",
+        "src": "/process/iterations-ours-hero-imagegen-hero-i17.jpg",
+        "role": "variant",
+        "title": "hero i17",
+        "round": "Hero image studies",
+        "sourceDir": "design-assets/ours/hero-imagegen"
+      },
+      {
+        "id": "iterations-ours-hero-imagegen-hero-i18",
+        "src": "/process/iterations-ours-hero-imagegen-hero-i18.jpg",
+        "role": "variant",
+        "title": "hero i18",
+        "round": "Hero image studies",
+        "sourceDir": "design-assets/ours/hero-imagegen"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i03-navy-01-strip",
+        "src": "/process/iterations-ours-page-imagegen-i03-navy-01-strip.jpg",
+        "role": "variant",
+        "title": "01 strip",
+        "round": "Full-page directions — i03 navy",
+        "sourceDir": "design-assets/ours/page-imagegen/i03-navy"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i03-navy-02-kinetic",
+        "src": "/process/iterations-ours-page-imagegen-i03-navy-02-kinetic.jpg",
+        "role": "variant",
+        "title": "02 kinetic",
+        "round": "Full-page directions — i03 navy",
+        "sourceDir": "design-assets/ours/page-imagegen/i03-navy"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i03-navy-03-hvu",
+        "src": "/process/iterations-ours-page-imagegen-i03-navy-03-hvu.jpg",
+        "role": "variant",
+        "title": "03 hvu",
+        "round": "Full-page directions — i03 navy",
+        "sourceDir": "design-assets/ours/page-imagegen/i03-navy"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i03-navy-04-objection-anatomy",
+        "src": "/process/iterations-ours-page-imagegen-i03-navy-04-objection-anatomy.jpg",
+        "role": "variant",
+        "title": "04 objection anatomy",
+        "round": "Full-page directions — i03 navy",
+        "sourceDir": "design-assets/ours/page-imagegen/i03-navy"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i03-navy-08-stats",
+        "src": "/process/iterations-ours-page-imagegen-i03-navy-08-stats.jpg",
+        "role": "variant",
+        "title": "08 stats",
+        "round": "Full-page directions — i03 navy",
+        "sourceDir": "design-assets/ours/page-imagegen/i03-navy"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i03-navy-10-footer",
+        "src": "/process/iterations-ours-page-imagegen-i03-navy-10-footer.jpg",
+        "role": "variant",
+        "title": "10 footer",
+        "round": "Full-page directions — i03 navy",
+        "sourceDir": "design-assets/ours/page-imagegen/i03-navy"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i06-grid-02-kinetic",
+        "src": "/process/iterations-ours-page-imagegen-i06-grid-02-kinetic.jpg",
+        "role": "variant",
+        "title": "02 kinetic",
+        "round": "Full-page directions — i06 grid",
+        "sourceDir": "design-assets/ours/page-imagegen/i06-grid"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i06-grid-03-hvu",
+        "src": "/process/iterations-ours-page-imagegen-i06-grid-03-hvu.jpg",
+        "role": "variant",
+        "title": "03 hvu",
+        "round": "Full-page directions — i06 grid",
+        "sourceDir": "design-assets/ours/page-imagegen/i06-grid"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i06-grid-04-objection-anatomy",
+        "src": "/process/iterations-ours-page-imagegen-i06-grid-04-objection-anatomy.jpg",
+        "role": "variant",
+        "title": "04 objection anatomy",
+        "round": "Full-page directions — i06 grid",
+        "sourceDir": "design-assets/ours/page-imagegen/i06-grid"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i06-grid-05-objection-library",
+        "src": "/process/iterations-ours-page-imagegen-i06-grid-05-objection-library.jpg",
+        "role": "variant",
+        "title": "05 objection library",
+        "round": "Full-page directions — i06 grid",
+        "sourceDir": "design-assets/ours/page-imagegen/i06-grid"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i06-grid-06-writeback",
+        "src": "/process/iterations-ours-page-imagegen-i06-grid-06-writeback.jpg",
+        "role": "variant",
+        "title": "06 writeback",
+        "round": "Full-page directions — i06 grid",
+        "sourceDir": "design-assets/ours/page-imagegen/i06-grid"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i06-grid-07-shared-truth",
+        "src": "/process/iterations-ours-page-imagegen-i06-grid-07-shared-truth.jpg",
+        "role": "variant",
+        "title": "07 shared truth",
+        "round": "Full-page directions — i06 grid",
+        "sourceDir": "design-assets/ours/page-imagegen/i06-grid"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i06-grid-08-stats",
+        "src": "/process/iterations-ours-page-imagegen-i06-grid-08-stats.jpg",
+        "role": "variant",
+        "title": "08 stats",
+        "round": "Full-page directions — i06 grid",
+        "sourceDir": "design-assets/ours/page-imagegen/i06-grid"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i06-grid-09-cta",
+        "src": "/process/iterations-ours-page-imagegen-i06-grid-09-cta.jpg",
+        "role": "variant",
+        "title": "09 cta",
+        "round": "Full-page directions — i06 grid",
+        "sourceDir": "design-assets/ours/page-imagegen/i06-grid"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i06-grid-10-footer",
+        "src": "/process/iterations-ours-page-imagegen-i06-grid-10-footer.jpg",
+        "role": "variant",
+        "title": "10 footer",
+        "round": "Full-page directions — i06 grid",
+        "sourceDir": "design-assets/ours/page-imagegen/i06-grid"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i08-typographic-01-strip",
+        "src": "/process/iterations-ours-page-imagegen-i08-typographic-01-strip.jpg",
+        "role": "variant",
+        "title": "01 strip",
+        "round": "Full-page directions — i08 typographic",
+        "sourceDir": "design-assets/ours/page-imagegen/i08-typographic"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i08-typographic-02-kinetic",
+        "src": "/process/iterations-ours-page-imagegen-i08-typographic-02-kinetic.jpg",
+        "role": "variant",
+        "title": "02 kinetic",
+        "round": "Full-page directions — i08 typographic",
+        "sourceDir": "design-assets/ours/page-imagegen/i08-typographic"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i08-typographic-03-hvu",
+        "src": "/process/iterations-ours-page-imagegen-i08-typographic-03-hvu.jpg",
+        "role": "variant",
+        "title": "03 hvu",
+        "round": "Full-page directions — i08 typographic",
+        "sourceDir": "design-assets/ours/page-imagegen/i08-typographic"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i08-typographic-04-objection-anatomy",
+        "src": "/process/iterations-ours-page-imagegen-i08-typographic-04-objection-anatomy.jpg",
+        "role": "variant",
+        "title": "04 objection anatomy",
+        "round": "Full-page directions — i08 typographic",
+        "sourceDir": "design-assets/ours/page-imagegen/i08-typographic"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i08-typographic-05-objection-library",
+        "src": "/process/iterations-ours-page-imagegen-i08-typographic-05-objection-library.jpg",
+        "role": "variant",
+        "title": "05 objection library",
+        "round": "Full-page directions — i08 typographic",
+        "sourceDir": "design-assets/ours/page-imagegen/i08-typographic"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i08-typographic-06-writeback",
+        "src": "/process/iterations-ours-page-imagegen-i08-typographic-06-writeback.jpg",
+        "role": "variant",
+        "title": "06 writeback",
+        "round": "Full-page directions — i08 typographic",
+        "sourceDir": "design-assets/ours/page-imagegen/i08-typographic"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i08-typographic-07-shared-truth",
+        "src": "/process/iterations-ours-page-imagegen-i08-typographic-07-shared-truth.jpg",
+        "role": "variant",
+        "title": "07 shared truth",
+        "round": "Full-page directions — i08 typographic",
+        "sourceDir": "design-assets/ours/page-imagegen/i08-typographic"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i08-typographic-08-stats",
+        "src": "/process/iterations-ours-page-imagegen-i08-typographic-08-stats.jpg",
+        "role": "variant",
+        "title": "08 stats",
+        "round": "Full-page directions — i08 typographic",
+        "sourceDir": "design-assets/ours/page-imagegen/i08-typographic"
+      },
+      {
+        "id": "iterations-ours-page-imagegen-i08-typographic-10-footer",
+        "src": "/process/iterations-ours-page-imagegen-i08-typographic-10-footer.jpg",
+        "role": "variant",
+        "title": "10 footer",
+        "round": "Full-page directions — i08 typographic",
+        "sourceDir": "design-assets/ours/page-imagegen/i08-typographic"
+      },
+      {
+        "id": "iterations-ours-color-vibes-r1-2-deep-chapter",
+        "src": "/process/iterations-ours-color-vibes-r1-2-deep-chapter.jpg",
+        "role": "variant",
+        "title": "r1 2 deep chapter",
+        "round": "Color & vibe mocks",
+        "sourceDir": "design-assets/ours/color-vibes"
+      },
+      {
+        "id": "iterations-ours-color-vibes-r1-5-warm-shift",
+        "src": "/process/iterations-ours-color-vibes-r1-5-warm-shift.jpg",
+        "role": "variant",
+        "title": "r1 5 warm shift",
+        "round": "Color & vibe mocks",
+        "sourceDir": "design-assets/ours/color-vibes"
+      },
+      {
+        "id": "iterations-ours-color-vibes-r1-6-colored-structure",
+        "src": "/process/iterations-ours-color-vibes-r1-6-colored-structure.jpg",
+        "role": "variant",
+        "title": "r1 6 colored structure",
+        "round": "Color & vibe mocks",
+        "sourceDir": "design-assets/ours/color-vibes"
+      },
+      {
+        "id": "iterations-ours-color-vibes-r2-deep-chapter-a",
+        "src": "/process/iterations-ours-color-vibes-r2-deep-chapter-a.jpg",
+        "role": "variant",
+        "title": "r2 deep chapter a",
+        "round": "Color & vibe mocks",
+        "sourceDir": "design-assets/ours/color-vibes"
+      },
+      {
+        "id": "iterations-ours-color-vibes-r2-deep-chapter-b",
+        "src": "/process/iterations-ours-color-vibes-r2-deep-chapter-b.jpg",
+        "role": "variant",
+        "title": "r2 deep chapter b",
+        "round": "Color & vibe mocks",
+        "sourceDir": "design-assets/ours/color-vibes"
+      },
+      {
+        "id": "iterations-ours-color-vibes-r2-product-color-a",
+        "src": "/process/iterations-ours-color-vibes-r2-product-color-a.jpg",
+        "role": "variant",
+        "title": "r2 product color a",
+        "round": "Color & vibe mocks",
+        "sourceDir": "design-assets/ours/color-vibes"
+      },
+      {
+        "id": "iterations-ours-color-vibes-r2-product-color-b",
+        "src": "/process/iterations-ours-color-vibes-r2-product-color-b.jpg",
+        "role": "variant",
+        "title": "r2 product color b",
+        "round": "Color & vibe mocks",
+        "sourceDir": "design-assets/ours/color-vibes"
+      },
+      {
+        "id": "iterations-ours-color-vibes-r2-tinted-chapters-a",
+        "src": "/process/iterations-ours-color-vibes-r2-tinted-chapters-a.jpg",
+        "role": "variant",
+        "title": "r2 tinted chapters a",
+        "round": "Color & vibe mocks",
+        "sourceDir": "design-assets/ours/color-vibes"
+      },
+      {
+        "id": "iterations-ours-color-vibes-r2-tinted-chapters-b",
+        "src": "/process/iterations-ours-color-vibes-r2-tinted-chapters-b.jpg",
+        "role": "variant",
+        "title": "r2 tinted chapters b",
+        "round": "Color & vibe mocks",
+        "sourceDir": "design-assets/ours/color-vibes"
+      },
+      {
+        "id": "iterations-ours-color-vibes-dotted-d1-1-dot-grid-ground",
+        "src": "/process/iterations-ours-color-vibes-dotted-d1-1-dot-grid-ground.jpg",
+        "role": "variant",
+        "title": "d1 1 dot grid ground",
+        "round": "Dotted variations",
+        "sourceDir": "design-assets/ours/color-vibes/dotted"
+      },
+      {
+        "id": "iterations-ours-color-vibes-dotted-d1-2-density-as-data",
+        "src": "/process/iterations-ours-color-vibes-dotted-d1-2-density-as-data.jpg",
+        "role": "variant",
+        "title": "d1 2 density as data",
+        "round": "Dotted variations",
+        "sourceDir": "design-assets/ours/color-vibes/dotted"
+      },
+      {
+        "id": "iterations-ours-color-vibes-dotted-d1-3-halftone-waveform",
+        "src": "/process/iterations-ours-color-vibes-dotted-d1-3-halftone-waveform.jpg",
+        "role": "variant",
+        "title": "d1 3 halftone waveform",
+        "round": "Dotted variations",
+        "sourceDir": "design-assets/ours/color-vibes/dotted"
+      },
+      {
+        "id": "iterations-ours-color-vibes-dotted-d1-4-dotted-structure",
+        "src": "/process/iterations-ours-color-vibes-dotted-d1-4-dotted-structure.jpg",
+        "role": "variant",
+        "title": "d1 4 dotted structure",
+        "round": "Dotted variations",
+        "sourceDir": "design-assets/ours/color-vibes/dotted"
+      },
+      {
+        "id": "iterations-ours-color-vibes-dotted-d1-5-colored-dot-field",
+        "src": "/process/iterations-ours-color-vibes-dotted-d1-5-colored-dot-field.jpg",
+        "role": "variant",
+        "title": "d1 5 colored dot field",
+        "round": "Dotted variations",
+        "sourceDir": "design-assets/ours/color-vibes/dotted"
+      },
+      {
+        "id": "iterations-ours-color-vibes-dotted-d1-6-dot-matrix-telemetry",
+        "src": "/process/iterations-ours-color-vibes-dotted-d1-6-dot-matrix-telemetry.jpg",
+        "role": "variant",
+        "title": "d1 6 dot matrix telemetry",
+        "round": "Dotted variations",
+        "sourceDir": "design-assets/ours/color-vibes/dotted"
+      },
+      {
+        "id": "iterations-ours-color-vibes-dotted-d2-colored-dot-field-a",
+        "src": "/process/iterations-ours-color-vibes-dotted-d2-colored-dot-field-a.jpg",
+        "role": "variant",
+        "title": "d2 colored dot field a",
+        "round": "Dotted variations",
+        "sourceDir": "design-assets/ours/color-vibes/dotted"
+      },
+      {
+        "id": "iterations-ours-color-vibes-dotted-d2-colored-dot-field-b",
+        "src": "/process/iterations-ours-color-vibes-dotted-d2-colored-dot-field-b.jpg",
+        "role": "variant",
+        "title": "d2 colored dot field b",
+        "round": "Dotted variations",
+        "sourceDir": "design-assets/ours/color-vibes/dotted"
+      },
+      {
+        "id": "iterations-ours-color-vibes-dotted-d2-dot-matrix-telemetry-a",
+        "src": "/process/iterations-ours-color-vibes-dotted-d2-dot-matrix-telemetry-a.jpg",
+        "role": "variant",
+        "title": "d2 dot matrix telemetry a",
+        "round": "Dotted variations",
+        "sourceDir": "design-assets/ours/color-vibes/dotted"
+      },
+      {
+        "id": "iterations-ours-color-vibes-dotted-d2-dot-matrix-telemetry-b",
+        "src": "/process/iterations-ours-color-vibes-dotted-d2-dot-matrix-telemetry-b.jpg",
+        "role": "variant",
+        "title": "d2 dot matrix telemetry b",
+        "round": "Dotted variations",
+        "sourceDir": "design-assets/ours/color-vibes/dotted"
+      },
+      {
+        "id": "iterations-ours-color-vibes-dotted-d2-dotted-structure-a",
+        "src": "/process/iterations-ours-color-vibes-dotted-d2-dotted-structure-a.jpg",
+        "role": "variant",
+        "title": "d2 dotted structure a",
+        "round": "Dotted variations",
+        "sourceDir": "design-assets/ours/color-vibes/dotted"
+      },
+      {
+        "id": "iterations-ours-color-vibes-dotted-d2-dotted-structure-b",
+        "src": "/process/iterations-ours-color-vibes-dotted-d2-dotted-structure-b.jpg",
+        "role": "variant",
+        "title": "d2 dotted structure b",
+        "round": "Dotted variations",
+        "sourceDir": "design-assets/ours/color-vibes/dotted"
+      },
+      {
+        "id": "iterations-mockups-hero-whitespace-01-expanding-context-window",
+        "src": "/process/iterations-mockups-hero-whitespace-01-expanding-context-window.jpg",
+        "role": "variant",
+        "title": "01 expanding context window",
+        "round": "Hero whitespace mocks",
+        "sourceDir": "design-assets/mockups/hero-whitespace"
+      },
+      {
+        "id": "iterations-mockups-hero-whitespace-02-one-route",
+        "src": "/process/iterations-mockups-hero-whitespace-02-one-route.jpg",
+        "role": "variant",
+        "title": "02 one route",
+        "round": "Hero whitespace mocks",
+        "sourceDir": "design-assets/mockups/hero-whitespace"
+      },
+      {
+        "id": "iterations-mockups-hero-whitespace-03-one-live-moment",
+        "src": "/process/iterations-mockups-hero-whitespace-03-one-live-moment.jpg",
+        "role": "variant",
+        "title": "03 one live moment",
+        "round": "Hero whitespace mocks",
+        "sourceDir": "design-assets/mockups/hero-whitespace"
+      },
+      {
+        "id": "iterations-mockups-evidence-digital-01-context-scrubber",
+        "src": "/process/iterations-mockups-evidence-digital-01-context-scrubber.jpg",
+        "role": "variant",
+        "title": "01 context scrubber",
+        "round": "Evidence digital mocks",
+        "sourceDir": "design-assets/mockups/evidence-digital"
+      },
+      {
+        "id": "iterations-mockups-evidence-digital-02-context-diff",
+        "src": "/process/iterations-mockups-evidence-digital-02-context-diff.jpg",
+        "role": "variant",
+        "title": "02 context diff",
+        "round": "Evidence digital mocks",
+        "sourceDir": "design-assets/mockups/evidence-digital"
+      },
+      {
+        "id": "iterations-mockups-component-concepts-round-3-02-memory-window",
+        "src": "/process/iterations-mockups-component-concepts-round-3-02-memory-window.jpg",
+        "role": "variant",
+        "title": "02 memory window",
+        "round": "Component concepts — round 3",
+        "sourceDir": "design-assets/mockups/component-concepts-round-3"
+      },
+      {
+        "id": "iterations-mockups-component-concepts-round-3-03-signal-horizon",
+        "src": "/process/iterations-mockups-component-concepts-round-3-03-signal-horizon.jpg",
+        "role": "variant",
+        "title": "03 signal horizon",
+        "round": "Component concepts — round 3",
+        "sourceDir": "design-assets/mockups/component-concepts-round-3"
+      },
+      {
+        "id": "iterations-mockups-component-concepts-round-3-04-intent-relay",
+        "src": "/process/iterations-mockups-component-concepts-round-3-04-intent-relay.jpg",
+        "role": "variant",
+        "title": "04 intent relay",
+        "round": "Component concepts — round 3",
+        "sourceDir": "design-assets/mockups/component-concepts-round-3"
+      },
+      {
+        "id": "iterations-mockups-component-concepts-round-3-05-objection-anatomy",
+        "src": "/process/iterations-mockups-component-concepts-round-3-05-objection-anatomy.jpg",
+        "role": "variant",
+        "title": "05 objection anatomy",
+        "round": "Component concepts — round 3",
+        "sourceDir": "design-assets/mockups/component-concepts-round-3"
+      },
+      {
+        "id": "iterations-mockups-component-concepts-round-3-06-silence-signal",
+        "src": "/process/iterations-mockups-component-concepts-round-3-06-silence-signal.jpg",
+        "role": "variant",
+        "title": "06 silence signal",
+        "round": "Component concepts — round 3",
+        "sourceDir": "design-assets/mockups/component-concepts-round-3"
+      },
+      {
+        "id": "iterations-mockups-component-concepts-round-3-07-evidence-ledger",
+        "src": "/process/iterations-mockups-component-concepts-round-3-07-evidence-ledger.jpg",
+        "role": "variant",
+        "title": "07 evidence ledger",
+        "round": "Component concepts — round 3",
+        "sourceDir": "design-assets/mockups/component-concepts-round-3"
+      },
+      {
+        "id": "iterations-mockups-component-concepts-round-3-08-decision-timeline",
+        "src": "/process/iterations-mockups-component-concepts-round-3-08-decision-timeline.jpg",
+        "role": "variant",
+        "title": "08 decision timeline",
+        "round": "Component concepts — round 3",
+        "sourceDir": "design-assets/mockups/component-concepts-round-3"
+      },
+      {
+        "id": "iterations-mockups-component-concepts-round-3-09-context-diff",
+        "src": "/process/iterations-mockups-component-concepts-round-3-09-context-diff.jpg",
+        "role": "variant",
+        "title": "09 context diff",
+        "round": "Component concepts — round 3",
+        "sourceDir": "design-assets/mockups/component-concepts-round-3"
+      },
+      {
+        "id": "iterations-mockups-component-concepts-round-3-10-response-branches",
+        "src": "/process/iterations-mockups-component-concepts-round-3-10-response-branches.jpg",
+        "role": "variant",
+        "title": "10 response branches",
+        "round": "Component concepts — round 3",
+        "sourceDir": "design-assets/mockups/component-concepts-round-3"
+      },
+      {
+        "id": "iterations-mockups-component-concepts-round-3-12-commitment-compiler",
+        "src": "/process/iterations-mockups-component-concepts-round-3-12-commitment-compiler.jpg",
+        "role": "variant",
+        "title": "12 commitment compiler",
+        "round": "Component concepts — round 3",
+        "sourceDir": "design-assets/mockups/component-concepts-round-3"
+      },
+      {
+        "id": "iterations-mockups-component-concepts-round-3-13-handoff-packet",
+        "src": "/process/iterations-mockups-component-concepts-round-3-13-handoff-packet.jpg",
+        "role": "variant",
+        "title": "13 handoff packet",
+        "round": "Component concepts — round 3",
+        "sourceDir": "design-assets/mockups/component-concepts-round-3"
+      },
+      {
+        "id": "iterations-mockups-playground-score-iterations-01-deviation-plot",
+        "src": "/process/iterations-mockups-playground-score-iterations-01-deviation-plot.jpg",
+        "role": "variant",
+        "title": "01 deviation plot",
+        "round": "Playground score iterations",
+        "sourceDir": "design-assets/mockups/playground-score-iterations"
+      },
+      {
+        "id": "iterations-mockups-playground-score-iterations-02-skill-orbit",
+        "src": "/process/iterations-mockups-playground-score-iterations-02-skill-orbit.jpg",
+        "role": "variant",
+        "title": "02 skill orbit",
+        "round": "Playground score iterations",
+        "sourceDir": "design-assets/mockups/playground-score-iterations"
+      },
+      {
+        "id": "iterations-mockups-playground-score-iterations-03-score-fingerprint",
+        "src": "/process/iterations-mockups-playground-score-iterations-03-score-fingerprint.jpg",
+        "role": "variant",
+        "title": "03 score fingerprint",
+        "round": "Playground score iterations",
+        "sourceDir": "design-assets/mockups/playground-score-iterations"
+      },
+      {
+        "id": "iterations-mockups-testimonial-concepts-round-1-02-before-moment-after",
+        "src": "/process/iterations-mockups-testimonial-concepts-round-1-02-before-moment-after.jpg",
+        "role": "variant",
+        "title": "02 before moment after",
+        "round": "Testimonial concepts — round 1",
+        "sourceDir": "design-assets/mockups/testimonial-concepts-round-1"
+      },
+      {
+        "id": "iterations-mockups-testimonial-concepts-round-1-04-customer-signal-tape",
+        "src": "/process/iterations-mockups-testimonial-concepts-round-1-04-customer-signal-tape.jpg",
+        "role": "variant",
+        "title": "04 customer signal tape",
+        "round": "Testimonial concepts — round 1",
+        "sourceDir": "design-assets/mockups/testimonial-concepts-round-1"
+      }
+    ]
+  }
+}

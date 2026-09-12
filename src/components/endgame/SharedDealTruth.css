@@ -1,0 +1,220 @@
+/* SharedDealTruth — dual-card showcase (base + floating overlay). */
+
+.sdt-band {
+  position: relative;
+  min-height: 420px;
+  display: grid;
+  align-items: stretch;
+}
+
+.sdt-base {
+  border-radius: 16px;
+  border: 1px solid var(--color-hairline-2);
+  background: var(--color-surface-200);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  max-width: 720px;
+}
+
+.sdt-base__bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--color-hairline-2);
+  background: var(--color-surface-100);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.sdt-base__bar em {
+  font-style: normal;
+  font-weight: 500;
+  color: var(--color-gray-600);
+}
+
+.sdt-roles {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+}
+
+.sdt-roles li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: 16px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--color-hairline-2);
+}
+
+.sdt-roles li:last-child {
+  border-bottom: 0;
+}
+
+.sdt-roles__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.sdt-roles__sees {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--color-gray-700);
+}
+
+.sdt-roles__sees--risk {
+  color: var(--color-risk-900, #7a1f1f);
+}
+
+.sdt-roles__sees--won {
+  color: var(--color-won-900, #0b3b2a);
+}
+
+.sdt-overlay {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  width: min(320px, 42%);
+  border-radius: 14px;
+  border: 1px solid var(--color-hairline-2);
+  background: var(--color-surface-100);
+  box-shadow: var(--kz-shadow-float, 0 1px 2px rgb(22 21 20 / 0.05), 0 12px 32px -8px rgb(22 21 20 / 0.12));
+  opacity: 0;
+  filter: blur(2.5px);
+  translate: 0 14px;
+}
+
+.sdt-overlay.is-in {
+  animation: sdt-lift 560ms var(--ease-entrance) 480ms both;
+}
+
+@keyframes sdt-lift {
+  to {
+    opacity: 1;
+    filter: blur(0);
+    translate: 0 0;
+  }
+}
+
+.sdt-overlay header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.sdt-overlay__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-won-900, #0b3b2a);
+  background: var(--color-won-100, #e0fced);
+  border: 1px solid var(--color-won-200, #cbf7e1);
+}
+
+.sdt-overlay dl {
+  margin: 0;
+  padding: 4px 0 8px;
+  border-top: 1px solid var(--color-hairline-2);
+  border-bottom: 1px solid var(--color-hairline-2);
+}
+
+.sdt-overlay dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+}
+
+.sdt-overlay dt {
+  font-size: 12px;
+  color: var(--color-gray-600);
+}
+
+.sdt-overlay dd {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 550;
+  color: var(--color-ink);
+  text-align: right;
+}
+
+.sdt-overlay footer {
+  padding: 12px 16px 14px;
+  font-size: 12px;
+  color: var(--color-gray-600);
+}
+
+.sdt-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px 48px;
+  margin-top: 48px;
+  max-width: 880px;
+}
+
+.sdt-features h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--color-ink);
+}
+
+.sdt-features h3 span {
+  color: var(--color-gray-600);
+  font-weight: 450;
+}
+
+@media (max-width: 900px) {
+  .sdt-band {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-height: 0;
+  }
+
+  .sdt-base {
+    max-width: none;
+  }
+
+  .sdt-overlay {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 100%;
+  }
+
+  .sdt-overlay.is-in {
+    animation-delay: 200ms;
+  }
+
+  .sdt-roles li {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .sdt-features {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sdt-overlay,
+  .sdt-overlay.is-in {
+    animation: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+    translate: none !important;
+  }
+}

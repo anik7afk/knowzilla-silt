@@ -1,0 +1,741 @@
+/* Pricing — four flat plan cards, the donor's own pricing grammar on our
+   tokens. Reference: the owner's screenshot of attio.com/pricing/eur
+   (2026-07-27); the full translation log is the header comment in Pricing.tsx.
+
+   THE GRAMMAR (donor's, translated):
+     ground   surface-200 #FAFAFA   the section (Natural's warm step, not
+                                    the donor's plain white)
+     card     surface-100 #FFFFFF   + 1px hairline-2, radius-card, FLAT —
+                                    no back-plates, no fills, no elevation
+     featured                       a 1.5px SIGNAL-600 outline + the one
+                                    ink-filled CTA. The stroke is painted as
+                                    an inset box-shadow because Chromium
+                                    floors fractional border-width; the
+                                    1px hairline border underneath goes
+                                    transparent so the box metrics of the
+                                    four cards stay identical.
+
+   COLOUR: no lavender anywhere in this section (the eyebrow runs gray) —
+   signal is the frame's ONE saturated family, per the 17°-adjacency rule:
+   the featured outline (signal-600) and the two save-chip sites
+   (signal-100 ground / signal-700 ink, the donor's badge pairing, already
+   used by Stats' delta chip). Everything else is neutral.
+
+   SHADOWS: none. The only box-shadows in this file are the featured
+   outline stroke (a border, not elevation) and the shared focus ring.
+
+   CONTRAST, measured on their actual grounds:
+     · switch labels gray-800 on gray-300 track = 7.5:1
+     · price caption gray-700 on white = 5.0:1
+     · feature ticks gray-600 on white = 3.4:1 (non-text 3:1 floor)
+     · chip signal-700 on signal-100 — the Stats-verified pairing
+   The one knowingly-low value is the outline CTA's gray-400 border (1.5:1),
+   which is design.md's own declared `button-outline` — a system convention.
+
+   Zero colour literals: every value resolves through a token. */
+
+.pr {
+  position: relative;
+  background-color: var(--color-surface-200);
+  color: var(--color-ink);
+  /* standard height class per design.md §Chapter map + height classes */
+  padding: 152px 0 96px;
+}
+
+.pr__container {
+  position: relative;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 40px;
+}
+
+/* ── header ─────────────────────────────────────────────────────────────── */
+
+.pr__head {
+  max-width: 640px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.pr-eyebrow {
+  margin: 0;
+  color: var(--color-gray-700);
+}
+
+.pr-heading {
+  margin: 14px 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(32px, 3.4vw, 44px);
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  color: var(--color-ink);
+  text-wrap: balance;
+}
+
+.pr-sub {
+  max-width: 560px;
+  margin: 18px auto 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 450;
+  color: var(--color-gray-700);
+  text-wrap: balance;
+}
+
+/* ── billing switch ──────────────────────────────────────────────────────
+   ObjectionLibrary's travelling-indicator pattern: the options paint no
+   background at all, and one persistent element measured off the active
+   option's box carries the selection. */
+
+.pr-switch {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: fit-content;
+  margin: 40px auto 0;
+  padding: 4px;
+  border-radius: var(--radius-button);
+  background-color: var(--color-gray-300);
+}
+
+.pr-switch__pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 0;
+  height: 32px;
+  border-radius: var(--radius-button);
+  background-color: var(--color-surface-100);
+  opacity: 0;
+  pointer-events: none;
+  contain: layout paint;
+}
+
+/* Armed one frame after the first measured paint, so the indicator never
+   travels in from x=0 on mount. 300ms = the donors' hover-out envelope, which
+   is the right weight for a control that follows the pointer's decision. */
+.pr--armed .pr-switch__pill {
+  transition:
+    transform 300ms var(--ease-entrance),
+    width 300ms var(--ease-entrance);
+}
+
+.pr-switch__opt {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  height: 32px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--radius-button);
+  background-color: transparent;
+  /* gray-800, not gray-600: the track is gray-300, where gray-600 measures
+     2.7:1. The selection does not need the unselected option to be faint —
+     the travelling pill carries it. */
+  color: var(--color-gray-800);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 550;
+  line-height: 32px;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  cursor: pointer;
+  /* asymmetric hover grammar: .kz-hover supplies 300ms out / 50ms in */
+  transition-property: color;
+}
+
+.pr-switch__opt:hover,
+.pr-switch__opt.is-active {
+  color: var(--color-ink);
+}
+
+.pr-switch__save {
+  font-size: 11px;
+  font-weight: 550;
+  letter-spacing: 0.01em;
+  color: var(--color-gray-800);
+}
+
+/* ── the plan grid — four equal flat cards ──────────────────────────────── */
+
+.pr__plans {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+  margin-top: 56px;
+}
+
+.pr-card {
+  display: flex;
+  flex-direction: column;
+  padding: 26px 24px 24px;
+  border: 1px solid var(--color-hairline-2);
+  border-radius: var(--radius-card);
+  background-color: var(--color-surface-100);
+  /* tick weight is the only per-card colour variable */
+  --pr-tick: var(--color-gray-600);
+}
+
+/* the recommendation, the donor's way: a 1.5px signal stroke + the ink CTA.
+   Painted as an INSET box-shadow (Chromium floors fractional border-width to
+   whole px); the hairline border underneath goes transparent so all four
+   cards keep identical box metrics. A stroke, not elevation.
+   DEVIATION FLAG (checkpoint): R1 keeps structural lines neutral — this line
+   is argued as a data mark ("this one"), on the ramp whose donor use is
+   exactly this. */
+.pr-card--featured {
+  border-color: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--color-signal-600);
+  --pr-tick: var(--color-gray-900);
+}
+
+.pr-card__name {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 550;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+
+/* ── price ───────────────────────────────────────────────────────────────
+   The two numerals share ONE grid cell and are both permanently in the DOM,
+   so the box is the wider string's width in every frame and a billing swap is
+   structurally incapable of moving anything. Tabular figures keep the two
+   strings identical anyway. The save chip's space is always reserved — only
+   its ink fades — so the toggle can move nothing on this row either. */
+
+.pr-price {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  margin: 18px 0 0;
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+}
+
+.pr-price__cur {
+  margin-top: 6px;
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 500;
+  color: var(--color-gray-700);
+}
+
+.pr-price__num {
+  display: grid;
+}
+
+.pr-price__v {
+  grid-area: 1 / 1;
+  font-size: 46px;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  opacity: 0;
+  /* (N) content swaps at 120–150ms ease-out */
+  transition: opacity 150ms ease-out;
+}
+
+.pr-price__v.is-on {
+  opacity: 1;
+}
+
+/* the donor's save badge — signal-100 ground / signal-700 ink, the pairing
+   Stats' delta chip already carries */
+.pr-price__chip {
+  align-self: center;
+  margin-left: 5px;
+  padding: 3px 9px;
+  border-radius: var(--radius-button);
+  background-color: var(--color-signal-100);
+  color: var(--color-signal-700);
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 550;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 150ms ease-out;
+}
+
+.pr-price__chip.is-on {
+  opacity: 1;
+}
+
+/* Always rendered in full, so the caption's box never changes — only the
+   "billed annually" ink fades in and out with the toggle. */
+.pr-card__caption {
+  margin: 8px 0 0;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 450;
+  color: var(--color-gray-700);
+}
+
+.pr-card__billing {
+  opacity: 0;
+  transition: opacity 150ms ease-out;
+}
+
+.pr-card__billing.is-on {
+  opacity: 1;
+}
+
+/* the donor's bold audience line, under the price rather than over it */
+.pr-card__desc {
+  margin: 18px 0 0;
+  min-height: 44px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 550;
+  letter-spacing: -0.005em;
+  color: var(--color-ink);
+  text-wrap: pretty;
+}
+
+/* ── features — straight under the audience line, no divider (donor) ─────── */
+
+.pr-feats {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 14px 0 26px;
+  padding: 0;
+  list-style: none;
+}
+
+.pr-feat {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  line-height: 20px;
+  font-weight: 450;
+  color: var(--color-gray-800);
+}
+
+/* graphite — weight, not hue, separates the plans */
+.pr-feat__tick {
+  flex: none;
+  width: 14px;
+  margin-top: 3px;
+  color: var(--pr-tick);
+}
+
+/* ── CTA ─────────────────────────────────────────────────────────────────
+   `margin-top: auto` bottom-aligns the four buttons across cards whose
+   feature lists differ in length. Featured = the page's ink pill convention
+   (AccountReveals.css §.ar__cta); the rest = design.md's `button-outline`,
+   verbatim. */
+
+.pr-cta {
+  width: 100%;
+  height: 40px;
+  margin-top: auto;
+  border: 1px solid var(--color-gray-400);
+  border-radius: var(--radius-button);
+  background-color: var(--color-surface-100);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition-property: background-color, border-color, color;
+}
+
+.pr-cta:hover {
+  background-color: var(--color-surface-300);
+  border-color: var(--color-gray-500);
+}
+
+.pr-cta--ink {
+  border-color: var(--color-ink);
+  background-color: var(--color-ink);
+  color: var(--color-surface-100);
+}
+
+.pr-cta--ink:hover {
+  background-color: var(--color-gray-800);
+  border-color: var(--color-gray-800);
+}
+
+/* ── the v2 page's blocks below the cards, on v5's skin ──────────────────
+   Each block: gray label-face eyebrow + display title (+ optional lede),
+   then its content. Blocks enter on their own viewport crossing (see the
+   entrance rules at the bottom), so the page reads section by section the
+   way v2's did. */
+
+.pr-block {
+  margin-top: 128px;
+}
+
+.pr-block__head {
+  max-width: 640px;
+}
+
+.pr-block__eyebrow {
+  margin: 0;
+  color: var(--color-gray-700);
+}
+
+.pr-block__title {
+  margin: 12px 0 0;
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  text-wrap: balance;
+}
+
+.pr-block__lede {
+  max-width: 560px;
+  margin: 12px 0 0;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 24px;
+  font-weight: 450;
+  color: var(--color-gray-700);
+}
+
+/* ── comparison table (v2 §02) ───────────────────────────────────────────
+   Hairline frame, label-face header row, sticky feature column so the table
+   stays readable inside its own horizontal scroll at narrow widths. */
+
+.pr-table__wrap {
+  margin-top: 32px;
+  overflow-x: auto;
+  border: 1px solid var(--color-hairline-2);
+  border-radius: var(--radius-card);
+  background-color: var(--color-surface-100);
+}
+
+.pr-table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.pr-table th,
+.pr-table td {
+  padding: 14px 16px;
+  text-align: left;
+}
+
+.pr-table thead tr {
+  border-bottom: 1px solid var(--color-hairline-2);
+  background-color: var(--color-surface-300);
+}
+
+.pr-table thead th {
+  color: var(--color-gray-700);
+}
+
+.pr-table thead .pr-table__feat {
+  background-color: var(--color-surface-300);
+}
+
+.pr-table tbody tr {
+  border-bottom: 1px solid var(--color-hairline-2);
+}
+
+.pr-table tbody tr:last-child {
+  border-bottom: 0;
+}
+
+.pr-table tbody th {
+  font-weight: 550;
+  color: var(--color-ink);
+}
+
+.pr-table tbody td {
+  font-weight: 450;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-gray-800);
+}
+
+/* first column stays put while the rest scrolls */
+.pr-table .pr-table__feat {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background-color: var(--color-surface-100);
+}
+
+.pr-table__tick {
+  color: var(--color-gray-900);
+}
+
+.pr-table__none {
+  color: var(--color-gray-500);
+}
+
+/* ── enterprise panel (v2 §03) — the page's one dark object ─────────────── */
+
+.pr-ent {
+  margin-top: 32px;
+  padding: 40px;
+  border-radius: var(--radius-card);
+  background-color: var(--color-ink);
+  color: var(--color-surface-100);
+}
+
+.pr-ent__lede {
+  max-width: 620px;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 25px;
+  font-weight: 450;
+  color: var(--color-gray-400);
+}
+
+.pr-ent__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 40px;
+  margin: 32px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pr-ent__feat {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 21px;
+  font-weight: 450;
+}
+
+.pr-ent__feat svg {
+  flex: none;
+  margin-top: 3px;
+  color: var(--color-gray-500);
+}
+
+.pr-ent__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.pr-ent__cta {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 20px;
+  border: 1px solid var(--color-surface-100);
+  border-radius: var(--radius-button);
+  background-color: var(--color-surface-100);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition-property: background-color, border-color, color;
+}
+
+.pr-ent__cta:hover {
+  background-color: var(--color-gray-300);
+  border-color: var(--color-gray-300);
+}
+
+.pr-ent__cta--ghost {
+  border-color: var(--color-gray-700);
+  background-color: transparent;
+  color: var(--color-surface-100);
+}
+
+.pr-ent__cta--ghost:hover {
+  background-color: var(--color-gray-900);
+  border-color: var(--color-gray-700);
+}
+
+/* ── trial steps (v2 §04) ────────────────────────────────────────────────── */
+
+.pr-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 32px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pr-step {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border: 1px solid var(--color-hairline-2);
+  border-radius: var(--radius-card);
+  background-color: var(--color-surface-100);
+}
+
+.pr-step__n {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--color-ink);
+  color: var(--color-surface-100);
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: 550;
+}
+
+.pr-step__title {
+  margin: 14px 0 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+
+.pr-step__body {
+  margin: 6px 0 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 450;
+  color: var(--color-gray-700);
+}
+
+/* ── QUIET entrance: header → toggle → cards (staggered), then each block
+     on its own viewport crossing ──────────────────────────────────────── */
+
+.pr__head,
+.pr-switch,
+.pr-card,
+.pr-block {
+  opacity: 0;
+  filter: blur(2px);
+  transition:
+    opacity 520ms var(--ease-entrance) var(--pr-delay, 0ms),
+    filter 520ms var(--ease-entrance) var(--pr-delay, 0ms);
+}
+
+.pr-switch {
+  --pr-delay: 140ms;
+}
+
+/* per-card stagger off the index the .tsx sets */
+.pr-card {
+  --pr-delay: calc(280ms + var(--pr-i, 0) * 90ms);
+}
+
+.pr--in .pr__head,
+.pr--in .pr-switch,
+.pr--in .pr-card {
+  opacity: 1;
+  filter: blur(0);
+}
+
+/* blocks latch themselves — each carries its own useInView */
+.pr-block.is-in {
+  opacity: 1;
+  filter: blur(0);
+}
+
+/* ── responsive ─────────────────────────────────────────────────────────── */
+
+/* four across gets tight below ~1120 — two by two keeps the card proportion */
+@media (max-width: 1120px) {
+  .pr__plans {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    max-width: 720px;
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .pr {
+    padding: 96px 0 64px;
+  }
+
+  .pr__container {
+    padding-inline: 24px;
+  }
+
+  .pr__plans {
+    margin-top: 40px;
+  }
+
+  .pr-block {
+    margin-top: 88px;
+  }
+
+  .pr-ent {
+    padding: 28px 24px;
+  }
+
+  .pr-ent__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pr-steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .pr__plans {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    max-width: 420px;
+  }
+
+  .pr-card__desc {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .pr-switch__opt {
+    padding: 0 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pr__head,
+  .pr-switch,
+  .pr-card,
+  .pr-block {
+    opacity: 1;
+    filter: blur(0);
+    transition: none;
+  }
+
+  /* the indicator snaps, the price swaps instantly — the control still works */
+  .pr--armed .pr-switch__pill,
+  .pr-price__v,
+  .pr-price__chip,
+  .pr-card__billing {
+    transition: none;
+  }
+}

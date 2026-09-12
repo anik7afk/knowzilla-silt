@@ -1,0 +1,73 @@
+/* QUIET entrance for the integration stack (pacing contract §3 motion ration).
+   ONE travelling emphasis, not seven fades: each mark rises from a ghost state
+   through a brief peak (full ink, blur gone, a hair of scale) and settles at
+   the uniform resting value. The step (120ms, `--mo-stag-strip`) is short
+   against the beat (560ms) so 4–5 marks are always in flight — the row reads
+   as a wave of value crossing it, left to right, once. It runs on
+   opacity / filter / color / transform only, and it holds its last frame
+   forever: nothing loops, because this section hard-cuts into the frozen
+   KineticConversation immediately below.
+
+   RESTING VALUE — the LABELS settle at `--color-gray-900` `#262524` (one step
+   off `--color-ink`, and within 5/channel of Attio's own third-party mark value
+   `#232529` on `#FAFAFB`, inspo/attio/DESIGN.md:231). The MARKS no longer take
+   that value: `--mark-ink` is deliberately left unset (user, 2026-07-27), so
+   every glyph paints its real brand colour and only the type is neutral. This
+   is NOT the old washed-out read — that was `grayscale(1)` over brand art,
+   which rendered each mark at its own luminance (0 for Notion's black up to 187
+   for Microsoft's yellow square) at ink-secondary `#71706f`. There is no filter
+   over the marks now, and full saturation reads as intentional where a
+   desaturated approximation read as broken. Setting `--mark-ink: currentColor`
+   on `.stack-mark` restores the monochrome row in one line. */
+.stack-mark {
+  /* ghost — also the animation's 0% frame, so the delay period matches */
+  opacity: 0.24;
+  color: var(--color-gray-500);
+  filter: blur(2px);
+  transform: scale(0.985);
+}
+
+.stack-row.is-in .stack-mark {
+  animation: stack-sweep 560ms cubic-bezier(0.33, 1, 0.68, 1) both;
+  animation-delay: calc(var(--i) * 120ms);
+}
+
+@keyframes stack-sweep {
+  0% {
+    opacity: 0.24;
+    color: var(--color-gray-500);
+    filter: blur(2px);
+    transform: scale(0.985);
+  }
+  /* peak: 213ms in, held to 291ms — the highlight passing through */
+  38% {
+    opacity: 1;
+    color: var(--color-ink);
+    filter: blur(0);
+    transform: scale(1.035);
+  }
+  52% {
+    opacity: 1;
+    color: var(--color-ink);
+    filter: blur(0);
+    transform: scale(1.035);
+  }
+  100% {
+    opacity: 1;
+    color: var(--color-gray-900);
+    filter: blur(0);
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* No sweep — paint the settled frame directly. */
+  .stack-mark,
+  .stack-row.is-in .stack-mark {
+    animation: none;
+    opacity: 1;
+    color: var(--color-gray-900);
+    filter: none;
+    transform: none;
+  }
+}

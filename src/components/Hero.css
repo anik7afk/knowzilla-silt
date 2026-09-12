@@ -1,0 +1,398 @@
+.hero-curtain {
+  position: relative;
+  isolation: isolate;
+  padding-block: 80px 96px;
+}
+
+.hero-curtain__stage {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.hero-curtain__stage-surface {
+  position: absolute;
+  right: 12px;
+  bottom: 56px;
+  left: 12px;
+  display: none;
+  height: 592px;
+  border-radius: var(--radius-card);
+}
+
+.hero-curtain__stage-surface--lavender {
+  display: block;
+  background: var(--color-accent-100);
+}
+
+.hero-curtain__stage-surface--neutral {
+  display: block;
+  background: var(--color-surface-300);
+}
+
+/* Wallpaper: a desktop picture the product frame sits ON, so the frame reads
+   as a window on a screen. It is bound to the CARD, not to the section — the
+   H4 stage panel is centred on the card's *settled* position, which leaves it
+   naked behind the headline for the first 470px of scroll, where a saturated
+   field reads as "the hero's background" instead of "the screen behind the
+   app" (owner, 2026-07-27). So `wallpaper` paints no stage panel at all.
+   Every stop is an owned token (accent-200→400 for the field, signal-200 for
+   the top-left corner); the BLENDS between stops and the stop POSITIONS are
+   interpolations (~) with no donor provenance — a checkpoint item.
+   2026-07-27: the corner stop used to be a WARM counterweight to the lavender
+   field. That ramp is retired and nothing in the signal ramp is warm, so the
+   corner is now a cool signal-200 — the warm/cool contrast is gone by
+   necessity, not by choice. Flagged for the checkpoint. */
+.hero-curtain__card-bed {
+  position: absolute;
+  inset: -24px;
+  z-index: 0;
+  border-radius: var(--radius-card);
+}
+
+.hero-curtain__card-bed--wallpaper {
+  background:
+    radial-gradient(60% 50% at 14% 4%, var(--color-signal-200) 0%, transparent 62%),
+    radial-gradient(70% 58% at 50% 58%, var(--color-accent-100) 0%, transparent 70%),
+    linear-gradient(
+      145deg,
+      var(--color-accent-200) 0%,
+      var(--color-accent-300) 52%,
+      var(--color-accent-400) 100%
+    );
+}
+
+/* PHOTO beds — a real macOS desktop picture, so the frame reads as an app
+   running on a screen rather than a tinted panel. Apple artwork: fine for a
+   portfolio mock, would need replacing before this shipped as a real site.
+
+   WHAT IS ACTUALLY VISIBLE, and why the crops differ: the bed is inset
+   -24/-40px behind a 1120×640 frame, so only that band shows — the picture's
+   centre is entirely hidden behind the app window, exactly as a real desktop
+   is. Judge these on their TOP and BOTTOM strips, not on the image.
+
+   Common to both: `background-attachment` is left at its default (scroll), NOT
+   fixed — a fixed background inside the scaled, sticky stage would be resolved
+   against the viewport and would slide against the frame during the step-back. */
+.hero-curtain__card-bed--photo-sequoia,
+.hero-curtain__card-bed--photo-tahoe {
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* SEQUOIA — the owner's actual wallpaper. It ships as a LIVE 3D render (USD
+   meshes + EXR sky maps + Metal shaders in WallpaperSequoiaExtension.appex), so
+   no bitmap exists on disk at any usable size (the only stills are 214×130
+   thumbnails) — this is a 2940×1912 desktop screenshot they supplied
+   2026-07-27, menu bar cropped off (78px), scaled to 2400px, WebP q84 → 46KB.
+   It compresses to a fifth of the Tahoe photo because it is smooth gradient,
+   not photographic detail.
+   Crop: `center top`. The rays converge on a yellow-green glow at the top of
+   the frame, and that glow is the only warm note in the picture — anchoring to
+   the top keeps it in the visible upper band instead of hiding it behind the
+   window, and pushes the deep blue-violet down into the side and bottom bands. */
+.hero-curtain__card-bed--photo-sequoia {
+  background-image: url('../assets/hero-wallpaper-sequoia.webp');
+  background-position: center top;
+}
+
+/* TAHOE — CHOSEN 2026-07-27 by the owner, over Sequoia, after seeing both in
+   place. macOS Tahoe Day
+   (`/System/Library/Desktop Pictures/.wallpapers/Tahoe Day/Tahoe Day.mov`),
+   frame 0 of a 120s 3840×2160 dynamic wallpaper, 2400px WebP q82 → 245KB.
+   Crop: `center 42%` — anchored to the horizon rather than centred, so the
+   clean sky holds the top band and the lake sits in the lower one. */
+.hero-curtain__card-bed--photo-tahoe {
+  background-image: url('../assets/hero-wallpaper-tahoe.webp');
+  background-position: center 42%;
+}
+
+/* The frame paints above the bed without either one taking a transform. */
+.hero-curtain__card-app {
+  position: relative;
+  z-index: 1;
+}
+
+/* Lizzie peeking over the frame's top chrome — owner pick 2026-07-29,
+   reviving the r5-07 concept with the owner's own drawing (all codex
+   redraws rejected for linework drift; see Lizzie.tsx PROVENANCE).
+   PLACEMENT MEASURED off r5-07-peek-product-window.png: centre at 78.2%
+   of the frame width, width 11.3% of frame there → 12.62% here because
+   this asset's bbox includes both paws (141px at the 1120px frame, 75px
+   visible). The asset ends at the paw line, so `bottom: 100%` rests her
+   exactly on the chrome — no overlap, no clip, the window IS the cut.
+   Sits between bed (z0) and frame (z1); scales with the step-back. */
+.hero-curtain__card-peek {
+  position: absolute;
+  bottom: 100%;
+  left: 78.2%;
+  transform: translateX(-50%);
+}
+
+/* Frame STEP-BACK — MEASURED off the live attio.com hero on 2026-07-27.
+   Their frame is not inert on scroll: it sits at scale 1 at the top of the
+   page and drops to scale(0.95) about its own centre the moment you scroll
+   past the first few pixels, then holds 0.95 for the rest of the page. The
+   repo's older dumps (dumps5/scrub-hero.json) recorded an inert card, and
+   H3 built ours to match — that reading is superseded here.
+
+   What the measurement pins, and why this is a transition rather than a
+   scrub or a lerp:
+     · the value CONVERGES while the scroll position is stationary, so it is
+       a state flip plus a tween, not a scroll-scrubbed value;
+     · the donor's own class list carries `group-data-hero-scrolling/hero:`,
+       i.e. it flips on a binary scrolling state — the same shape as our 6px
+       CURTAIN_THRESHOLD, so the step rides that existing flip;
+     · `transition-duration` computes to 0s and `getAnimations()` is empty on
+       their node, so they write the transform per frame from JS. We do not
+       need to: the trace is monotone with no overshoot, so one transition
+       reproduces it and costs zero per-frame work.
+   Trace: motion starts ~41.6ms after the flip and reaches 0.95 at 765.9ms,
+   i.e. 724ms of travel — shipped as 720ms. Easing is FITTED to the
+   frame-by-frame trace (rms 0.013, max error 0.034 of the residual, about
+   1.8px of frame width at the worst instant; plain ease-out fits 8× worse at
+   rms 0.102). The bezier is therefore an approximation of a JS tween, marked
+   `~`, and is declared here component-scoped — NOT in tokens.css — so a token
+   edit cannot silently retime a measured curve. Checkpoint item.
+   Full trace + method: design-assets/refs/session10/attio-hero-scroll/. */
+.hero-curtain__card-scale {
+  position: relative;
+  transform-origin: 50% 50%;
+  transition: transform 720ms var(--hero-step-ease); /* ~ fitted, see above */
+  will-change: transform;
+  --hero-step-ease: cubic-bezier(0.2, 0.1, 0.1, 0.92);
+}
+
+[data-hero-stepped='true'] .hero-curtain__card-scale {
+  transform: scale(0.95);
+}
+
+/* Reduced motion: the curtain is disabled and the hero renders as static
+   flow, so there is no "stepped back" state to settle into — the frame stays
+   at its full size. Matches DESIGN.md §5.2 (entrances disabled, content in
+   its final state) rather than freezing a mid-scene value. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-curtain__card-scale,
+  [data-hero-stepped='true'] .hero-curtain__card-scale {
+    transform: none;
+    transition: none;
+    will-change: auto;
+  }
+}
+
+.hero-curtain__rails {
+  display: none;
+}
+
+.hero-curtain__headline {
+  position: relative;
+  z-index: 10;
+}
+
+.hero-curtain__card-viewport {
+  position: relative;
+  z-index: 10;
+  margin-top: 56px;
+  pointer-events: none;
+}
+
+.hero-curtain__card {
+  pointer-events: auto;
+}
+
+/* Frame entrance — MEASURED off the live attio.com hero on 2026-07-27, not
+   inferred: the product frame mounts at scale(0.98)/opacity 0 and ramps to
+   1/1 over 900ms after a 450ms delay on cubic-bezier(0, 0, 0.58, 1). The
+   trace is monotone and its maximum scale is 0.999972 — there is NO
+   overshoot, so this is a long ease-out, not a spring. No blur and no
+   translate: the donor's frame neither rises nor blurs, unlike its headline.
+   Full trace + method: design-assets/refs/session10/attio-hero-entrance/.
+   The easing is declared here, component-scoped — it is NOT in tokens.css
+   and is a checkpoint item. Our 480ms delay is our own text ladder's slot,
+   not the donor's 450ms. */
+@keyframes hero-card-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.hero-curtain__card--enter {
+  animation: hero-card-enter 900ms var(--hero-card-ease) var(--enter-delay, 0ms) both;
+  /* ~ donor easing is CSS ease-out to 2dp; kept literal so a token edit
+     cannot silently retime a measured curve. */
+  --hero-card-ease: cubic-bezier(0, 0, 0.58, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-curtain__card--enter {
+    animation: none;
+  }
+}
+
+.hero-curtain .si-marker {
+  transform: translateY(
+    calc(
+      var(--hero-marker-rest, 0px) -
+        var(--si-p) * var(--hero-marker-travel, 171.5px)
+    )
+  );
+}
+
+@media (min-width: 768px) {
+  .hero-curtain {
+    padding-block: 128px;
+  }
+
+  .hero-curtain__stage-surface {
+    right: 12px;
+    bottom: 88px;
+    left: 12px;
+    margin-inline: auto;
+    max-width: 1216px;
+  }
+
+  .hero-curtain__card-viewport {
+    margin-top: 80px;
+  }
+
+  /* The card's own padding is 40px at md, so a 40px inset keeps the wallpaper
+     margin uniform on all four sides of the frame — and keeps the bed exactly
+     where it was before it moved inside the scaled wrapper. */
+  .hero-curtain__card-bed {
+    inset: -40px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-curtain {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    padding-block: 0;
+  }
+
+  .hero-curtain__stage,
+  .hero-curtain__rails,
+  .hero-curtain__content {
+    grid-area: 1 / 1;
+  }
+
+  .hero-curtain__stage {
+    position: sticky;
+    inset: auto;
+    top: 80px;
+    height: calc(100svh - 80px);
+    align-self: start;
+  }
+
+  .hero-curtain__stage-surface {
+    top: calc(50% - 40px);
+    right: auto;
+    bottom: auto;
+    left: 50%;
+    width: min(1216px, calc(100% - 24px));
+    max-width: none;
+    height: min(720px, calc(100% - 24px));
+    margin-inline: 0;
+    transform: translate(-50%, -50%);
+  }
+
+  .hero-curtain__rails {
+    pointer-events: none;
+    position: sticky;
+    top: 80px;
+    z-index: 20;
+    display: block;
+    height: 320px;
+    align-self: start;
+  }
+
+  .hero-curtain__content {
+    position: relative;
+    z-index: 10;
+    min-width: 0;
+  }
+
+  .hero-curtain__headline {
+    position: sticky;
+    top: 80px;
+    min-height: clamp(320px, calc(40svh - 80px), 520px);
+    /* The card viewport centres the frame in 100svh, so its rest position
+       climbs as the viewport shortens — a fixed -60px overlap let the frame
+       bury the trial microcopy below ~900px windows. This ramp keeps the
+       wallpaper bed ≥ ~48px under the microcopy at every height and only
+       reaches the full -60px overlap on tall viewports where centring
+       already provides the air. */
+    margin-bottom: clamp(-60px, calc(420px - 50svh), 48px);
+    padding-top: max(96px, 10svh);
+  }
+
+  .hero-curtain__card-viewport {
+    position: sticky;
+    top: 0;
+    display: flex;
+    height: 100svh;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    margin-top: 0;
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  .hero-curtain {
+    display: block;
+    padding-block: 128px;
+  }
+
+  .hero-curtain__stage {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    align-self: auto;
+  }
+
+  .hero-curtain__stage-surface {
+    top: auto;
+    right: 12px;
+    bottom: 88px;
+    left: 12px;
+    width: auto;
+    max-width: 1216px;
+    height: 720px;
+    margin-inline: auto;
+    transform: none;
+  }
+
+  .hero-curtain__rails {
+    position: absolute;
+    inset: 0;
+    height: 320px;
+  }
+
+  .hero-curtain__headline,
+  .hero-curtain__card-viewport {
+    position: relative;
+    top: auto;
+  }
+
+  .hero-curtain__headline {
+    min-height: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+  }
+
+  .hero-curtain__card-viewport {
+    height: auto;
+    margin-top: 80px;
+    padding-block: 0;
+  }
+}

@@ -1,0 +1,44 @@
+.kz-dm {
+  display: grid;
+  gap: 2px;
+  width: fit-content;
+  line-height: 0;
+}
+
+.kz-dm--2x2 {
+  grid-template-columns: repeat(2, 2px);
+}
+
+.kz-dm--3x3 {
+  grid-template-columns: repeat(3, 2px);
+}
+
+.kz-dm__dot {
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  transition: opacity 340ms var(--ease-entrance);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kz-dm .kz-dm__dot {
+    transition: none;
+  }
+}
+
+.kz-dm--graphite .is-lit   { background-color: var(--kz-gray-700); opacity: 1; }
+.kz-dm--graphite .is-unlit { background-color: var(--kz-gray-700); opacity: 0.22; }
+
+.kz-dm--accent .is-lit   { background-color: var(--kz-accent-600); opacity: 1; }
+.kz-dm--accent .is-unlit { background-color: var(--kz-accent-600); opacity: 0.24; }
+
+/* The third ink became signal on 2026-07-27, and the constraint that forced its old
+   0.4 alpha is GONE — that was a consequence of the retired ramp being pale, not of
+   the ink role. Rec.709 luma of the retired step was 179.6, i.e. only 75.4 off the
+   white ground, so the unlit ≥30 / lit−unlit ≥45 bounds pinched to a ∈ [0.398, 0.403].
+   signal-600 measures 103.4 → delta 151.6, so the window opens to a ∈ [0.198, 0.703]
+   (100× wider). 0.24 matches the accent ink's alpha (same faint unlit read) and clears
+   both bounds with margin: unlit delta 36.4 (floor 30), lit−unlit 115.2 (floor 45).
+   signal-700 is not needed. */
+.kz-dm--signal .is-lit   { background-color: var(--kz-signal-600); opacity: 1; }
+.kz-dm--signal .is-unlit { background-color: var(--kz-signal-600); opacity: 0.24; }
