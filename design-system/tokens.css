@@ -1,0 +1,173 @@
+/* Knowzilla fusion tokens — v0.1
+   Provenance: (N) natural.com extraction · (A) attio.com extraction.
+   Mirrored into src/index.css @theme once approved — keep in sync. */
+
+:root {
+  /* ---- ink & surfaces (N) ---- */
+  --kz-ink: #161514;
+  --kz-ink-secondary: #71706f;
+  --kz-surface-100: #ffffff;
+  --kz-surface-200: #fafafa;
+  --kz-surface-300: #f6f6f6;
+  --kz-surface-dark: #111400;
+  --kz-hairline-1: #f6f6f6;
+  --kz-hairline-2: #ececeb;
+
+  /* ---- gray scale (N warm ramp; step = intent) ---- */
+  --kz-gray-100: #fafafa;
+  --kz-gray-200: #f6f6f6;
+  --kz-gray-300: #ececeb;
+  --kz-gray-400: #d7d6d4;
+  --kz-gray-500: #afafaf;
+  --kz-gray-600: #8c8b8a;
+  --kz-gray-700: #71706f;
+  --kz-gray-800: #454545;
+  --kz-gray-900: #262524;
+  --kz-gray-1000: #161514;
+
+  /* ---- lavender — THE interactive accent (N) ---- */
+  --kz-accent-100: #f0f2fd;
+  --kz-accent-200: #dbe0fa;
+  --kz-accent-300: #bec6f5;
+  --kz-accent-400: #9ea8f0;
+  --kz-accent-500: #7e8be9;
+  --kz-accent-600: #6a77e5;
+  --kz-accent-700: #5461cc;
+  --kz-accent-800: #3f4baf;
+  --kz-accent-900: #2c3587;
+  --kz-accent-1000: #1a1f59;
+
+  /* ---- signal blue — THE telemetry/live accent (A). Replaced olive
+     page-wide, 2026-07-27, at the owner's direction ("not the olive colour,
+     something stronger").
+     Three of the ten steps are MEASURED from the Attio extraction, and the
+     donor's ladder turns out to be a single hue — all three sit at H 219.0±0.1:
+       signal-100  #e8f0ff  DESIGN.md:269  (Platform badge background)
+       signal-600  #266df0  DESIGN.md:69   ("active tab bar, workflow
+                                            connectors, chart line, glows" —
+                                            literally this role)
+       signal-700  #245bc2  DESIGN.md:68   (badge blue text)
+     The other seven are interpolated on that H 219 ladder and are marked `~`.
+     Why this and not the reference swatch the owner sent (#0090f8, H 205,
+     S 1.00): that hue is traced to nothing we own, and the rule is that the
+     palette may evolve only as an evolution of a donor-traced scale.
+     Why it replaced olive rather than joining it: olive-600 was the least
+     saturated colour in the system (S 0.29) and measured 2.07:1 on white —
+     it never carried the telemetry role it was given. signal-600 is 4.64:1.
+     CAUTION: signal-600 sits only 17° from accent-600 (H 219 vs H 236). They
+     must never both appear saturated in the same frame — signal is the
+     saturated stroke, accent drops to tint (100/200 fills, 1px borders). */
+  --kz-signal-100: #e8f0ff; /* measured (A) */
+  --kz-signal-200: #c8dbfe; /* ~ */
+  --kz-signal-300: #a2c1fb; /* ~ */
+  --kz-signal-400: #73a1f7; /* ~ */
+  --kz-signal-500: #4985f3; /* ~ */
+  --kz-signal-600: #266df0; /* measured (A) */
+  --kz-signal-700: #245bc2; /* measured (A) */
+  --kz-signal-800: #1f4a98; /* ~ */
+  --kz-signal-900: #193871; /* ~ */
+  --kz-signal-1000: #122649; /* ~ */
+
+  /* ---- olive — RETIRED 2026-07-27 (N). Superseded page-wide by the signal
+     ramp above. Kept defined, and only defined: no `src/` file may reference
+     these. They stay so the decision is one revert away, not because anything
+     uses them. ---- */
+  --kz-olive-100: #f7f8f2;
+  --kz-olive-200: #eef0e2;
+  --kz-olive-300: #e2e5cb;
+  --kz-olive-400: #d1d6a8;
+  --kz-olive-500: #c3c993;
+  --kz-olive-600: #b3b980;
+  --kz-olive-700: #9da369;
+  --kz-olive-800: #7e844f;
+  --kz-olive-900: #5c6138;
+  --kz-olive-1000: #393d20;
+
+  /* ---- status scales, deal-won / deal-at-risk ONLY (A) ---- */
+  --kz-green-100: #e0fced;
+  /* green-200 added 2026-07-27 session 12: Attio's exact status-pill border step
+     (attio-canvas-measure.md §Status chips — "border 1px #CBF7E1 (green-200 exact)").
+     Needed because the workflow canvas's executed path rides the Attio green
+     grammar (owner directive: light fills + won-200 borders + won-900 text,
+     bright won-700 for strokes/ticks only; v2's #4ca368 family NOT ported). */
+  --kz-green-200: #cbf7e1;
+  --kz-green-700: #0fc27b;
+  --kz-green-900: #007d53;
+  --kz-red-100: #ffecec;
+  --kz-red-700: #ff5b59;
+  --kz-red-900: #c42422;
+
+  /* ---- typography ---- */
+  --kz-font-display: "Inter Variable", Inter, sans-serif; /* (A) Display cut via the
+     opsz axis of the loaded Inter Variable (main.tsx imports the opsz build);
+     a literal "Inter Display" family is never registered. */
+  --kz-font-body: "Inter Variable", Inter, sans-serif;                     /* (A) */
+  /* MONO RETIRED 2026-07-25. The slot keeps its name (40+ `font-mono` call sites)
+     but now resolves to the body face — see design.md §"Label face". Donor basis:
+     Attio sets EVERY eyebrow/overline/group-header in Inter, uppercase, tracked
+     (DESIGN.md:141, 312, 329, 381, 395) and puts its big stats in Inter Display
+     (:374); JetBrains Mono appears only in code blocks and inside product mockups
+     (:96). Natural's eyebrows are STK Miso because its WHOLE page is STK Miso, so
+     they are not a mono-on-sans device either. Neither donor supports the mono
+     eyebrow we had invented. Labels carry weight + tracking, digits carry
+     tabular figures. */
+  --kz-font-mono: "Inter Variable", Inter, sans-serif;                     /* (A) */
+  --kz-font-serif: "Newsreader Variable", Newsreader, Georgia, serif;      /* (v2 heritage — serif dial opened by user 2026-07-24; italic flourish inside display headlines only, inherits size/line from the heading */
+
+  /* size / line-height / weight / letter-spacing */
+  --kz-type-display-64: 500 64px/68px var(--kz-font-display); --kz-ls-display-64: -0.64px; /* (A) */
+  --kz-type-display-40: 500 40px/44px var(--kz-font-display); --kz-ls-display-40: -0.4px;  /* (A) */
+  --kz-type-display-32: 500 32px/36px var(--kz-font-display); --kz-ls-display-32: -0.32px; /* (A) */
+  --kz-type-heading-24: 500 24px/32px var(--kz-font-display); --kz-ls-heading-24: -0.24px; /* (A/N) */
+  --kz-type-heading-17: 500 17px/24px var(--kz-font-body);    --kz-ls-heading-17: -0.17px; /* (N/A) */
+  --kz-type-body-15: 450 15px/24px var(--kz-font-body);       --kz-ls-body-15: -0.1px;     /* (N size, ~450 weight) */
+  --kz-type-body-14: 450 14px/20px var(--kz-font-body);       --kz-ls-body-14: -0.14px;    /* (A/N) */
+  --kz-type-label-13: 500 13px/16px var(--kz-font-body);      --kz-ls-label-13: -0.13px;   /* (A) */
+  --kz-type-readout-13: 450 13px/20px var(--kz-font-mono);    --kz-ls-readout-13: 0;       /* (A) tabular figures */
+  --kz-type-eyebrow-12: 600 12px/16px var(--kz-font-mono);    --kz-ls-eyebrow-12: 1.2px;   /* (A uppercase eyebrow, DESIGN.md:381) */
+
+  /* ---- spacing landmarks ---- */
+  --kz-container: 1200px;        /* (N) */
+  --kz-container-pad: 40px;      /* (N nav rhythm) */
+  --kz-section-intro: 152px;     /* (A pt-38) */
+  --kz-section-close: 96px;      /* (N) */
+  --kz-cta-silence: 240px;       /* (N CTA) */
+  --kz-card-gap: 24px;           /* (N/A) */
+
+  /* ---- radii ---- */
+  --kz-radius-card: 12px;        /* (A md) */
+  --kz-radius-tile: 8px;         /* (A sm) */
+  --kz-radius-tag: 10px;         /* (N tag) */
+  --kz-radius-button: 20px;      /* (N pill) */
+  --kz-radius-input: 8px;
+  --kz-radius-micro: 4px;        /* (N news tag) */
+
+  /* ---- elevation: NONE (N policy) — product-frame exception opened by user 2026-07-24 ---- */
+  --kz-shadow: none;
+  --kz-shadow-frame: 0 1px 2px rgb(22 21 20 / 0.04), 0 4px 12px rgb(22 21 20 / 0.04);        /* product windows ONLY (v2 --shadow-card, re-tinted to warm ink) */
+  --kz-shadow-float: 0 1px 2px rgb(22 21 20 / 0.05), 0 12px 32px -8px rgb(22 21 20 / 0.12);  /* floating chips/cards over product frames ONLY (v2 --shadow-float, re-tinted) */
+  /* Card lift, opened by user 2026-07-25 (~ interpolated: donor is Natural's own tabbed
+     install card, which carries a soft lift; spread not probed, values fitted by eye).
+     RULE: only on a tinted ground (surface-200/300) — a lift on #fff has no cause.
+     Reserved for things that genuinely float: the hero app stage + the tabbed card. */
+  /* hover-lift shadow, added 2026-07-27 session 12 (owner pivot: v2 physicality).
+     v2's canonical window hover (v2-physicality-measure.md §3:
+     `hover:shadow-[0_2px_4px_rgb(10_13_20/0.06),0_18px_44px_-10px_rgb(10_13_20/0.16)]`)
+     re-tinted from v2 ink #0a0d14 to warm ink #161514 — the established v5 remap
+     (same treatment as -frame/-float above). Pairs with translateY(-2px) / 200ms
+     ease-out on the chapter windows ONLY. */
+  --kz-shadow-hover: 0 2px 4px rgb(22 21 20 / 0.06), 0 18px 44px -10px rgb(22 21 20 / 0.16);
+  --kz-shadow-card: 0 1px 2px rgb(22 21 20 / 0.04), 0 8px 24px -6px rgb(22 21 20 / 0.08), 0 20px 48px -16px rgb(22 21 20 / 0.10);   /* ~ */
+  --kz-shadow-stage: 0 1px 3px rgb(22 21 20 / 0.05), 0 16px 40px -8px rgb(22 21 20 / 0.09), 0 48px 96px -24px rgb(22 21 20 / 0.13); /* ~ hero frame only (1200px needs more spread to read the same) */
+
+  /* ---- motion ---- */
+  --kz-ease-entrance: cubic-bezier(0.33, 1, 0.68, 1);  /* (A) */
+  --kz-ease-hover-out: cubic-bezier(0.2, 0, 0, 1);     /* (A) */
+  --kz-dur-entrance: 420ms;       /* (A 340–500ms band) */
+  --kz-dur-hover-in: 50ms;        /* (A) */
+  --kz-dur-hover-out: 300ms;      /* (A) */
+  --kz-dur-micro: 140ms;          /* (N 120–150ms band) */
+  --kz-stagger: 120ms;            /* (A 100–140ms band) */
+  --kz-entrance-lift: 12px;       /* (N) */
+  --kz-entrance-blur: 1.5px;      /* (A) */
+}
